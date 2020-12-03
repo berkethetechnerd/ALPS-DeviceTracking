@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">Device Tracking</string>
+    <string name="login_title">WELCOME</string>
+    <string name="login_disclaimer">This is the application of ALPS Project. You can record your sensor usage with this application.
+        \nTo start the app please click the next button. </string>
 </resources>

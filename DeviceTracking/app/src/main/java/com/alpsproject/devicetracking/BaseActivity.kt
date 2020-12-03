@@ -7,7 +7,7 @@ import android.os.Bundle
 This activity is to be inherited by all living activities in the application
 BaseActivity includes functions that is most common and shared by all activities.
  */
-class BaseActivity : AppCompatActivity() {
+open class BaseActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
