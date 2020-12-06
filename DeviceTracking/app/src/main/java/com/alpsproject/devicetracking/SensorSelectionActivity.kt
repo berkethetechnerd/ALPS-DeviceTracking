@@ -3,6 +3,7 @@ package com.alpsproject.devicetracking
 import android.os.Bundle
 import android.widget.Button
 import android.widget.Toast
+
 import com.alpsproject.devicetracking.views.SensorView
 
 class SensorSelectionActivity : BaseActivity() {

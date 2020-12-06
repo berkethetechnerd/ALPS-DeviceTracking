@@ -1,10 +1,14 @@
 <resources>
     <string name="app_name">Device Tracking</string>
 
-    <string name="screen_sensor_selection">Sensor Selection</string>
+    <string name="login_title">WELCOME</string>
+    <string name="login_disclaimer">This is the application of ALPS Project. You can record your sensor usage with this application.
+        \nTo start the app please click the next button. </string>
 
+    <string name="screen_sensor_selection">Sensor Selection</string>
     <string name="sensor_wifi">WiFi</string>
     <string name="sensor_bluetooth">Bluetooth</string>
     <string name="sensor_screen_usage">Screen Usage</string>
     <string name="sensor_selection_next">Next</string>
+
 </resources>
