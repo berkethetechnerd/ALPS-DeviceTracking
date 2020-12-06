@@ -1,7 +1,6 @@
 package com.alpsproject.devicetracking
 
-import android.media.tv.TvContract
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
 import android.os.Bundle
 import android.widget.*
 
@@ -25,7 +24,7 @@ class LoginActivity : BaseActivity() {
         tvDisclamer.text = getString(R.string.login_disclaimer)
 
         btnNext.setOnClickListener {
-            Toast.makeText(this, "Hello World", Toast.LENGTH_SHORT).show()
+            startActivity(Intent(this, SensorSelectionActivity::class.java))
         }
     }
 }
