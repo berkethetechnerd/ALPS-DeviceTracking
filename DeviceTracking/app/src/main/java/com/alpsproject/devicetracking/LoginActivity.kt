@@ -6,7 +6,8 @@ import android.widget.*
 
 class LoginActivity : BaseActivity() {
 
-    private lateinit var ivLogo: ImageView
+    private lateinit var ivAlpsLogo: ImageView
+    private lateinit var ivIipmLogo: ImageView
     private lateinit var tvTitle: TextView
     private lateinit var tvDisclamer: TextView
     private lateinit var btnNext: Button
@@ -15,7 +16,8 @@ class LoginActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        ivLogo = findViewById(R.id.iv_logo)
+        ivAlpsLogo = findViewById(R.id.iv_alps_logo)
+        ivIipmLogo = findViewById(R.id.iv_iipm_logo)
         tvTitle = findViewById(R.id.tv_title)
         tvDisclamer = findViewById(R.id.tv_disclaimer_text)
         btnNext = findViewById(R.id.btn_next)
