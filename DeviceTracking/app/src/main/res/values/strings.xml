@@ -5,6 +5,11 @@
     <string name="login_disclaimer">This is an application developed for a research project conducted by ALPS. Using this application, you will be recording your device usage and share the data with us anonymously. This is a valuable contribution for us and we thank you very much for your participation.
         \nTo start the application, please hit the \'Next\' button. </string>
 
+    <string name="consent_title">Consent of Data Collection</string>
+    <string name="consent_disclaimer">This is an application developed for a research project conducted by ALPS. Using this application, you will be recording your device usage and share the data with us anonymously. This is a valuable contribution for us and we thank you very much for your participation.
+        \nTo start the application, please hit the \'Next\' button. </string>
+    <string name="consent_text">There will be a consent text here.</string>
+
     <string name="screen_sensor_selection">Sensor Selection</string>
     <string name="sensor_wifi">WiFi</string>
     <string name="sensor_bluetooth">Bluetooth</string>
