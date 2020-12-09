@@ -1,5 +1,6 @@
 package com.alpsproject.devicetracking
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.*
@@ -26,7 +27,14 @@ class LoginActivity : BaseActivity() {
         tvDisclamer.text = getString(R.string.login_disclaimer)
 
         btnNext.setOnClickListener {
-            startActivity(Intent(this, SensorSelectionActivity::class.java))
+            val sharedPref = this.getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE) ?: return@setOnClickListener
+            val consent = sharedPref.getBoolean("ConsentOfTheUser", false)
+
+            if(consent){
+                startActivity(Intent(this, SensorSelectionActivity::class.java))
+            }else{
+                startActivity(Intent(this, ConsentActivity::class.java))
+            }
         }
     }
 }
