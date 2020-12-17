@@ -13,7 +13,7 @@
         android:theme="@style/Theme.DeviceTracking">
         <activity
             android:name=".ReportScreenActivity"
-            android:label="@string/title_activity_report_screen"
+            android:label="@string/report_title"
             android:theme="@style/Theme.DeviceTracking.NoActionBar"></activity>
         <activity android:name=".ConsentActivity" />
         <activity android:name=".LoginActivity">

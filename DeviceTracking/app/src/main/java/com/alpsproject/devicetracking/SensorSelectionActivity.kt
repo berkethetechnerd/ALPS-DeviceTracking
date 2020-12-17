@@ -19,7 +19,7 @@ class SensorSelectionActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_sensor_selection)
 
-        title = getString(R.string.screen_sensor_selection)
+        title = getString(R.string.sensor_selection_title)
         initUI()
     }
 
