@@ -11,6 +11,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="false"
         android:theme="@style/Theme.DeviceTracking">
+        <activity android:name=".DataCollectionActivity"></activity>
         <activity android:name=".ConsentActivity"></activity>
         <activity android:name=".LoginActivity">
             <intent-filter>
