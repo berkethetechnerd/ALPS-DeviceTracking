@@ -16,6 +16,7 @@
             android:label="@string/report_title"
             android:theme="@style/Theme.DeviceTracking.NoActionBar"></activity>
         <activity android:name=".ConsentActivity" />
+        <activity android:name=".DataCollectionActivity"></activity>
         <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

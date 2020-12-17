@@ -22,6 +22,11 @@
     <string name="sensor_screen_usage">Screen Usage</string>
     <string name="sensor_selection_next">Next</string>
 
+    <string name="data_collection_title">Data Collection</string>
+    <string name="data_collection_start">START</string>
+    <string name="data_collection_stop">STOP</string>
+    <string name="selected_sensor_title">Selected Sensors</string>
+
     <string name="report_title">Reports of Usage</string>
     <string name="report_tab_screen_usage">Screen Usage</string>
     <string name="report_tab_bluetooth">Bluetooth</string>
