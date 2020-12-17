@@ -1,5 +1,6 @@
 package com.alpsproject.devicetracking
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.Toast
@@ -15,6 +16,9 @@ class SensorSelectionActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if(isRunning()){
+            startActivity(Intent(this, DataCollectionActivity::class.java))
+        }
         setContentView(R.layout.activity_sensor_selection)
 
         title = getString(R.string.screen_sensor_selection)
@@ -33,21 +37,37 @@ class SensorSelectionActivity : BaseActivity() {
 
         btnNext = findViewById(R.id.btn_next_data_collection)
         btnNext.setOnClickListener {
-            var message = "Selected sensors: "
+            val selected_sensors = Intent(this, DataCollectionActivity::class.java)
+            var message = "Please select at least one sensor to continue"
+            var go_next = false
 
             if (sensorWifiView.isSensorSelected()) {
-                message += "Wifi "
+                selected_sensors.putExtra("Wifi", true)
+                go_next = true
+            } else {
+                selected_sensors.putExtra("Wifi", false)
             }
 
             if (sensorBluetoothView.isSensorSelected()) {
-                message += "Bluetooth "
+                selected_sensors.putExtra("Bluetooth", true)
+                go_next = true
+            } else {
+                selected_sensors.putExtra("Bluetooth", false)
             }
 
             if (sensorScreenUsageView.isSensorSelected()) {
-                message += "Screen Usage "
+                selected_sensors.putExtra("Screen Usage", true)
+                go_next = true
+            } else {
+                selected_sensors.putExtra("Screen Usage", false)
             }
 
-            Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+            // Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+            if(go_next) {
+                startActivity(selected_sensors)
+            } else {
+                Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+            }
         }
     }
 }

@@ -27,7 +27,6 @@ class LoginActivity : BaseActivity() {
         tvDisclamer.text = getString(R.string.login_disclaimer)
 
         btnNext.setOnClickListener {
-            val sharedPref = this.getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE) ?: return@setOnClickListener
             val consent = sharedPref.getBoolean("ConsentOfTheUser", false)
 
             if(consent){
