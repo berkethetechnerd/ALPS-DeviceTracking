@@ -26,5 +26,11 @@
     <string name="report_tab_screen_usage">Screen Usage</string>
     <string name="report_tab_bluetooth">Bluetooth</string>
     <string name="report_tab_wifi">Wi-Fi</string>
+    <string name="report_screen_usage_description">In this screen, you can see your \'Screen Usage\'
+        for the last 7 days. The screen usage statistics start every day at midnight.</string>
+    <string name="report_bluetooth_description">In this screen, you can see your \'Bluetooth\' usage
+        for the last 7 days. The bluetooth usage statistics start every day at midnight.</string>
+    <string name="report_wifi_description">In this screen, you can see your \'Wi-Fi\' usage
+        for the last 7 days. The Wi-Fi usage statistics start every day at midnight.</string>
 
 </resources>

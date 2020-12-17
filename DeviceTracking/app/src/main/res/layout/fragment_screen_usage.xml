@@ -7,4 +7,12 @@
     android:layout_height="match_parent"
     tools:context=".ui.reports.fragments.ScreenUsageFragment">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:text="@string/report_screen_usage_description"
+        android:textStyle="bold"
+        android:textSize="16sp" />
+
 </LinearLayout>

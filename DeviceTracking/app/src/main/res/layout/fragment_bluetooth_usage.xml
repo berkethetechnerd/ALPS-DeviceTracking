@@ -7,4 +7,12 @@
     android:layout_height="match_parent"
     tools:context=".ui.reports.fragments.BluetoothUsageFragment">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:text="@string/report_bluetooth_description"
+        android:textStyle="bold"
+        android:textSize="16sp" />
+
 </LinearLayout>
