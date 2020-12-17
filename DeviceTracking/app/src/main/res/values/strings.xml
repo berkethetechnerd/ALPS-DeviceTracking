@@ -2,22 +2,40 @@
     <string name="app_name">Device Tracking</string>
 
     <string name="login_title">WELCOME</string>
-    <string name="login_disclaimer">This is an application developed for a research project conducted by ALPS. Using this application, you will be recording your device usage and share the data with us anonymously. This is a valuable contribution for us and we thank you very much for your participation.
-        \nTo start the application, please hit the \'Next\' button. </string>
+    <string name="login_disclaimer">This is an application developed for a research project
+        conducted by ALPS. Using this application, you will be recording your device usage and
+        share the data with us anonymously. This is a valuable contribution for us and we
+        thank you very much for your participation. \nTo start the application, please hit the
+        \'Next\' button. </string>
 
     <string name="consent_title">Consent of Data Collection</string>
-    <string name="consent_disclaimer">This is an application developed for a research project conducted by ALPS. Using this application, you will be recording your device usage and share the data with us anonymously. This is a valuable contribution for us and we thank you very much for your participation.
-        \nTo start the application, please hit the \'Next\' button. </string>
+    <string name="consent_disclaimer">This is an application developed for a research project
+        conducted by ALPS. Using this application, you will be recording your device usage and
+        share the data with us anonymously. This is a valuable contribution for us and we
+        thank you very much for your participation. \nTo start the application, please hit the
+        \'Next\' button. </string>
     <string name="consent_text">There will be a consent text here.</string>
 
-    <string name="screen_sensor_selection">Sensor Selection</string>
+    <string name="sensor_selection_title">Sensor Selection</string>
     <string name="sensor_wifi">WiFi</string>
     <string name="sensor_bluetooth">Bluetooth</string>
     <string name="sensor_screen_usage">Screen Usage</string>
     <string name="sensor_selection_next">Next</string>
 
     <string name="data_collection_title">Data Collection</string>
-    <string name="button_start">START</string>
-    <string name="button_stop">STOP</string>
+    <string name="data_collection_start">START</string>
+    <string name="data_collection_stop">STOP</string>
     <string name="selected_sensor_title">Selected Sensors</string>
+
+    <string name="report_title">Reports of Usage</string>
+    <string name="report_tab_screen_usage">Screen Usage</string>
+    <string name="report_tab_bluetooth">Bluetooth</string>
+    <string name="report_tab_wifi">Wi-Fi</string>
+    <string name="report_screen_usage_description">In this screen, you can see your \'Screen Usage\'
+        for the last 7 days. The screen usage statistics start every day at midnight.</string>
+    <string name="report_bluetooth_description">In this screen, you can see your \'Bluetooth\' usage
+        for the last 7 days. The bluetooth usage statistics start every day at midnight.</string>
+    <string name="report_wifi_description">In this screen, you can see your \'Wi-Fi\' usage
+        for the last 7 days. The Wi-Fi usage statistics start every day at midnight.</string>
+
 </resources>

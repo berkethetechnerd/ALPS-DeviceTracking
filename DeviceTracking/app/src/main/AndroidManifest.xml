@@ -9,10 +9,14 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
-        android:supportsRtl="false"
+        android:supportsRtl="true"
         android:theme="@style/Theme.DeviceTracking">
+        <activity
+            android:name=".ReportScreenActivity"
+            android:label="@string/report_title"
+            android:theme="@style/Theme.DeviceTracking.NoActionBar"></activity>
+        <activity android:name=".ConsentActivity" />
         <activity android:name=".DataCollectionActivity"></activity>
-        <activity android:name=".ConsentActivity"></activity>
         <activity android:name=".LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

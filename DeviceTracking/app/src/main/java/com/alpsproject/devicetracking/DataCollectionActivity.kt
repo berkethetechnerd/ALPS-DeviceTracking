@@ -1,9 +1,10 @@
 package com.alpsproject.devicetracking
 
-import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
@@ -35,9 +36,9 @@ class DataCollectionActivity : BaseActivity() {
 
     fun startStopButton(){
         if(isRunning()){
-            btnStartStop.text = getString(R.string.button_stop)
+            btnStartStop.text = getString(R.string.data_collection_stop)
         } else{
-            btnStartStop.text = getString(R.string.button_start)
+            btnStartStop.text = getString(R.string.data_collection_start)
         }
         btnStartStop.setOnClickListener {
             if(!isRunning()){
@@ -45,13 +46,13 @@ class DataCollectionActivity : BaseActivity() {
                     putBoolean("RunningBackGround", true)
                     commit()
                 }
-                btnStartStop.text = getString(R.string.button_stop)
+                btnStartStop.text = getString(R.string.data_collection_stop)
             } else {
                 with (sharedPref.edit()) {
                     putBoolean("RunningBackGround", false)
                     commit()
                 }
-                btnStartStop.text = getString(R.string.button_start)
+                btnStartStop.text = getString(R.string.data_collection_start)
             }
         }
     }
@@ -88,6 +89,21 @@ class DataCollectionActivity : BaseActivity() {
         } else {
             selectedScreenUsageView.visibility = View.GONE
         }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        val inflater: MenuInflater = menuInflater
+        inflater.inflate(R.menu.menu_report, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.menu_report_screen) {
+            startActivity(Intent(this, ReportScreenActivity::class.java))
+            return true
+        }
+
+        return false
     }
 
     override fun onBackPressed() {

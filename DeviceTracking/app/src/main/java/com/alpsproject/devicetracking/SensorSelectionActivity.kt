@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 
 import com.alpsproject.devicetracking.views.SensorView
 
@@ -21,19 +22,19 @@ class SensorSelectionActivity : BaseActivity() {
         }
         setContentView(R.layout.activity_sensor_selection)
 
-        title = getString(R.string.screen_sensor_selection)
+        title = getString(R.string.sensor_selection_title)
         initUI()
     }
 
     private fun initUI() {
         sensorWifiView = findViewById(R.id.sensor_view_wifi)
-        sensorWifiView.configureSensor(getDrawable(R.drawable.ic_wifi_sensor), getString(R.string.sensor_wifi))
+        sensorWifiView.configureSensor(ContextCompat.getDrawable(this, R.drawable.ic_wifi_sensor), getString(R.string.sensor_wifi))
 
         sensorBluetoothView = findViewById(R.id.sensor_view_bluetooth)
-        sensorBluetoothView.configureSensor(getDrawable(R.drawable.ic_bluetooth_sensor), getString(R.string.sensor_bluetooth))
+        sensorBluetoothView.configureSensor(ContextCompat.getDrawable(this, R.drawable.ic_bluetooth_sensor), getString(R.string.sensor_bluetooth))
 
         sensorScreenUsageView = findViewById(R.id.sensor_view_screen_usage)
-        sensorScreenUsageView.configureSensor(getDrawable(R.drawable.ic_screen_usage_sensor), getString(R.string.sensor_screen_usage))
+        sensorScreenUsageView.configureSensor(ContextCompat.getDrawable(this, R.drawable.ic_screen_usage_sensor), getString(R.string.sensor_screen_usage))
 
         btnNext = findViewById(R.id.btn_next_data_collection)
         btnNext.setOnClickListener {
@@ -62,7 +63,6 @@ class SensorSelectionActivity : BaseActivity() {
                 selected_sensors.putExtra("Screen Usage", false)
             }
 
-            // Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
             if(go_next) {
                 startActivity(selected_sensors)
             } else {
