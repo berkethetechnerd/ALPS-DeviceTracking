@@ -16,4 +16,8 @@
     <string name="sensor_screen_usage">Screen Usage</string>
     <string name="sensor_selection_next">Next</string>
 
+    <string name="data_collection_title">Data Collection</string>
+    <string name="button_start">START</string>
+    <string name="button_stop">STOP</string>
+    <string name="selected_sensor_title">Selected Sensors</string>
 </resources>
