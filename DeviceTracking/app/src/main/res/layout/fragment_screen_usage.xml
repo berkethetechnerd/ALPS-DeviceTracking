@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".ui.reports.fragments.ScreenUsageFragment">
 
     <TextView
@@ -14,5 +15,16 @@
         android:text="@string/report_screen_usage_description"
         android:textStyle="bold"
         android:textSize="16sp" />
+
+    <com.anychart.AnyChartView
+        android:id="@+id/screen_usage_chart"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_margin="16dp"/>
+
+    <ProgressBar
+        android:id="@+id/screen_usage_progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
 
 </LinearLayout>
