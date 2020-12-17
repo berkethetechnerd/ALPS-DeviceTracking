@@ -15,5 +15,8 @@
     <string name="sensor_bluetooth">Bluetooth</string>
     <string name="sensor_screen_usage">Screen Usage</string>
     <string name="sensor_selection_next">Next</string>
+    <string name="title_activity_report_screen">ReportScreenActivity</string>
+    <string name="tab_text_1">Tab 1</string>
+    <string name="tab_text_2">Tab 2</string>
 
 </resources>
