@@ -1,6 +1,7 @@
 package com.alpsproject.devicetracking
 
 import android.content.Intent
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
@@ -23,6 +24,7 @@ class DataCollectionActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_data_collection)
 
+        title = getString(R.string.data_collection_title)
         initUI()
     }
 
@@ -39,7 +41,6 @@ class DataCollectionActivity : BaseActivity() {
             btnStartStop.text = getString(R.string.data_collection_start)
         }
 
-        startStopButton()
         updateSelectedSensors()
     }
 
@@ -88,6 +89,12 @@ class DataCollectionActivity : BaseActivity() {
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val inflater: MenuInflater = menuInflater
         inflater.inflate(R.menu.menu_report, menu)
+
+        // Just coloring the icon
+        val iconDrawable: Drawable = menu.findItem(R.id.menu_report_screen).icon
+        iconDrawable.mutate()
+        iconDrawable.setTint(getColor(R.color.white))
+
         return true
     }
 
