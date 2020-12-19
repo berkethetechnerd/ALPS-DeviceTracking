@@ -1,6 +1,6 @@
 package com.alpsproject.devicetracking.helper
 
-object Constants {
+object ConstantsManager {
 
     const val CONSENT_OF_USER = "ConsentOfUser"
 

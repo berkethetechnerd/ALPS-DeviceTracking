@@ -3,7 +3,7 @@ package com.alpsproject.devicetracking
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import com.alpsproject.devicetracking.helper.Constants
+import com.alpsproject.devicetracking.helper.ConstantsManager
 import com.alpsproject.devicetracking.helper.SharedPreferencesManager
 
 /**
@@ -13,7 +13,7 @@ import com.alpsproject.devicetracking.helper.SharedPreferencesManager
 
 open class BaseActivity : AppCompatActivity() {
 
-    val CONST = Constants
+    val CONST = ConstantsManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
