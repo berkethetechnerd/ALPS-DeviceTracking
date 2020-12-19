@@ -20,6 +20,16 @@ class DataCollectionActivity : BaseActivity() {
     private lateinit var selectedBluetoothView: SensorView
     private lateinit var selectedScreenUsageView: SensorView
 
+    private val isWifiSelected: Boolean
+        get() = intent.getBooleanExtra(CONST.SENSOR_WIFI, false)
+                || SharedPreferencesManager.read(CONST.RUNNING_SENSOR_WIFI, false)
+    private val isBluetoothSelected: Boolean
+        get() = intent.getBooleanExtra(CONST.SENSOR_BLUETOOTH, false)
+                || SharedPreferencesManager.read(CONST.RUNNING_SENSOR_BLUETOOTH, false)
+    private val isScreenUsageSelected: Boolean
+        get() = intent.getBooleanExtra(CONST.SENSOR_SCREEN_USAGE, false)
+                || SharedPreferencesManager.read(CONST.RUNNING_SENSOR_SCREEN_USAGE, false)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_data_collection)
@@ -45,11 +55,17 @@ class DataCollectionActivity : BaseActivity() {
     }
 
     private fun startStopButton() {
-        if(!isRunning()) {
+        if(!isRunning()) { // Starting
             SharedPreferencesManager.write(CONST.RUNNING_DATA_COLLECTION, true)
+            SharedPreferencesManager.write(CONST.RUNNING_SENSOR_WIFI, isWifiSelected)
+            SharedPreferencesManager.write(CONST.RUNNING_SENSOR_BLUETOOTH, isBluetoothSelected)
+            SharedPreferencesManager.write(CONST.RUNNING_SENSOR_SCREEN_USAGE, isScreenUsageSelected)
             btnStartStop.text = getString(R.string.data_collection_stop)
-        } else {
+        } else { // Stopping
             SharedPreferencesManager.write(CONST.RUNNING_DATA_COLLECTION, false)
+            SharedPreferencesManager.write(CONST.RUNNING_SENSOR_WIFI, false)
+            SharedPreferencesManager.write(CONST.RUNNING_SENSOR_BLUETOOTH, false)
+            SharedPreferencesManager.write(CONST.RUNNING_SENSOR_SCREEN_USAGE, false)
             btnStartStop.text = getString(R.string.data_collection_start)
         }
     }
@@ -67,19 +83,19 @@ class DataCollectionActivity : BaseActivity() {
         selectedScreenUsageView.configureSensor(getResIcon(R.drawable.ic_screen_usage_sensor), getString(R.string.sensor_screen_usage))
         selectedScreenUsageView.removeCheckBox()
 
-        if(intent.getBooleanExtra(CONST.SENSOR_WIFI, false)) {
+        if(isWifiSelected) {
             // todo: get permission and turn of sensor
         } else {
             selectedWifiView.visibility = View.GONE
         }
 
-        if(intent.getBooleanExtra(CONST.SENSOR_BLUETOOTH, false)) {
+        if(isBluetoothSelected) {
             // todo: get permission and turn of sensor
         } else {
             selectedBluetoothView.visibility = View.GONE
         }
 
-        if(intent.getBooleanExtra(CONST.SENSOR_SCREEN_USAGE, false)) {
+        if(isScreenUsageSelected) {
             // todo: get permission and turn of sensor
         } else {
             selectedScreenUsageView.visibility = View.GONE
