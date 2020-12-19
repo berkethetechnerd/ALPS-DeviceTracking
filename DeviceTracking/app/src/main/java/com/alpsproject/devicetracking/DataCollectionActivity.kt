@@ -127,7 +127,10 @@ class DataCollectionActivity : BaseActivity() {
 
     override fun onBackPressed() {
         if (isRunning()) {
-            startActivity(Intent(this, LoginActivity::class.java))
+            val launcherIntent = Intent(this, LoginActivity::class.java)
+            launcherIntent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+            startActivity(launcherIntent)
+            finish()
         } else {
             super.onBackPressed()
         }
