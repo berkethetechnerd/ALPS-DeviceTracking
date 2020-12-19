@@ -57,6 +57,8 @@
     <string name="report_tab_wifi">Wi-Fi</string>
     <string name="report_usage_description">In this screen, you can see your \'%1$s\'
         for the last 7 days. The screen usage statistics start every day at midnight.</string>
+    <string name="report_usage_dates">Dates</string>
+    <string name="report_usage_hours_total">Hours in Total</string>
 
     <string name="menu_item_report">Report</string>
 

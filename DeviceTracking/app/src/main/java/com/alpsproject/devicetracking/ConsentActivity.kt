@@ -5,8 +5,6 @@ import android.os.Bundle
 import android.widget.*
 import com.alpsproject.devicetracking.helper.SharedPreferencesManager
 
-const val CONSENT_OF_USER = "ConsentOfUser"
-
 class ConsentActivity : BaseActivity() {
 
     private lateinit var tvTitle: TextView
@@ -14,6 +12,7 @@ class ConsentActivity : BaseActivity() {
     private lateinit var tvConsent: TextView
     private lateinit var cbConsent: CheckBox
     private lateinit var btnConsentNext: Button
+    private lateinit var rlConsentLayout: RelativeLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,12 +34,19 @@ class ConsentActivity : BaseActivity() {
         btnConsentNext = findViewById(R.id.btn_consent_next)
         btnConsentNext.setOnClickListener { proceedToSensorSelection() }
 
+        rlConsentLayout = findViewById(R.id.rl_consent)
+        rlConsentLayout.setOnClickListener { checkboxPress() }
+
         cbConsent = findViewById(R.id.cb_consent)
+    }
+
+    private fun checkboxPress() {
+        cbConsent.isChecked = !cbConsent.isChecked
     }
 
     private fun proceedToSensorSelection() {
         if (cbConsent.isChecked) {
-            SharedPreferencesManager.write(CONSENT_OF_USER, true)
+            SharedPreferencesManager.write(CONST.CONSENT_OF_USER, true)
             startActivity(Intent(this, SensorSelectionActivity::class.java))
             finish()
         } else {

@@ -1,11 +1,10 @@
-package com.alpsproject.devicetracking.ui.reports
+package com.alpsproject.devicetracking.reporting
 
 import android.content.Context
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
 import com.alpsproject.devicetracking.R
-import com.alpsproject.devicetracking.ui.reports.fragments.ColumnReportFragment
 
 private val TAB_TITLES = arrayOf(
         R.string.report_tab_screen_usage,

@@ -1,4 +1,4 @@
-package com.alpsproject.devicetracking.ui.reports.fragments
+package com.alpsproject.devicetracking.reporting
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -78,8 +78,8 @@ class ColumnReportFragment : Fragment() {
         cartesian.yAxis(0).labels().format("{%Value}{groupsSeparator: }")
         cartesian.tooltip().positionMode(TooltipPositionMode.POINT)
         cartesian.interactivity().hoverMode(HoverMode.BY_X)
-        cartesian.xAxis(0).title("Dates")
-        cartesian.yAxis(0).title("Hours in Total")
+        cartesian.xAxis(0).title(getString(R.string.report_usage_dates))
+        cartesian.yAxis(0).title(getString(R.string.report_usage_hours_total))
 
         usageChart.setChart(cartesian)
     }

@@ -45,10 +45,10 @@ class DataCollectionActivity : BaseActivity() {
 
     private fun startStopButton() {
         if(!isRunning()) {
-            SharedPreferencesManager.write(RUNNING_DATA_COLLECTION, true)
+            SharedPreferencesManager.write(CONST.RUNNING_DATA_COLLECTION, true)
             btnStartStop.text = getString(R.string.data_collection_stop)
         } else {
-            SharedPreferencesManager.write(RUNNING_DATA_COLLECTION, false)
+            SharedPreferencesManager.write(CONST.RUNNING_DATA_COLLECTION, false)
             btnStartStop.text = getString(R.string.data_collection_start)
         }
     }
@@ -66,19 +66,19 @@ class DataCollectionActivity : BaseActivity() {
         selectedScreenUsageView.configureSensor(getResIcon(R.drawable.ic_screen_usage_sensor), getString(R.string.sensor_screen_usage))
         selectedScreenUsageView.removeCheckBox()
 
-        if(intent.getBooleanExtra(SENSOR_WIFI, false)) {
+        if(intent.getBooleanExtra(CONST.SENSOR_WIFI, false)) {
             // todo: get permission and turn of sensor
         } else {
             selectedWifiView.visibility = View.GONE
         }
 
-        if(intent.getBooleanExtra(SENSOR_BLUETOOTH, false)) {
+        if(intent.getBooleanExtra(CONST.SENSOR_BLUETOOTH, false)) {
             // todo: get permission and turn of sensor
         } else {
             selectedBluetoothView.visibility = View.GONE
         }
 
-        if(intent.getBooleanExtra(SENSOR_SCREEN_USAGE, false)) {
+        if(intent.getBooleanExtra(CONST.SENSOR_SCREEN_USAGE, false)) {
             // todo: get permission and turn of sensor
         } else {
             selectedScreenUsageView.visibility = View.GONE

@@ -38,6 +38,7 @@
                 android:textSize="@dimen/large_body_text_size"/>
 
             <RelativeLayout
+                android:id="@+id/rl_consent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
