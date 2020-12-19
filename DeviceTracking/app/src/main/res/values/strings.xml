@@ -5,7 +5,7 @@
     <string name="login_disclaimer">This is an application developed for a research project
         conducted by ALPS. Using this application, you will be recording your device usage and
         share the data with us anonymously. This is a valuable contribution for us and we
-        thank you very much for your participation. \nTo start the application, please hit the
+        thank you very much for your participation. \n\nTo start the application, please hit the
         \'Next\' button. </string>
 
     <string name="consent_title">Consent of Data Collection</string>
@@ -38,4 +38,6 @@
     <string name="report_wifi_description">In this screen, you can see your \'Wi-Fi\' usage
         for the last 7 days. The Wi-Fi usage statistics start every day at midnight.</string>
 
+    <string name="content_description_app_logo">ALPS Software Ltd</string>
+    <string name="content_description_ifm_logo">Innovation and IP Management LAB</string>
 </resources>

@@ -2,8 +2,8 @@ package com.alpsproject.devicetracking
 
 import android.content.Context
 import android.content.SharedPreferences
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 
 /*
 This activity is to be inherited by all living activities in the application
