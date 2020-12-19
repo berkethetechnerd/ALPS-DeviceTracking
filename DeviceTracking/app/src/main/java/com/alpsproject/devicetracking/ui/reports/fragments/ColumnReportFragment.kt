@@ -21,15 +21,18 @@ import com.anychart.enums.Position
 import com.anychart.enums.TooltipPositionMode
 
 private const val ARG_REPORT_TYPE = "REPORT_NAME"
+private const val ARG_SEED = "REPORT_SEED"
 
 class ColumnReportFragment : Fragment() {
 
     private var reportName: String? = null
+    private var dummyDataSeed: Long = 100
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             reportName = it.getString(ARG_REPORT_TYPE)
+            dummyDataSeed = it.getLong(ARG_SEED, 100)
         }
     }
 
@@ -52,7 +55,7 @@ class ColumnReportFragment : Fragment() {
 
         val cartesian: Cartesian = AnyChart.column()
         val data: MutableList<DataEntry> = ArrayList()
-        val dummyData = DummyDataGenerator.generateUsageHours(110)
+        val dummyData = DummyDataGenerator.generateUsageHours(dummyDataSeed)
         data.add(ValueDataEntry("15.12", dummyData[0]))
         data.add(ValueDataEntry("16.12", dummyData[1]))
         data.add(ValueDataEntry("17.12", dummyData[2]))
@@ -83,9 +86,10 @@ class ColumnReportFragment : Fragment() {
 
     companion object {
         @JvmStatic
-        fun newInstance(reportName: String) = ColumnReportFragment().apply {
-            this.arguments?.apply {
-                putString(ARG_REPORT_TYPE, reportName)
+        fun newInstance(name: String, seed: Long) = ColumnReportFragment().apply {
+            arguments = Bundle().apply {
+                putString(ARG_REPORT_TYPE, name)
+                putLong(ARG_SEED, seed)
             }
         }
     }
