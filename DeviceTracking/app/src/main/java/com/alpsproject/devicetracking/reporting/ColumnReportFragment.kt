@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
+import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.alpsproject.devicetracking.R
@@ -26,6 +27,10 @@ private const val ARG_SEED = "REPORT_SEED"
 
 class ColumnReportFragment : Fragment() {
 
+    private lateinit var usageChart: AnyChartView
+    private lateinit var progressBar: ProgressBar
+    private lateinit var noDataLayout: RelativeLayout
+
     private var reportName: String? = null
     private var dummyDataSeed: Long = 100
 
@@ -45,13 +50,22 @@ class ColumnReportFragment : Fragment() {
     }
 
     private fun initUI(view: View) {
+        usageChart = view.findViewById(R.id.sensor_usage_chart)
+        progressBar = view.findViewById(R.id.sensor_progress_bar)
+        noDataLayout = view.findViewById(R.id.rl_no_data)
+
         val tvDescription: TextView = view.findViewById(R.id.tv_report_description)
         tvDescription.text = getString(R.string.report_usage_description, reportName)
+
+        if (dummyDataSeed.toInt() % 2 == 0) {
+            noDataLayout.visibility = View.GONE
+        } else {
+            usageChart.visibility = View.GONE
+            progressBar.visibility = View.GONE
+        }
     }
 
     private fun initChart(view: View) {
-        val usageChart: AnyChartView = view.findViewById(R.id.sensor_usage_chart)
-        val progressBar: ProgressBar = view.findViewById(R.id.sensor_progress_bar)
         usageChart.setProgressBar(progressBar)
 
         CalendarManager.last7Days()
