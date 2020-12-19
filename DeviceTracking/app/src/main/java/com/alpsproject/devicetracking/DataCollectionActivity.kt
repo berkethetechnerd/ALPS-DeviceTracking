@@ -67,6 +67,8 @@ class DataCollectionActivity : BaseActivity() {
             SharedPreferencesManager.write(CONST.RUNNING_SENSOR_BLUETOOTH, false)
             SharedPreferencesManager.write(CONST.RUNNING_SENSOR_SCREEN_USAGE, false)
             btnStartStop.text = getString(R.string.data_collection_start)
+
+            finish()
         }
     }
 
