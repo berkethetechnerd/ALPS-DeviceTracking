@@ -15,12 +15,14 @@
         thank you very much for your participation. \nTo start the application, please hit the
         \'Next\' button. </string>
     <string name="consent_text">There will be a consent text here.</string>
+    <string name="consent_must_agree">You need to give consent before participating.</string>
 
     <string name="sensor_selection_title">Sensor Selection</string>
     <string name="sensor_wifi">WiFi</string>
     <string name="sensor_bluetooth">Bluetooth</string>
     <string name="sensor_screen_usage">Screen Usage</string>
     <string name="sensor_selection_next">Next</string>
+    <string name="sensor_selection_select_at_least_one">Please select at least one sensor to continue.</string>
 
     <string name="data_collection_title">Data Collection</string>
     <string name="data_collection_start">START</string>
@@ -31,12 +33,8 @@
     <string name="report_tab_screen_usage">Screen Usage</string>
     <string name="report_tab_bluetooth">Bluetooth</string>
     <string name="report_tab_wifi">Wi-Fi</string>
-    <string name="report_screen_usage_description">In this screen, you can see your \'Screen Usage\'
+    <string name="report_usage_description">In this screen, you can see your \'%1$s\'
         for the last 7 days. The screen usage statistics start every day at midnight.</string>
-    <string name="report_bluetooth_description">In this screen, you can see your \'Bluetooth\' usage
-        for the last 7 days. The bluetooth usage statistics start every day at midnight.</string>
-    <string name="report_wifi_description">In this screen, you can see your \'Wi-Fi\' usage
-        for the last 7 days. The Wi-Fi usage statistics start every day at midnight.</string>
 
     <string name="content_description_app_logo">ALPS Software Ltd</string>
     <string name="content_description_ifm_logo">Innovation and IP Management LAB</string>

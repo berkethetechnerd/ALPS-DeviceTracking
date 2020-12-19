@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.alpsproject.devicetracking.R
 import com.alpsproject.devicetracking.helper.DummyDataGenerator
@@ -19,18 +20,35 @@ import com.anychart.enums.HoverMode
 import com.anychart.enums.Position
 import com.anychart.enums.TooltipPositionMode
 
-class WifiUsageFragment : Fragment() {
+private const val ARG_REPORT_TYPE = "REPORT_NAME"
+
+class ColumnReportFragment : Fragment() {
+
+    private var reportName: String? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        arguments?.let {
+            reportName = it.getString(ARG_REPORT_TYPE)
+        }
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val view = inflater.inflate(R.layout.fragment_wifi_usage, container, false)
+        val view = inflater.inflate(R.layout.fragment_column_report, container, false)
+        initUI(view)
         initChart(view)
         return view
     }
 
+    private fun initUI(view: View) {
+        val tvDescription: TextView = view.findViewById(R.id.tv_report_description)
+        tvDescription.text = getString(R.string.report_usage_description, reportName)
+    }
+
     private fun initChart(view: View) {
-        val wifiUsageChart: AnyChartView = view.findViewById(R.id.wifi_usage_chart)
-        val wifiUsageProgress: ProgressBar = view.findViewById(R.id.wifi_progress_bar)
-        wifiUsageChart.setProgressBar(wifiUsageProgress)
+        val usageChart: AnyChartView = view.findViewById(R.id.sensor_usage_chart)
+        val progressBar: ProgressBar = view.findViewById(R.id.sensor_progress_bar)
+        usageChart.setProgressBar(progressBar)
 
         val cartesian: Cartesian = AnyChart.column()
         val data: MutableList<DataEntry> = ArrayList()
@@ -50,7 +68,7 @@ class WifiUsageFragment : Fragment() {
             .anchor(Anchor.CENTER_BOTTOM)
             .offsetX(0.0)
             .offsetY(5.0)
-            .format("{%2.fValue}{groupsSeparator: } Hours")
+            .format("{%Value}{groupsSeparator: } Hours")
 
         cartesian.animation(true)
         cartesian.yScale().minimum(0.0)
@@ -60,11 +78,15 @@ class WifiUsageFragment : Fragment() {
         cartesian.xAxis(0).title("Dates")
         cartesian.yAxis(0).title("Hours in Total")
 
-        wifiUsageChart.setChart(cartesian)
+        usageChart.setChart(cartesian)
     }
 
     companion object {
         @JvmStatic
-        fun newInstance() = WifiUsageFragment()
+        fun newInstance(reportName: String) = ColumnReportFragment().apply {
+            this.arguments?.apply {
+                putString(ARG_REPORT_TYPE, reportName)
+            }
+        }
     }
 }

@@ -6,24 +6,24 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.reports.fragments.WifiUsageFragment">
+    tools:context=".ui.reports.fragments.ColumnReportFragment">
 
     <TextView
+        android:id="@+id/tv_report_description"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:text="@string/report_wifi_description"
+        android:layout_margin="@dimen/margin_material"
         android:textStyle="bold"
-        android:textSize="16sp" />
+        android:textSize="@dimen/body_text_size" />
 
     <com.anychart.AnyChartView
-        android:id="@+id/wifi_usage_chart"
+        android:id="@+id/sensor_usage_chart"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="16dp"/>
+        android:layout_margin="@dimen/margin_material"/>
 
     <ProgressBar
-        android:id="@+id/wifi_progress_bar"
+        android:id="@+id/sensor_progress_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 

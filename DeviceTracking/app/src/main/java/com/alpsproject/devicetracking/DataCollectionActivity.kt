@@ -8,6 +8,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
+import com.alpsproject.devicetracking.helper.SharedPreferencesManager
 import com.alpsproject.devicetracking.views.SensorView
 
 class DataCollectionActivity : BaseActivity() {
@@ -23,6 +24,10 @@ class DataCollectionActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_data_collection)
 
+        initUI()
+    }
+
+    private fun initUI() {
         tvTitle = findViewById(R.id.tv_data_collection_title)
         tvTitle.text = getString(R.string.data_collection_title)
 
@@ -34,57 +39,50 @@ class DataCollectionActivity : BaseActivity() {
         getSelectedSensorList()
     }
 
-    fun startStopButton(){
-        if(isRunning()){
+    private fun startStopButton(){
+        if (isRunning()) {
             btnStartStop.text = getString(R.string.data_collection_stop)
-        } else{
+        } else {
             btnStartStop.text = getString(R.string.data_collection_start)
         }
+
         btnStartStop.setOnClickListener {
             if(!isRunning()){
-                with (sharedPref.edit()) {
-                    putBoolean("RunningBackGround", true)
-                    commit()
-                }
+                SharedPreferencesManager.write("RunningBackGround", true)
                 btnStartStop.text = getString(R.string.data_collection_stop)
             } else {
-                with (sharedPref.edit()) {
-                    putBoolean("RunningBackGround", false)
-                    commit()
-                }
+                SharedPreferencesManager.write("RunningBackGround", false)
                 btnStartStop.text = getString(R.string.data_collection_start)
             }
         }
     }
 
-    fun getSelectedSensorList(){
+    private fun getSelectedSensorList(){
         selectedWifiView = findViewById(R.id.data_collection_list_wifi)
-        selectedWifiView.configureSensor(getDrawable(R.drawable.ic_wifi_sensor), getString(R.string.sensor_wifi))
+        selectedWifiView.configureSensor(getResIcon(R.drawable.ic_wifi_sensor), getString(R.string.sensor_wifi))
         selectedWifiView.removeCheckBox()
 
         selectedBluetoothView = findViewById(R.id.data_collection_list_bluetooth)
-        selectedBluetoothView.configureSensor(getDrawable(R.drawable.ic_bluetooth_sensor), getString(R.string.sensor_bluetooth))
+        selectedBluetoothView.configureSensor(getResIcon(R.drawable.ic_bluetooth_sensor), getString(R.string.sensor_bluetooth))
         selectedBluetoothView.removeCheckBox()
 
         selectedScreenUsageView = findViewById(R.id.data_collection_list_screen_usage)
-        selectedScreenUsageView.configureSensor(getDrawable(R.drawable.ic_screen_usage_sensor), getString(R.string.sensor_screen_usage))
+        selectedScreenUsageView.configureSensor(getResIcon(R.drawable.ic_screen_usage_sensor), getString(R.string.sensor_screen_usage))
         selectedScreenUsageView.removeCheckBox()
 
-        val selected_sensors = intent
-
-        if( selected_sensors.getBooleanExtra("Wifi", false) ) {
+        if(intent.getBooleanExtra("Wifi", false)) {
             // todo: get permission and turn of sensor
         } else {
             selectedWifiView.visibility = View.GONE
         }
 
-        if( selected_sensors.getBooleanExtra("Bluetooth", false) ) {
+        if(intent.getBooleanExtra("Bluetooth", false)) {
             // todo: get permission and turn of sensor
         } else {
             selectedBluetoothView.visibility = View.GONE
         }
 
-        if( selected_sensors.getBooleanExtra("Screen Usage", false) ) {
+        if(intent.getBooleanExtra("Screen Usage", false)) {
             // todo: get permission and turn of sensor
         } else {
             selectedScreenUsageView.visibility = View.GONE
@@ -107,7 +105,7 @@ class DataCollectionActivity : BaseActivity() {
     }
 
     override fun onBackPressed() {
-        if(isRunning()){
+        if (isRunning()) {
             startActivity(Intent(this, LoginActivity::class.java))
         } else {
             super.onBackPressed()

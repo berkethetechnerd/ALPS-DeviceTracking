@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.Toast
 import androidx.core.content.ContextCompat
-
 import com.alpsproject.devicetracking.views.SensorView
 
 class SensorSelectionActivity : BaseActivity() {
@@ -17,57 +16,60 @@ class SensorSelectionActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if(isRunning()){
-            startActivity(Intent(this, DataCollectionActivity::class.java))
-        }
+        checkIfAlreadyRunning()
         setContentView(R.layout.activity_sensor_selection)
 
         title = getString(R.string.sensor_selection_title)
         initUI()
     }
 
-    private fun initUI() {
-        sensorWifiView = findViewById(R.id.sensor_view_wifi)
-        sensorWifiView.configureSensor(ContextCompat.getDrawable(this, R.drawable.ic_wifi_sensor), getString(R.string.sensor_wifi))
-
-        sensorBluetoothView = findViewById(R.id.sensor_view_bluetooth)
-        sensorBluetoothView.configureSensor(ContextCompat.getDrawable(this, R.drawable.ic_bluetooth_sensor), getString(R.string.sensor_bluetooth))
-
-        sensorScreenUsageView = findViewById(R.id.sensor_view_screen_usage)
-        sensorScreenUsageView.configureSensor(ContextCompat.getDrawable(this, R.drawable.ic_screen_usage_sensor), getString(R.string.sensor_screen_usage))
-
-        btnNext = findViewById(R.id.btn_next_data_collection)
-        btnNext.setOnClickListener {
-            val selected_sensors = Intent(this, DataCollectionActivity::class.java)
-            var message = "Please select at least one sensor to continue"
-            var go_next = false
-
-            if (sensorWifiView.isSensorSelected()) {
-                selected_sensors.putExtra("Wifi", true)
-                go_next = true
-            } else {
-                selected_sensors.putExtra("Wifi", false)
-            }
-
-            if (sensorBluetoothView.isSensorSelected()) {
-                selected_sensors.putExtra("Bluetooth", true)
-                go_next = true
-            } else {
-                selected_sensors.putExtra("Bluetooth", false)
-            }
-
-            if (sensorScreenUsageView.isSensorSelected()) {
-                selected_sensors.putExtra("Screen Usage", true)
-                go_next = true
-            } else {
-                selected_sensors.putExtra("Screen Usage", false)
-            }
-
-            if(go_next) {
-                startActivity(selected_sensors)
-            } else {
-                Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-            }
+    private fun checkIfAlreadyRunning() {
+        if (isRunning()) {
+            startActivity(Intent(this, DataCollectionActivity::class.java))
         }
     }
+
+    private fun initUI() {
+        sensorWifiView = findViewById(R.id.sensor_view_wifi)
+        sensorWifiView.configureSensor(getResIcon(R.drawable.ic_wifi_sensor), getString(R.string.sensor_wifi))
+
+        sensorBluetoothView = findViewById(R.id.sensor_view_bluetooth)
+        sensorBluetoothView.configureSensor(getResIcon(R.drawable.ic_bluetooth_sensor), getString(R.string.sensor_bluetooth))
+
+        sensorScreenUsageView = findViewById(R.id.sensor_view_screen_usage)
+        sensorScreenUsageView.configureSensor(getResIcon(R.drawable.ic_screen_usage_sensor), getString(R.string.sensor_screen_usage))
+
+        btnNext = findViewById(R.id.btn_next_data_collection)
+        btnNext.setOnClickListener { proceedToDataCollection() }
+    }
+
+    private fun proceedToDataCollection() {
+        val selectedSensors = Intent(this, DataCollectionActivity::class.java)
+
+        if (sensorWifiView.isSensorSelected()) {
+            selectedSensors.putExtra("Wifi", true)
+        } else {
+            selectedSensors.putExtra("Wifi", false)
+        }
+
+        if (sensorBluetoothView.isSensorSelected()) {
+            selectedSensors.putExtra("Bluetooth", true)
+        } else {
+            selectedSensors.putExtra("Bluetooth", false)
+        }
+
+        if (sensorScreenUsageView.isSensorSelected()) {
+            selectedSensors.putExtra("Screen Usage", true)
+        } else {
+            selectedSensors.putExtra("Screen Usage", false)
+        }
+
+        if (isAnySensorSelected()) {
+            startActivity(selectedSensors)
+        } else {
+            Toast.makeText(this, getString(R.string.sensor_selection_select_at_least_one), Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun isAnySensorSelected() = sensorWifiView.isSensorSelected() || sensorBluetoothView.isSensorSelected() || sensorScreenUsageView.isSensorSelected()
 }
