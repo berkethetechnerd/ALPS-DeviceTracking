@@ -1,56 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ConsentActivity"
-    android:layout_marginVertical="40dp"
-    android:layout_marginHorizontal="24dp"
+    android:layout_marginHorizontal="@dimen/margin_material"
+    android:layout_marginTop="@dimen/margin_material"
+    android:orientation="vertical"
     android:gravity="center"
-    android:orientation="vertical">
+    tools:context=".ConsentActivity" >
+
     <TextView
         android:id="@+id/tv_title"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:layout_marginBottom="24dp"/>
+        android:layout_marginBottom="@dimen/margin_material"
+        android:gravity="center"
+        android:textSize="@dimen/large_header_text_size"
+        android:textStyle="bold" />
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scrollbars="none">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:gravity="center">
+
             <TextView
                 android:id="@+id/tv_disclaimer_text"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textSize="18sp"
-                android:textAlignment="inherit"/>
+                android:textSize="@dimen/large_body_text_size"/>
+
             <RelativeLayout
+                android:id="@+id/rl_consent"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
-                <TextView
-                    android:id="@+id/tv_consent_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_toEndOf="@id/cb_consent"
-                    android:layout_centerInParent="true"
-                    android:textSize="18sp"/>
+
                 <CheckBox
                     android:id="@+id/cb_consent"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentStart="true"/>
+
+                <TextView
+                    android:id="@+id/tv_consent_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_toEndOf="@id/cb_consent"
+                    android:layout_centerInParent="true"
+                    android:textSize="@dimen/large_body_text_size"/>
+
             </RelativeLayout>
+
             <Button
                 android:id="@+id/btn_consent_next"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin_material"
                 android:text="@string/sensor_selection_next" />
+
         </LinearLayout>
+
     </ScrollView>
+
 </LinearLayout>

@@ -4,26 +4,27 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="12dp"
-    android:gravity="center">
+    android:layout_margin="@dimen/margin_material">
 
     <ImageView
         android:id="@+id/iv_icon_sensor"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_width="@dimen/icon_sensor_size"
+        android:layout_height="@dimen/icon_sensor_size"
         android:layout_alignParentStart="true"
-        android:src="@android:drawable/btn_plus" />
+        android:layout_centerVertical="true"
+        android:contentDescription="@string/content_description_icon_sensor"/>
 
     <TextView
         android:id="@+id/tv_name_sensor"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_toEndOf="@id/iv_icon_sensor"
         android:layout_toStartOf="@id/cb_select_sensor"
-        android:layout_centerInParent="true"
-        android:paddingStart="16dp"
+        android:layout_centerVertical="true"
+        android:paddingStart="@dimen/margin_material"
+        android:paddingEnd="@dimen/margin_small"
         android:textStyle="bold"
-        android:textSize="32sp" />
+        android:textSize="@dimen/large_header_text_size" />
 
     <CheckBox
         android:id="@+id/cb_select_sensor"

@@ -2,7 +2,7 @@ package com.alpsproject.devicetracking
 
 import android.os.Bundle
 import androidx.viewpager.widget.ViewPager
-import com.alpsproject.devicetracking.ui.reports.SectionsPagerAdapter
+import com.alpsproject.devicetracking.reporting.SectionsPagerAdapter
 import com.google.android.material.tabs.TabLayout
 
 class ReportScreenActivity : BaseActivity() {

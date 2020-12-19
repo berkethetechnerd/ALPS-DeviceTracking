@@ -1,47 +1,56 @@
 package com.alpsproject.devicetracking
 
-import android.content.Context
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.*
+import com.alpsproject.devicetracking.helper.SharedPreferencesManager
 
 class ConsentActivity : BaseActivity() {
+
     private lateinit var tvTitle: TextView
     private lateinit var tvDisclaimer: TextView
     private lateinit var tvConsent: TextView
     private lateinit var cbConsent: CheckBox
     private lateinit var btnConsentNext: Button
+    private lateinit var rlConsentLayout: RelativeLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_consent)
 
-        tvTitle = findViewById(R.id.tv_title)
-        tvDisclaimer = findViewById(R.id.tv_disclaimer_text)
-        tvConsent = findViewById(R.id.tv_consent_text)
-        cbConsent = findViewById(R.id.cb_consent)
-        btnConsentNext = findViewById(R.id.btn_consent_next)
-
-        tvTitle.text = getString(R.string.consent_title)
-        tvDisclaimer.text = getString(R.string.consent_disclaimer)
-        tvConsent.text = getString(R.string.consent_text)
-
-        var message = "You need to give consent before participating"
-
-        btnConsentNext.setOnClickListener {
-            if(cbConsent.isChecked){
-                val sharedPref = this.getSharedPreferences(getString(R.string.app_name), Context.MODE_PRIVATE) ?: return@setOnClickListener
-                with (sharedPref.edit()) {
-                    putBoolean("ConsentOfTheUser", true)
-                    commit()
-                }
-                startActivity(Intent(this, SensorSelectionActivity::class.java))
-                finish()
-            } else{
-                Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-            }
-        }
+        initUI()
     }
 
+    private fun initUI() {
+        tvTitle = findViewById(R.id.tv_title)
+        tvTitle.text = getString(R.string.consent_title)
+
+        tvDisclaimer = findViewById(R.id.tv_disclaimer_text)
+        tvDisclaimer.text = getString(R.string.consent_disclaimer)
+
+        tvConsent = findViewById(R.id.tv_consent_text)
+        tvConsent.text = getString(R.string.consent_text)
+
+        btnConsentNext = findViewById(R.id.btn_consent_next)
+        btnConsentNext.setOnClickListener { proceedToSensorSelection() }
+
+        rlConsentLayout = findViewById(R.id.rl_consent)
+        rlConsentLayout.setOnClickListener { checkboxPress() }
+
+        cbConsent = findViewById(R.id.cb_consent)
+    }
+
+    private fun checkboxPress() {
+        cbConsent.isChecked = !cbConsent.isChecked
+    }
+
+    private fun proceedToSensorSelection() {
+        if (cbConsent.isChecked) {
+            SharedPreferencesManager.write(CONST.CONSENT_OF_USER, true)
+            startActivity(Intent(this, SensorSelectionActivity::class.java))
+            finish()
+        } else {
+            Toast.makeText(this, getString(R.string.consent_must_agree), Toast.LENGTH_SHORT).show()
+        }
+    }
 }

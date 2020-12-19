@@ -5,37 +5,65 @@
     <string name="login_disclaimer">This is an application developed for a research project
         conducted by ALPS. Using this application, you will be recording your device usage and
         share the data with us anonymously. This is a valuable contribution for us and we
-        thank you very much for your participation. \nTo start the application, please hit the
+        thank you very much for your participation. \n\nTo start the application, please hit the
         \'Next\' button. </string>
 
     <string name="consent_title">Consent of Data Collection</string>
-    <string name="consent_disclaimer">This is an application developed for a research project
-        conducted by ALPS. Using this application, you will be recording your device usage and
-        share the data with us anonymously. This is a valuable contribution for us and we
-        thank you very much for your participation. \nTo start the application, please hit the
-        \'Next\' button. </string>
+    <string name="consent_disclaimer">Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+        Praesent mollis luctus lacus. Nullam eu nulla lacus. Vestibulum elementum tincidunt sagittis.
+        Mauris venenatis ornare mauris, vitae consequat felis mattis in. Integer mi metus, scelerisque
+        sed purus vitae, varius posuere nisi. Pellentesque nunc ante, posuere vitae tortor id,
+        vulputate viverra libero. Aenean leo leo, venenatis sit amet malesuada at, fermentum sit amet
+        leo. Aenean sodales odio eget magna elementum luctus. Duis varius nibh sit amet tincidunt dignissim.
+        Aliquam fringilla volutpat ante nec posuere. Nam pretium maximus tincidunt. Aliquam erat volutpat.
+        Morbi gravida neque ac semper viverra. Nunc nunc nulla, semper at elit a, tristique consectetur sem.
+        Aliquam dictum arcu erat, vitae dictum ex rhoncus rhoncus. Vestibulum volutpat luctus lorem,
+        quis pulvinar metus facilisis viverra.\n\nQuisque dictum augue non mattis facilisis. Integer risus neque,
+        mattis vitae tellus eget, pulvinar semper nunc. In accumsan id enim ac rhoncus. Nullam
+        efficitur laoreet odio eu sollicitudin. Mauris consequat ante et ipsum viverra, quis finibus
+        ligula tristique. Etiam aliquet euismod felis. Vivamus massa sem, lobortis at arcu sed,
+        dictum ullamcorper nisl. Donec pretium tincidunt quam, ullamcorper ornare lacus scelerisque
+        eu. Etiam nec magna orci.\n\nSed nulla turpis, ornare non justo et, bibendum condimentum sapien.
+        Cras ornare venenatis justo,nec aliquam risus tincidunt quis. Pellentesque placerat ex et
+        consectetur eleifend. Donecsit amet lorem sed nunc lacinia efficitur. Aenean nulla arcu,
+        congue eget ligula viverra,condimentum dapibus leo. Maecenas ac tellus felis. Donec auctor
+        pharetra massa aliquamtempus. Nam risus nisl, iaculis quis neque in, maximus laoreet ante.
+        Integer sollicitudinporttitor vulputate. Suspendisse aliquam lacus velit, quis porttitor
+        est consectetur ac.Donec condimentum libero non sem porttitor facilisis. Suspendisse vitae
+        dictum urna, utrutrum libero. Integer sit amet euismod eros. Nullam porttitor ullamcorper
+        est at cursus.Phasellus scelerisque justo et venenatis maximus.</string>
     <string name="consent_text">There will be a consent text here.</string>
+    <string name="consent_must_agree">You need to give consent before participating.</string>
 
     <string name="sensor_selection_title">Sensor Selection</string>
     <string name="sensor_wifi">WiFi</string>
     <string name="sensor_bluetooth">Bluetooth</string>
     <string name="sensor_screen_usage">Screen Usage</string>
     <string name="sensor_selection_next">Next</string>
+    <string name="sensor_selection_description">Please select at least one sensor from below
+        available sensor list. \n\nYou will be then asked to give permission for us to observe the
+        sensors you have selected (if not granted before, or rejected)</string>
+    <string name="sensor_selection_available_sensors">Available Sensors</string>
+    <string name="sensor_selection_select_at_least_one">Please select at least one sensor to continue.</string>
 
     <string name="data_collection_title">Data Collection</string>
     <string name="data_collection_start">START</string>
     <string name="data_collection_stop">STOP</string>
-    <string name="selected_sensor_title">Selected Sensors</string>
+    <string name="data_collection_selected_sensors">Selected Sensors</string>
 
     <string name="report_title">Reports of Usage</string>
     <string name="report_tab_screen_usage">Screen Usage</string>
     <string name="report_tab_bluetooth">Bluetooth</string>
     <string name="report_tab_wifi">Wi-Fi</string>
-    <string name="report_screen_usage_description">In this screen, you can see your \'Screen Usage\'
-        for the last 7 days. The screen usage statistics start every day at midnight.</string>
-    <string name="report_bluetooth_description">In this screen, you can see your \'Bluetooth\' usage
-        for the last 7 days. The bluetooth usage statistics start every day at midnight.</string>
-    <string name="report_wifi_description">In this screen, you can see your \'Wi-Fi\' usage
-        for the last 7 days. The Wi-Fi usage statistics start every day at midnight.</string>
+    <string name="report_usage_description">In this screen, you can see your \'%1$s\' sensor data
+        for the last 7 days. The statistics for each day start at midnight.</string>
+    <string name="report_no_data_found">(ø_ø)\n\nNo data found</string>
+    <string name="report_usage_dates">Dates</string>
+    <string name="report_usage_hours_total">Hours in Total</string>
 
+    <string name="menu_item_report">Report</string>
+
+    <string name="content_description_app_logo">ALPS Software Ltd</string>
+    <string name="content_description_ifm_logo">Innovation and IP Management LAB</string>
+    <string name="content_description_icon_sensor">Sensor element</string>
 </resources>

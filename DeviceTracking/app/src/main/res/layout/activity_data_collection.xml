@@ -1,43 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".DataCollectionActivity"
-    android:layout_marginVertical="40dp"
-    android:layout_marginHorizontal="24dp"
-    android:gravity="center"
-    android:orientation="vertical">
+    android:layout_margin="@dimen/margin_material"
+    android:orientation="vertical"
+    tools:context=".DataCollectionActivity" >
+
     <TextView
         android:id="@+id/tv_data_collection_title"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="24sp"
+        android:layout_marginTop="@dimen/margin_medium"
+        android:gravity="center_horizontal"
+        android:textSize="@dimen/large_header_text_size"
         android:textStyle="bold"/>
+
     <com.google.android.material.button.MaterialButton
         style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton"
-        app:cornerRadius="75dp"
         android:id="@+id/btn_start_stop"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        app:backgroundTint="@color/purple_light"
-        android:textSize="30sp"
-        android:layout_margin="50dp"/>
+        android:layout_width="@dimen/btn_start_stop_size"
+        android:layout_height="@dimen/btn_start_stop_size"
+        android:layout_marginVertical="@dimen/margin_large"
+        android:layout_gravity="center"
+        android:textSize="@dimen/btn_start_stop_text_size"
+        app:cornerRadius="@dimen/btn_start_stop_radius"
+        app:backgroundTint="@color/purple_light"/>
+
     <TextView
-        android:id="@+id/tv_selected_sensor_title"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="20sp"/>
+        android:layout_marginTop="@dimen/margin_material"
+        android:layout_marginBottom="@dimen/margin_small"
+        android:gravity="center_horizontal"
+        android:textSize="@dimen/large_header_text_size"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:text="@string/data_collection_selected_sensors"/>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scrollbars="none">
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginVertical="40dp"
-            android:layout_marginHorizontal="24dp"
+            android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <com.alpsproject.devicetracking.views.SensorView
@@ -54,7 +65,9 @@
                 android:id="@+id/data_collection_list_screen_usage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
+
         </LinearLayout>
+
     </ScrollView>
 
 </LinearLayout>
