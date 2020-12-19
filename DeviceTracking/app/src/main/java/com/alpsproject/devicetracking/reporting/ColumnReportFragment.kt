@@ -8,6 +8,7 @@ import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.alpsproject.devicetracking.R
+import com.alpsproject.devicetracking.helper.CalendarManager
 import com.alpsproject.devicetracking.helper.DummyDataGenerator
 import com.anychart.AnyChart
 import com.anychart.AnyChartView
@@ -53,16 +54,21 @@ class ColumnReportFragment : Fragment() {
         val progressBar: ProgressBar = view.findViewById(R.id.sensor_progress_bar)
         usageChart.setProgressBar(progressBar)
 
+        CalendarManager.last7Days()
+
         val cartesian: Cartesian = AnyChart.column()
         val data: MutableList<DataEntry> = ArrayList()
+
         val dummyData = DummyDataGenerator.generateUsageHours(dummyDataSeed)
-        data.add(ValueDataEntry("15.12", dummyData[0]))
-        data.add(ValueDataEntry("16.12", dummyData[1]))
-        data.add(ValueDataEntry("17.12", dummyData[2]))
-        data.add(ValueDataEntry("18.12", dummyData[3]))
-        data.add(ValueDataEntry("19.12", dummyData[4]))
-        data.add(ValueDataEntry("20.12", dummyData[5]))
-        data.add(ValueDataEntry("21.12", dummyData[6]))
+        val dummyDates = CalendarManager.last7Days()
+
+        data.add(ValueDataEntry(dummyDates[0], dummyData[0]))
+        data.add(ValueDataEntry(dummyDates[1], dummyData[1]))
+        data.add(ValueDataEntry(dummyDates[2], dummyData[2]))
+        data.add(ValueDataEntry(dummyDates[3], dummyData[3]))
+        data.add(ValueDataEntry(dummyDates[4], dummyData[4]))
+        data.add(ValueDataEntry(dummyDates[5], dummyData[5]))
+        data.add(ValueDataEntry(dummyDates[6], dummyData[6]))
 
         val column: Column = cartesian.column(data)
         column.tooltip()
