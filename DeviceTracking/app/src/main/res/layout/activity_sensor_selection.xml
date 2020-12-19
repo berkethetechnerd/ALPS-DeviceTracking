@@ -5,10 +5,26 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginVertical="40dp"
-    android:layout_marginHorizontal="24dp"
+    android:layout_margin="@dimen/margin_material"
     android:orientation="vertical"
     tools:context=".SensorSelectionActivity" >
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/margin_material"
+        android:textSize="@dimen/large_body_text_size"
+        android:text="@string/sensor_selection_description"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/margin_small"
+        android:gravity="center_horizontal"
+        android:textSize="@dimen/large_header_text_size"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        android:text="@string/sensor_selection_available_sensors"/>
 
     <com.alpsproject.devicetracking.views.SensorView
         android:id="@+id/sensor_view_wifi"

@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.widget.*
 import com.alpsproject.devicetracking.helper.SharedPreferencesManager
 
+const val CONSENT_OF_USER = "ConsentOfUser"
+
 class ConsentActivity : BaseActivity() {
 
     private lateinit var tvTitle: TextView
@@ -38,7 +40,7 @@ class ConsentActivity : BaseActivity() {
 
     private fun proceedToSensorSelection() {
         if (cbConsent.isChecked) {
-            SharedPreferencesManager.write("ConsentOfTheUser", true)
+            SharedPreferencesManager.write(CONSENT_OF_USER, true)
             startActivity(Intent(this, SensorSelectionActivity::class.java))
             finish()
         } else {

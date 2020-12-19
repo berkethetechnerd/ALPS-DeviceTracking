@@ -6,6 +6,6 @@
 
     <item android:id="@+id/menu_report_screen"
         android:icon="@drawable/ic_data"
-        android:title="REPORT"
+        android:title="@string/menu_item_report"
         app:showAsAction="always" />
 </menu>

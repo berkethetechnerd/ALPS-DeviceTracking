@@ -9,7 +9,6 @@ import android.widget.CheckBox
 import android.widget.ImageView
 import android.widget.RelativeLayout
 import android.widget.TextView
-
 import com.alpsproject.devicetracking.R
 
 class SensorView @JvmOverloads constructor(

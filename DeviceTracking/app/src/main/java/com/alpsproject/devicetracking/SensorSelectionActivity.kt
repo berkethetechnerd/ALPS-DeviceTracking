@@ -4,8 +4,11 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.Toast
-import androidx.core.content.ContextCompat
 import com.alpsproject.devicetracking.views.SensorView
+
+const val SENSOR_WIFI = "Wi-Fi"
+const val SENSOR_BLUETOOTH = "Bluetooth"
+const val SENSOR_SCREEN_USAGE = "Screen Usage"
 
 class SensorSelectionActivity : BaseActivity() {
 
@@ -45,24 +48,9 @@ class SensorSelectionActivity : BaseActivity() {
 
     private fun proceedToDataCollection() {
         val selectedSensors = Intent(this, DataCollectionActivity::class.java)
-
-        if (sensorWifiView.isSensorSelected()) {
-            selectedSensors.putExtra("Wifi", true)
-        } else {
-            selectedSensors.putExtra("Wifi", false)
-        }
-
-        if (sensorBluetoothView.isSensorSelected()) {
-            selectedSensors.putExtra("Bluetooth", true)
-        } else {
-            selectedSensors.putExtra("Bluetooth", false)
-        }
-
-        if (sensorScreenUsageView.isSensorSelected()) {
-            selectedSensors.putExtra("Screen Usage", true)
-        } else {
-            selectedSensors.putExtra("Screen Usage", false)
-        }
+        selectedSensors.putExtra(SENSOR_WIFI, sensorWifiView.isSensorSelected())
+        selectedSensors.putExtra(SENSOR_BLUETOOTH, sensorBluetoothView.isSensorSelected())
+        selectedSensors.putExtra(SENSOR_SCREEN_USAGE, sensorScreenUsageView.isSensorSelected())
 
         if (isAnySensorSelected()) {
             startActivity(selectedSensors)
@@ -71,5 +59,7 @@ class SensorSelectionActivity : BaseActivity() {
         }
     }
 
-    private fun isAnySensorSelected() = sensorWifiView.isSensorSelected() || sensorBluetoothView.isSensorSelected() || sensorScreenUsageView.isSensorSelected()
+    private fun isAnySensorSelected() = sensorWifiView.isSensorSelected()
+            || sensorBluetoothView.isSensorSelected()
+            || sensorScreenUsageView.isSensorSelected()
 }

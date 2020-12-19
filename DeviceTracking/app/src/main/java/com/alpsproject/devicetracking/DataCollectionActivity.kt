@@ -15,7 +15,6 @@ class DataCollectionActivity : BaseActivity() {
 
     private lateinit var tvTitle: TextView
     private lateinit var btnStartStop: Button
-    private lateinit var tvSelectedSensorTitle: TextView
     private lateinit var selectedWifiView: SensorView
     private lateinit var selectedBluetoothView: SensorView
     private lateinit var selectedScreenUsageView: SensorView
@@ -32,32 +31,29 @@ class DataCollectionActivity : BaseActivity() {
         tvTitle.text = getString(R.string.data_collection_title)
 
         btnStartStop = findViewById(R.id.btn_start_stop)
-        startStopButton()
+        btnStartStop.setOnClickListener { startStopButton() }
 
-        tvSelectedSensorTitle = findViewById(R.id.tv_selected_sensor_title)
-        tvSelectedSensorTitle.text = getString(R.string.selected_sensor_title)
-        getSelectedSensorList()
-    }
-
-    private fun startStopButton(){
         if (isRunning()) {
             btnStartStop.text = getString(R.string.data_collection_stop)
         } else {
             btnStartStop.text = getString(R.string.data_collection_start)
         }
 
-        btnStartStop.setOnClickListener {
-            if(!isRunning()){
-                SharedPreferencesManager.write("RunningBackGround", true)
-                btnStartStop.text = getString(R.string.data_collection_stop)
-            } else {
-                SharedPreferencesManager.write("RunningBackGround", false)
-                btnStartStop.text = getString(R.string.data_collection_start)
-            }
+        startStopButton()
+        updateSelectedSensors()
+    }
+
+    private fun startStopButton() {
+        if(!isRunning()) {
+            SharedPreferencesManager.write(RUNNING_DATA_COLLECTION, true)
+            btnStartStop.text = getString(R.string.data_collection_stop)
+        } else {
+            SharedPreferencesManager.write(RUNNING_DATA_COLLECTION, false)
+            btnStartStop.text = getString(R.string.data_collection_start)
         }
     }
 
-    private fun getSelectedSensorList(){
+    private fun updateSelectedSensors(){
         selectedWifiView = findViewById(R.id.data_collection_list_wifi)
         selectedWifiView.configureSensor(getResIcon(R.drawable.ic_wifi_sensor), getString(R.string.sensor_wifi))
         selectedWifiView.removeCheckBox()
@@ -70,19 +66,19 @@ class DataCollectionActivity : BaseActivity() {
         selectedScreenUsageView.configureSensor(getResIcon(R.drawable.ic_screen_usage_sensor), getString(R.string.sensor_screen_usage))
         selectedScreenUsageView.removeCheckBox()
 
-        if(intent.getBooleanExtra("Wifi", false)) {
+        if(intent.getBooleanExtra(SENSOR_WIFI, false)) {
             // todo: get permission and turn of sensor
         } else {
             selectedWifiView.visibility = View.GONE
         }
 
-        if(intent.getBooleanExtra("Bluetooth", false)) {
+        if(intent.getBooleanExtra(SENSOR_BLUETOOTH, false)) {
             // todo: get permission and turn of sensor
         } else {
             selectedBluetoothView.visibility = View.GONE
         }
 
-        if(intent.getBooleanExtra("Screen Usage", false)) {
+        if(intent.getBooleanExtra(SENSOR_SCREEN_USAGE, false)) {
             // todo: get permission and turn of sensor
         } else {
             selectedScreenUsageView.visibility = View.GONE

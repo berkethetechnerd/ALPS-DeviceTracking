@@ -17,8 +17,8 @@ class SectionsPagerAdapter(private val context: Context, fm: FragmentManager) : 
 
     override fun getItem(position: Int): Fragment {
         return when(position) {
-            0 -> ColumnReportFragment.newInstance(context.getString(R.string.report_tab_screen_usage), 100)
-            1 -> ColumnReportFragment.newInstance(context.getString(R.string.report_tab_wifi), 150)
+            0 -> ColumnReportFragment.newInstance(context.getString(R.string.report_tab_screen_usage), 700)
+            1 -> ColumnReportFragment.newInstance(context.getString(R.string.report_tab_wifi), 10)
             else -> ColumnReportFragment.newInstance(context.getString(R.string.report_tab_bluetooth), 123)
         }
     }
