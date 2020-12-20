@@ -9,7 +9,9 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
+import com.alpsproject.devicetracking.helper.RealmManager
 import com.alpsproject.devicetracking.helper.SharedPreferencesManager
+import com.alpsproject.devicetracking.model.SensorData
 import com.alpsproject.devicetracking.views.SensorView
 
 class DataCollectionActivity : BaseActivity() {
@@ -58,13 +60,50 @@ class DataCollectionActivity : BaseActivity() {
         if(!isRunning()) { // Starting
             SharedPreferencesManager.write(CONST.RUNNING_DATA_COLLECTION, true)
             SharedPreferencesManager.write(CONST.RUNNING_SENSOR_WIFI, isWifiSelected)
+            if(isWifiSelected) {
+                val sensorData = SensorData()
+                sensorData.sensorName = "Wifi"
+                val id = RealmManager.saveData(sensorData)
+                SharedPreferencesManager.write(CONST.RUNNING_SENSOR_WIFI_ID, id)
+            }
             SharedPreferencesManager.write(CONST.RUNNING_SENSOR_BLUETOOTH, isBluetoothSelected)
+            if(isBluetoothSelected) {
+                val sensorData = SensorData()
+                sensorData.sensorName = "Bluetooth"
+                val id = RealmManager.saveData(sensorData)
+                SharedPreferencesManager.write(CONST.RUNNING_SENSOR_BLUETOOTH_ID, id)
+            }
             SharedPreferencesManager.write(CONST.RUNNING_SENSOR_SCREEN_USAGE, isScreenUsageSelected)
+            if(isScreenUsageSelected) {
+                val sensorData = SensorData()
+                sensorData.sensorName = "Screen Record"
+                val id = RealmManager.saveData(sensorData)
+                SharedPreferencesManager.write(CONST.RUNNING_SENSOR_SCREEN_USAGE_ID, id)
+            }
+
             btnStartStop.text = getString(R.string.data_collection_stop)
         } else { // Stopping
             SharedPreferencesManager.write(CONST.RUNNING_DATA_COLLECTION, false)
+            if(isWifiSelected) {
+                var id = SharedPreferencesManager.read(CONST.RUNNING_SENSOR_WIFI_ID, "")
+                id?.let {
+                    RealmManager.updateData(it)
+                }
+            }
             SharedPreferencesManager.write(CONST.RUNNING_SENSOR_WIFI, false)
+            if(isBluetoothSelected){
+                var id = SharedPreferencesManager.read(CONST.RUNNING_SENSOR_BLUETOOTH_ID, "")
+                id?.let {
+                    RealmManager.updateData(it)
+                }
+            }
             SharedPreferencesManager.write(CONST.RUNNING_SENSOR_BLUETOOTH, false)
+            if(isScreenUsageSelected){
+                var id = SharedPreferencesManager.read(CONST.RUNNING_SENSOR_SCREEN_USAGE_ID, "")
+                id?.let {
+                    RealmManager.updateData(it)
+                }
+            }
             SharedPreferencesManager.write(CONST.RUNNING_SENSOR_SCREEN_USAGE, false)
             btnStartStop.text = getString(R.string.data_collection_start)
 
