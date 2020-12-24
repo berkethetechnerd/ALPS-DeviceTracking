@@ -1,6 +1,7 @@
 package com.alpsproject.devicetracking.helper
 
 import android.app.Activity
+import android.bluetooth.BluetoothAdapter
 import android.content.Context
 import android.content.Intent
 import android.net.wifi.WifiManager
@@ -14,6 +15,14 @@ object SettingsManager {
             activateWifi(activity)
         } else {
             PermissionManager.askPermission(activity, AccessPermission.ACCESS_WIFI)
+        }
+    }
+
+    fun turnBluetoothOn(activity: Activity) {
+        if (PermissionManager.checkPermission(activity, AccessPermission.ACCESS_BLUETOOTH)) {
+            activateBluetooth()
+        } else {
+            PermissionManager.askPermission(activity, AccessPermission.ACCESS_BLUETOOTH)
         }
     }
 
@@ -32,5 +41,12 @@ object SettingsManager {
         }
     }
 
+    private fun activateBluetooth() {
+        val adapter = getBluetoothAdapter()
+        adapter.enable()
+    }
+
     private fun getWifiManager(activity: Activity): WifiManager? = activity.applicationContext.getSystemService(Context.WIFI_SERVICE) as? WifiManager?
+
+    private fun getBluetoothAdapter() = BluetoothAdapter.getDefaultAdapter()
 }

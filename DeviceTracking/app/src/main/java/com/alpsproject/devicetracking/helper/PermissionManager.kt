@@ -15,13 +15,17 @@ enum class AccessPermission {
 object PermissionManager: ActivityCompat.OnRequestPermissionsResultCallback {
 
     private const val REQUEST_WIFI = android.Manifest.permission.ACCESS_WIFI_STATE
+    private const val REQUEST_BLUETOOTH = android.Manifest.permission.BLUETOOTH_ADMIN
     private const val REQUEST_WIFI_CODE = 101
+    private const val REQUEST_BLUETOOTH_CODE = 102
 
     private var activeActivity: Activity? = null
 
     fun checkPermission(ctx: Context, forPermission: AccessPermission): Boolean {
         if (forPermission == AccessPermission.ACCESS_WIFI) {
             return ContextCompat.checkSelfPermission(ctx, REQUEST_WIFI) == PackageManager.PERMISSION_GRANTED
+        } else if (forPermission == AccessPermission.ACCESS_BLUETOOTH) {
+            return ContextCompat.checkSelfPermission(ctx, REQUEST_BLUETOOTH) == PackageManager.PERMISSION_GRANTED
         }
 
         return false
@@ -36,6 +40,12 @@ object PermissionManager: ActivityCompat.OnRequestPermissionsResultCallback {
                     arrayOf(REQUEST_WIFI),
                     REQUEST_WIFI_CODE
             )
+        } else if (forPermission == AccessPermission.ACCESS_BLUETOOTH) {
+            ActivityCompat.requestPermissions(
+                    activity,
+                    arrayOf(REQUEST_BLUETOOTH),
+                    REQUEST_BLUETOOTH_CODE)
+
         }
     }
 
@@ -48,6 +58,12 @@ object PermissionManager: ActivityCompat.OnRequestPermissionsResultCallback {
             if (requestCode == REQUEST_WIFI_CODE) {
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     SettingsManager.turnWifiOn(caller)
+                } else {
+                    // TODO: Error handling
+                }
+            } else if (requestCode == REQUEST_BLUETOOTH_CODE) {
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    SettingsManager.turnBluetoothOn(caller)
                 } else {
                     // TODO: Error handling
                 }

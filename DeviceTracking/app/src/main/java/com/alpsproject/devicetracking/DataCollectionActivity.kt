@@ -71,6 +71,8 @@ class DataCollectionActivity : BaseActivity() {
             }
             SharedPreferencesManager.write(C.RUNNING_SENSOR_BLUETOOTH, isBluetoothSelected)
             if(isBluetoothSelected) {
+                SettingsManager.turnBluetoothOn(this)
+
                 val sensorData = SensorData()
                 sensorData.sensorName = "Bluetooth"
                 val id = RealmManager.saveData(sensorData)
