@@ -1,25 +1,36 @@
 package com.alpsproject.devicetracking.helper
 
 import android.app.Activity
-import android.app.AlertDialog
-import android.content.DialogInterface
+import com.alpsproject.devicetracking.R
+import com.alpsproject.devicetracking.enums.AccessPermission
+import com.shreyaspatil.MaterialDialog.BottomSheetMaterialDialog
 
 object UserMessageGenerator {
 
     fun generateDialogForPermission(activity: Activity, permission: AccessPermission) {
-        val dialogBuilder = AlertDialog.Builder(activity)
-        dialogBuilder.apply {
-            setTitle("Testing dialog")
-            setMessage("This is just testing for permission dialog.")
-            setPositiveButton(android.R.string.ok, DialogInterface.OnClickListener { dialog, which ->
-                // User clicked OK
-            })
-            setNegativeButton(android.R.string.cancel, DialogInterface.OnClickListener { dialog, which ->
-                // User cancelled the dialog
-            })
-        }
+        val sensor = getSensorTitle(activity, permission)
+        val title = activity.getString(R.string.user_message_title)
+        val message = activity.getString(R.string.user_message_message, sensor, sensor)
 
-        val alertDialog = dialogBuilder.create()
-        alertDialog.show()
+        val mBottomSheetDialog = BottomSheetMaterialDialog.Builder(activity)
+                .setTitle(title)
+                .setMessage(message)
+                .setCancelable(false)
+                .setPositiveButton(activity.getString(R.string.user_message_positive)) { dialogInterface, _ ->
+                    dialogInterface.dismiss()
+                }
+                .setNegativeButton(activity.getString(R.string.user_message_negative)) { dialogInterface, _ ->
+                    dialogInterface.dismiss()
+                }
+                .build()
+        mBottomSheetDialog.show()
+    }
+
+    private fun getSensorTitle(activity: Activity, permission: AccessPermission): String {
+        return when (permission) {
+            AccessPermission.ACCESS_WIFI -> activity.getString(R.string.user_message_title_wifi)
+            AccessPermission.ACCESS_BLUETOOTH -> activity.getString(R.string.user_message_title_bluetooth)
+            AccessPermission.ACCESS_SCREEN_USAGE -> activity.getString(R.string.user_message_title_screen_usage)
+        }
     }
 }

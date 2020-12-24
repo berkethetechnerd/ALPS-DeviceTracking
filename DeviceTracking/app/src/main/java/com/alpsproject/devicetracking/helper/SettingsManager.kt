@@ -7,6 +7,7 @@ import android.content.Intent
 import android.net.wifi.WifiManager
 import android.os.Build
 import android.provider.Settings
+import com.alpsproject.devicetracking.enums.AccessPermission
 
 object SettingsManager {
 

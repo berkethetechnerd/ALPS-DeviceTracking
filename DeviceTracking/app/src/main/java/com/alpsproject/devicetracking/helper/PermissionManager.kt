@@ -1,10 +1,6 @@
 package com.alpsproject.devicetracking.helper
 
-enum class AccessPermission {
-    ACCESS_WIFI,
-    ACCESS_BLUETOOTH,
-    ACCESS_SCREEN_USAGE
-}
+import com.alpsproject.devicetracking.enums.AccessPermission
 
 object PermissionManager {
 
