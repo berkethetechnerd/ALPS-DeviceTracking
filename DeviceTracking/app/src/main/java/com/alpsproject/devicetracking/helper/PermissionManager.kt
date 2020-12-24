@@ -1,72 +1,38 @@
 package com.alpsproject.devicetracking.helper
 
-import android.app.Activity
-import android.content.Context
-import android.content.pm.PackageManager
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-
 enum class AccessPermission {
     ACCESS_WIFI,
     ACCESS_BLUETOOTH,
     ACCESS_SCREEN_USAGE
 }
 
-object PermissionManager: ActivityCompat.OnRequestPermissionsResultCallback {
+object PermissionManager {
 
-    private const val REQUEST_WIFI = android.Manifest.permission.ACCESS_WIFI_STATE
-    private const val REQUEST_BLUETOOTH = android.Manifest.permission.BLUETOOTH_ADMIN
-    private const val REQUEST_WIFI_CODE = 101
-    private const val REQUEST_BLUETOOTH_CODE = 102
-
-    private var activeActivity: Activity? = null
-
-    fun checkPermission(ctx: Context, forPermission: AccessPermission): Boolean {
-        if (forPermission == AccessPermission.ACCESS_WIFI) {
-            return ContextCompat.checkSelfPermission(ctx, REQUEST_WIFI) == PackageManager.PERMISSION_GRANTED
-        } else if (forPermission == AccessPermission.ACCESS_BLUETOOTH) {
-            return ContextCompat.checkSelfPermission(ctx, REQUEST_BLUETOOTH) == PackageManager.PERMISSION_GRANTED
-        }
-
-        return false
-    }
-
-    fun askPermission(activity: Activity, forPermission: AccessPermission) {
-        this.activeActivity = activity
-
-        if (forPermission == AccessPermission.ACCESS_WIFI) {
-            ActivityCompat.requestPermissions(
-                    activity,
-                    arrayOf(REQUEST_WIFI),
-                    REQUEST_WIFI_CODE
-            )
-        } else if (forPermission == AccessPermission.ACCESS_BLUETOOTH) {
-            ActivityCompat.requestPermissions(
-                    activity,
-                    arrayOf(REQUEST_BLUETOOTH),
-                    REQUEST_BLUETOOTH_CODE)
-
-        }
-    }
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        activeActivity?.let { caller ->
-            if (grantResults.isEmpty()) {
-                return // No permission given
+    fun checkPermission(forPermission: AccessPermission): Boolean {
+        return when (forPermission) {
+            AccessPermission.ACCESS_WIFI -> {
+                SharedPreferencesManager.read(ConstantsManager.CONSENT_OF_WIFI, false)
             }
+            AccessPermission.ACCESS_BLUETOOTH -> {
+                SharedPreferencesManager.read(ConstantsManager.CONSENT_OF_BLUETOOTH, false)
+            }
+            AccessPermission.ACCESS_SCREEN_USAGE -> {
+                SharedPreferencesManager.read(ConstantsManager.CONSENT_OF_SCREEN_USAGE, false)
+            }
+        }
 
-            if (requestCode == REQUEST_WIFI_CODE) {
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    SettingsManager.turnWifiOn(caller)
-                } else {
-                    // TODO: Error handling
-                }
-            } else if (requestCode == REQUEST_BLUETOOTH_CODE) {
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    SettingsManager.turnBluetoothOn(caller)
-                } else {
-                    // TODO: Error handling
-                }
+    }
+
+    fun askPermission(forPermission: AccessPermission) {
+        when (forPermission) {
+            AccessPermission.ACCESS_WIFI -> {
+                //UserMessageGenerator.generateDialogForPermission(AccessPermission.ACCESS_WIFI)
+            }
+            AccessPermission.ACCESS_BLUETOOTH -> {
+                //UserMessageGenerator.generateDialogForPermission(AccessPermission.ACCESS_BLUETOOTH)
+            }
+            AccessPermission.ACCESS_SCREEN_USAGE -> {
+                //UserMessageGenerator.generateDialogForPermission(AccessPermission.ACCESS_SCREEN_USAGE)
             }
         }
     }

@@ -11,18 +11,18 @@ import android.provider.Settings
 object SettingsManager {
 
     fun turnWifiOn(activity: Activity) {
-        if (PermissionManager.checkPermission(activity, AccessPermission.ACCESS_WIFI)) {
+        if (PermissionManager.checkPermission(AccessPermission.ACCESS_WIFI)) {
             activateWifi(activity)
         } else {
-            PermissionManager.askPermission(activity, AccessPermission.ACCESS_WIFI)
+            PermissionManager.askPermission(AccessPermission.ACCESS_WIFI)
         }
     }
 
-    fun turnBluetoothOn(activity: Activity) {
-        if (PermissionManager.checkPermission(activity, AccessPermission.ACCESS_BLUETOOTH)) {
+    fun turnBluetoothOn() {
+        if (PermissionManager.checkPermission(AccessPermission.ACCESS_BLUETOOTH)) {
             activateBluetooth()
         } else {
-            PermissionManager.askPermission(activity, AccessPermission.ACCESS_BLUETOOTH)
+            PermissionManager.askPermission(AccessPermission.ACCESS_BLUETOOTH)
         }
     }
 

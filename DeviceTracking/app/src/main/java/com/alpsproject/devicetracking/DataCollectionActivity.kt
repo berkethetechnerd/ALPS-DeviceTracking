@@ -71,7 +71,7 @@ class DataCollectionActivity : BaseActivity() {
             }
             SharedPreferencesManager.write(C.RUNNING_SENSOR_BLUETOOTH, isBluetoothSelected)
             if(isBluetoothSelected) {
-                SettingsManager.turnBluetoothOn(this)
+                SettingsManager.turnBluetoothOn()
 
                 val sensorData = SensorData()
                 sensorData.sensorName = "Bluetooth"
