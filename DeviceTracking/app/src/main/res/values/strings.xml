@@ -44,7 +44,8 @@
         available sensor list. \n\nYou will be then asked to give permission for us to observe the
         sensors you have selected (if not granted before, or rejected)</string>
     <string name="sensor_selection_available_sensors">Available Sensors</string>
-    <string name="sensor_selection_select_at_least_one">Please select at least one sensor to continue.</string>
+    <string name="sensor_selection_select_at_least_one">Either you haven\'t selected an available
+        sensor or you rejected permission for one. In order to continue please follow our guideline.</string>
 
     <string name="data_collection_title">Data Collection</string>
     <string name="data_collection_start">START</string>
@@ -62,6 +63,20 @@
     <string name="report_usage_hours_total">Hours in Total</string>
 
     <string name="menu_item_report">Report</string>
+
+
+    <string name="user_message_alert_title">Something is wrong</string>
+    <string name="user_message_title">We need your permission!</string>
+    <string name="user_message_title_wifi">Wi-Fi</string>
+    <string name="user_message_title_bluetooth">Bluetooth</string>
+    <string name="user_message_title_screen_usage">Screen Usage</string>
+    <string name="user_message_message">In order to collect your data on %1$s, we do need your
+        consent. The data collected on this sensor will be stored locally and uploaded to our
+        servers. This data will not be illustrated with your personal identity in any way, and
+        it will solely be used for our research. Do you give your consent for us to collect
+        data on %2$s?</string>
+    <string name="user_message_positive">I give my consent</string>
+    <string name="user_message_negative">Cancel</string>
 
     <string name="content_description_app_logo">ALPS Software Ltd</string>
     <string name="content_description_ifm_logo">Innovation and IP Management LAB</string>

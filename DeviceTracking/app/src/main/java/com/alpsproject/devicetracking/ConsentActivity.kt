@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.*
 import com.alpsproject.devicetracking.helper.SharedPreferencesManager
+import com.alpsproject.devicetracking.helper.UserMessageGenerator
 
 class ConsentActivity : BaseActivity() {
 
@@ -46,11 +47,11 @@ class ConsentActivity : BaseActivity() {
 
     private fun proceedToSensorSelection() {
         if (cbConsent.isChecked) {
-            SharedPreferencesManager.write(CONST.CONSENT_OF_USER, true)
+            SharedPreferencesManager.write(C.CONSENT_OF_USER, true)
             startActivity(Intent(this, SensorSelectionActivity::class.java))
             finish()
         } else {
-            Toast.makeText(this, getString(R.string.consent_must_agree), Toast.LENGTH_SHORT).show()
+            UserMessageGenerator.generateDialogForAlert(this, getString(R.string.consent_must_agree))
         }
     }
 }

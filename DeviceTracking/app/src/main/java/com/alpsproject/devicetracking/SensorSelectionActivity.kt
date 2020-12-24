@@ -8,22 +8,48 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.widget.Button
 import android.widget.Toast
+import com.alpsproject.devicetracking.delegates.PermissionDelegate
+import com.alpsproject.devicetracking.enums.AccessPermission
+import com.alpsproject.devicetracking.helper.PermissionManager
+import com.alpsproject.devicetracking.helper.UserMessageGenerator
 import com.alpsproject.devicetracking.views.SensorView
 
-class SensorSelectionActivity : BaseActivity() {
+class SensorSelectionActivity : BaseActivity(), PermissionDelegate {
 
     private lateinit var sensorWifiView: SensorView
     private lateinit var sensorBluetoothView: SensorView
     private lateinit var sensorScreenUsageView: SensorView
     private lateinit var btnNext: Button
 
+    private var grantedSensors: Int = 0
+    private var rejectedSensors: Int = 0
+    private val activeSensors: Int
+        get() {
+            var num = 0
+            if (sensorWifiView.isSensorSelected()) num++
+            if (sensorBluetoothView.isSensorSelected()) num++
+            if (sensorScreenUsageView.isSensorSelected()) num++
+            return num
+        }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         checkIfAlreadyRunning()
         setContentView(R.layout.activity_sensor_selection)
 
+        UserMessageGenerator.delegate = this
         title = getString(R.string.sensor_selection_title)
         initUI()
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        grantedSensors = 0
+        rejectedSensors = 0
+        sensorWifiView.deselectSensor()
+        sensorBluetoothView.deselectSensor()
+        sensorScreenUsageView.deselectSensor()
     }
 
     private fun checkIfAlreadyRunning() {
@@ -43,25 +69,68 @@ class SensorSelectionActivity : BaseActivity() {
         sensorScreenUsageView.configureSensor(getResIcon(R.drawable.ic_screen_usage_sensor), getString(R.string.sensor_screen_usage))
 
         btnNext = findViewById(R.id.btn_next_data_collection)
-        btnNext.setOnClickListener { proceedToDataCollection() }
+        btnNext.setOnClickListener { requestPermissions() }
+    }
+
+    private fun requestPermissions() {
+        grantedSensors = 0
+        rejectedSensors = 0
+
+        if (sensorScreenUsageView.isSensorSelected()) {
+            if (!PermissionManager.checkPermission(AccessPermission.ACCESS_SCREEN_USAGE)) {
+                PermissionManager.askPermission(this, AccessPermission.ACCESS_SCREEN_USAGE)
+            } else {
+                grantedSensors++
+            }
+        }
+
+        if (sensorBluetoothView.isSensorSelected()) {
+            if (!PermissionManager.checkPermission(AccessPermission.ACCESS_BLUETOOTH)) {
+                PermissionManager.askPermission(this, AccessPermission.ACCESS_BLUETOOTH)
+            } else {
+                grantedSensors++
+            }
+        }
+
+        if (sensorWifiView.isSensorSelected()) {
+            if (!PermissionManager.checkPermission(AccessPermission.ACCESS_WIFI)) {
+                PermissionManager.askPermission(this, AccessPermission.ACCESS_WIFI)
+            } else {
+                grantedSensors++
+            }
+        }
+
+        proceedToDataCollection()
+    }
+
+    override fun permissionGranted() {
+        grantedSensors++
+        proceedToDataCollection()
+    }
+
+    override fun permissionRejected() {
+        rejectedSensors++
+        proceedToDataCollection()
     }
 
     private fun proceedToDataCollection() {
-        val selectedSensors = Intent(this, DataCollectionActivity::class.java)
-        selectedSensors.putExtra(CONST.SENSOR_WIFI, sensorWifiView.isSensorSelected())
-        selectedSensors.putExtra(CONST.SENSOR_BLUETOOTH, sensorBluetoothView.isSensorSelected())
-        selectedSensors.putExtra(CONST.SENSOR_SCREEN_USAGE, sensorScreenUsageView.isSensorSelected())
+        if (activeSensors == 0) {
+            UserMessageGenerator.generateDialogForAlert(this, getString(R.string.sensor_selection_select_at_least_one))
+            return
+        }
 
-        if (isAnySensorSelected()) {
-            startActivity(selectedSensors)
-        } else {
-            Toast.makeText(this, getString(R.string.sensor_selection_select_at_least_one), Toast.LENGTH_SHORT).show()
+        if (activeSensors == rejectedSensors + grantedSensors) {
+            if (rejectedSensors != 0) {
+                UserMessageGenerator.generateDialogForAlert(this, getString(R.string.sensor_selection_select_at_least_one))
+            } else {
+                val selectedSensors = Intent(this, DataCollectionActivity::class.java)
+                selectedSensors.putExtra(C.SENSOR_WIFI, sensorWifiView.isSensorSelected())
+                selectedSensors.putExtra(C.SENSOR_BLUETOOTH, sensorBluetoothView.isSensorSelected())
+                selectedSensors.putExtra(C.SENSOR_SCREEN_USAGE, sensorScreenUsageView.isSensorSelected())
+                startActivity(selectedSensors)
+            }
         }
     }
-
-    private fun isAnySensorSelected() = sensorWifiView.isSensorSelected()
-            || sensorBluetoothView.isSensorSelected()
-            || sensorScreenUsageView.isSensorSelected()
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val inflater: MenuInflater = menuInflater
