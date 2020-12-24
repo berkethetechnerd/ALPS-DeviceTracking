@@ -65,6 +65,7 @@
     <string name="menu_item_report">Report</string>
 
 
+    <string name="user_message_alert_title">Something is wrong</string>
     <string name="user_message_title">We need your permission!</string>
     <string name="user_message_title_wifi">Wi-Fi</string>
     <string name="user_message_title_bluetooth">Bluetooth</string>

@@ -1,14 +1,28 @@
 package com.alpsproject.devicetracking.helper
 
 import android.app.Activity
+import android.app.AlertDialog
 import com.alpsproject.devicetracking.R
 import com.alpsproject.devicetracking.delegates.PermissionDelegate
 import com.alpsproject.devicetracking.enums.AccessPermission
 import com.shreyaspatil.MaterialDialog.BottomSheetMaterialDialog
+import com.shreyaspatil.MaterialDialog.MaterialDialog
 
 object UserMessageGenerator {
 
     var delegate: PermissionDelegate? = null
+
+    fun generateDialogForAlert(activity: Activity, message: String) {
+        val mDialog = AlertDialog.Builder(activity)
+                .setTitle(activity.getString(R.string.user_message_alert_title))
+                .setMessage(message)
+                .setCancelable(false)
+                .setPositiveButton(activity.getString(android.R.string.ok)) { dialogInterface, _ ->
+                    dialogInterface.dismiss()
+                }
+                .create()
+        mDialog.show()
+    }
 
     fun generateDialogForPermission(activity: Activity, permission: AccessPermission) {
         val sensor = getSensorTitle(activity, permission)
@@ -25,6 +39,7 @@ object UserMessageGenerator {
                     dialogInterface.dismiss()
                 }
                 .setNegativeButton(activity.getString(R.string.user_message_negative)) { dialogInterface, _ ->
+                    delegate?.permissionRejected()
                     dialogInterface.dismiss()
                 }
                 .build()

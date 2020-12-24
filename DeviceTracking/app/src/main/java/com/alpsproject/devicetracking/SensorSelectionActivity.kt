@@ -22,6 +22,7 @@ class SensorSelectionActivity : BaseActivity(), PermissionDelegate {
     private lateinit var btnNext: Button
 
     private var grantedSensors: Int = 0
+    private var rejectedSensors: Int = 0
     private val activeSensors: Int
         get() {
             var num = 0
@@ -45,6 +46,7 @@ class SensorSelectionActivity : BaseActivity(), PermissionDelegate {
         super.onResume()
 
         grantedSensors = 0
+        rejectedSensors = 0
         sensorWifiView.deselectSensor()
         sensorBluetoothView.deselectSensor()
         sensorScreenUsageView.deselectSensor()
@@ -72,6 +74,7 @@ class SensorSelectionActivity : BaseActivity(), PermissionDelegate {
 
     private fun requestPermissions() {
         grantedSensors = 0
+        rejectedSensors = 0
 
         if (sensorScreenUsageView.isSensorSelected()) {
             if (!PermissionManager.checkPermission(AccessPermission.ACCESS_SCREEN_USAGE)) {
@@ -105,16 +108,26 @@ class SensorSelectionActivity : BaseActivity(), PermissionDelegate {
         proceedToDataCollection()
     }
 
+    override fun permissionRejected() {
+        rejectedSensors++
+        proceedToDataCollection()
+    }
+
     private fun proceedToDataCollection() {
-        if (activeSensors == grantedSensors) {
-            if (activeSensors != 0) {
+        if (activeSensors == 0) {
+            UserMessageGenerator.generateDialogForAlert(this, getString(R.string.sensor_selection_select_at_least_one))
+            return
+        }
+
+        if (activeSensors == rejectedSensors + grantedSensors) {
+            if (rejectedSensors != 0) {
+                UserMessageGenerator.generateDialogForAlert(this, getString(R.string.sensor_selection_select_at_least_one))
+            } else {
                 val selectedSensors = Intent(this, DataCollectionActivity::class.java)
                 selectedSensors.putExtra(C.SENSOR_WIFI, sensorWifiView.isSensorSelected())
                 selectedSensors.putExtra(C.SENSOR_BLUETOOTH, sensorBluetoothView.isSensorSelected())
                 selectedSensors.putExtra(C.SENSOR_SCREEN_USAGE, sensorScreenUsageView.isSensorSelected())
                 startActivity(selectedSensors)
-            } else {
-                Toast.makeText(this, getString(R.string.sensor_selection_select_at_least_one), Toast.LENGTH_SHORT).show()
             }
         }
     }
