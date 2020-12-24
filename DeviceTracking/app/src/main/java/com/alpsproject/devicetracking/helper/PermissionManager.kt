@@ -33,7 +33,7 @@ object PermissionManager: ActivityCompat.OnRequestPermissionsResultCallback {
         if (forPermission == AccessPermission.ACCESS_WIFI) {
             ActivityCompat.requestPermissions(
                     activity,
-                    Array(1) { REQUEST_WIFI },
+                    arrayOf(REQUEST_WIFI),
                     REQUEST_WIFI_CODE
             )
         }
