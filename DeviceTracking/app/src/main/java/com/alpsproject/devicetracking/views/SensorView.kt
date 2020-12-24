@@ -45,6 +45,10 @@ class SensorView @JvmOverloads constructor(
         return checkbox.isChecked
     }
 
+    fun deselectSensor() {
+        checkbox.isChecked = false
+    }
+
     fun removeCheckBox() {
         checkbox.visibility = View.GONE
     }

@@ -44,7 +44,8 @@
         available sensor list. \n\nYou will be then asked to give permission for us to observe the
         sensors you have selected (if not granted before, or rejected)</string>
     <string name="sensor_selection_available_sensors">Available Sensors</string>
-    <string name="sensor_selection_select_at_least_one">Please select at least one sensor to continue.</string>
+    <string name="sensor_selection_select_at_least_one">Either you haven\'t selected an available
+        sensor or you rejected permission for one. In order to continue please follow our guideline.</string>
 
     <string name="data_collection_title">Data Collection</string>
     <string name="data_collection_start">START</string>

@@ -14,16 +14,12 @@ object SettingsManager {
     fun turnWifiOn(activity: Activity) {
         if (PermissionManager.checkPermission(AccessPermission.ACCESS_WIFI)) {
             activateWifi(activity)
-        } else {
-            PermissionManager.askPermission(AccessPermission.ACCESS_WIFI)
         }
     }
 
     fun turnBluetoothOn() {
         if (PermissionManager.checkPermission(AccessPermission.ACCESS_BLUETOOTH)) {
             activateBluetooth()
-        } else {
-            PermissionManager.askPermission(AccessPermission.ACCESS_BLUETOOTH)
         }
     }
 
