@@ -1,6 +1,5 @@
 package com.alpsproject.devicetracking
 
-import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.alpsproject.devicetracking.helper.ConstantsManager
@@ -13,13 +12,8 @@ import com.alpsproject.devicetracking.helper.SharedPreferencesManager
 
 open class BaseActivity : AppCompatActivity() {
 
-    val CONST = ConstantsManager
+    val C = ConstantsManager
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        SharedPreferencesManager.init(context = applicationContext)
-    }
-
-    fun isRunning() = SharedPreferencesManager.read(CONST.RUNNING_DATA_COLLECTION, false)
+    fun isRunning() = SharedPreferencesManager.read(C.RUNNING_DATA_COLLECTION, false)
     fun getResIcon(id: Int) = ContextCompat.getDrawable(applicationContext, id)
 }

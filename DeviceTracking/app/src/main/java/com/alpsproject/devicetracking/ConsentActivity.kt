@@ -46,7 +46,7 @@ class ConsentActivity : BaseActivity() {
 
     private fun proceedToSensorSelection() {
         if (cbConsent.isChecked) {
-            SharedPreferencesManager.write(CONST.CONSENT_OF_USER, true)
+            SharedPreferencesManager.write(C.CONSENT_OF_USER, true)
             startActivity(Intent(this, SensorSelectionActivity::class.java))
             finish()
         } else {

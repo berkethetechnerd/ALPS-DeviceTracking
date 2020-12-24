@@ -30,7 +30,7 @@ class LoginActivity : BaseActivity() {
     }
 
     private fun proceedToApp() {
-        val isConsentGiven = SharedPreferencesManager.read(CONST.CONSENT_OF_USER, false)
+        val isConsentGiven = SharedPreferencesManager.read(C.CONSENT_OF_USER, false)
 
         if (isConsentGiven) {
             startActivity(Intent(this, SensorSelectionActivity::class.java))

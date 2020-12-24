@@ -48,9 +48,9 @@ class SensorSelectionActivity : BaseActivity() {
 
     private fun proceedToDataCollection() {
         val selectedSensors = Intent(this, DataCollectionActivity::class.java)
-        selectedSensors.putExtra(CONST.SENSOR_WIFI, sensorWifiView.isSensorSelected())
-        selectedSensors.putExtra(CONST.SENSOR_BLUETOOTH, sensorBluetoothView.isSensorSelected())
-        selectedSensors.putExtra(CONST.SENSOR_SCREEN_USAGE, sensorScreenUsageView.isSensorSelected())
+        selectedSensors.putExtra(C.SENSOR_WIFI, sensorWifiView.isSensorSelected())
+        selectedSensors.putExtra(C.SENSOR_BLUETOOTH, sensorBluetoothView.isSensorSelected())
+        selectedSensors.putExtra(C.SENSOR_SCREEN_USAGE, sensorScreenUsageView.isSensorSelected())
 
         if (isAnySensorSelected()) {
             startActivity(selectedSensors)
