@@ -1,6 +1,7 @@
 package com.alpsproject.devicetracking.helper
 
 import android.app.Activity
+import android.bluetooth.BluetoothAdapter
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -13,8 +14,11 @@ object Broadcaster {
     private val receivers: ArrayList<SensorStatusDelegate> = ArrayList()
 
     fun registerForBroadcasting(receiver: Activity) {
-        val intentFilter = IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION)
-        receiver.registerReceiver(wifiStateReceiver, intentFilter)
+        val wifiFilter = IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION)
+        receiver.registerReceiver(wifiStateReceiver, wifiFilter)
+
+        val bluetoothFilter = IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED)
+        receiver.registerReceiver(bluetoothStateReceiver, bluetoothFilter)
 
         (receiver as? SensorStatusDelegate)?.let {
             receivers.add(it)
@@ -23,6 +27,7 @@ object Broadcaster {
 
     fun deregisterForBroadcasting(receiver: Activity) {
         receiver.unregisterReceiver(wifiStateReceiver)
+        receiver.unregisterReceiver(bluetoothStateReceiver)
 
         (receiver as? SensorStatusDelegate)?.let {
             if (receivers.contains(it)) {
@@ -41,10 +46,27 @@ object Broadcaster {
         }
     }
 
+    private val bluetoothStateReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            intent?.let {
+                val bluetoothStateExtra = it.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.ERROR)
+                val bluetoothStatus = bluetoothStateExtra == BluetoothAdapter.STATE_ON
+                broadcastBluetoothChange(bluetoothStatus)
+            }
+        }
+    }
+
     private fun broadcastWifiChange(status: Boolean) {
         for (receiver in receivers) {
             if (status) { receiver.didWifiEnable() }
             else { receiver.didWifiDisable() }
+        }
+    }
+
+    private fun broadcastBluetoothChange(status: Boolean) {
+        for (receiver in receivers) {
+            if (status) { receiver.didBluetoothEnable() }
+            else { receiver.didBluetoothDisable() }
         }
     }
 }

@@ -127,6 +127,14 @@ class DataCollectionActivity : BaseActivity(), SensorStatusDelegate {
         selectedWifiView.sensorDisabled()
     }
 
+    override fun didBluetoothEnable() {
+        selectedBluetoothView.sensorEnabled()
+    }
+
+    override fun didBluetoothDisable() {
+        selectedBluetoothView.sensorDisabled()
+    }
+
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val inflater: MenuInflater = menuInflater
         inflater.inflate(R.menu.menu_report, menu)
