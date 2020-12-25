@@ -2,7 +2,9 @@ package com.alpsproject.devicetracking
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.*
+import com.alpsproject.devicetracking.helper.RealmManager
 import com.alpsproject.devicetracking.helper.SharedPreferencesManager
 
 class LoginActivity : BaseActivity() {
@@ -16,6 +18,7 @@ class LoginActivity : BaseActivity() {
         setContentView(R.layout.activity_login)
 
         initUI()
+        RealmManager.printData()
     }
 
     private fun initUI() {

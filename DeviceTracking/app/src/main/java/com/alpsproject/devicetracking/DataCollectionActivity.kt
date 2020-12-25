@@ -9,10 +9,8 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
-import com.alpsproject.devicetracking.helper.RealmManager
-import com.alpsproject.devicetracking.helper.SettingsManager
+import com.alpsproject.devicetracking.helper.DataCollectionManager
 import com.alpsproject.devicetracking.helper.SharedPreferencesManager
-import com.alpsproject.devicetracking.model.SensorData
 import com.alpsproject.devicetracking.views.SensorView
 
 class DataCollectionActivity : BaseActivity() {
@@ -39,6 +37,7 @@ class DataCollectionActivity : BaseActivity() {
 
         setTitle(getString(R.string.data_collection_title))
         initUI()
+        initSensors()
     }
 
     private fun initUI() {
@@ -53,75 +52,9 @@ class DataCollectionActivity : BaseActivity() {
         } else {
             btnStartStop.text = getString(R.string.data_collection_start)
         }
-
-        updateSelectedSensors()
     }
 
-    private fun startStopButton() {
-        if(!isRunning()) { // Starting
-            SharedPreferencesManager.write(C.RUNNING_DATA_COLLECTION, true)
-
-            SharedPreferencesManager.write(C.RUNNING_SENSOR_WIFI, isWifiSelected)
-            if(isWifiSelected) {
-                SettingsManager.askForWiFi(this)
-
-                val sensorData = SensorData()
-                sensorData.sensorName = "Wifi"
-                val id = RealmManager.saveData(sensorData)
-                SharedPreferencesManager.write(C.RUNNING_SENSOR_WIFI_ID, id)
-            }
-
-            SharedPreferencesManager.write(C.RUNNING_SENSOR_BLUETOOTH, isBluetoothSelected)
-            if(isBluetoothSelected) {
-                SettingsManager.askForBluetooth(this)
-
-                val sensorData = SensorData()
-                sensorData.sensorName = "Bluetooth"
-                val id = RealmManager.saveData(sensorData)
-                SharedPreferencesManager.write(C.RUNNING_SENSOR_BLUETOOTH_ID, id)
-            }
-
-            SharedPreferencesManager.write(C.RUNNING_SENSOR_SCREEN_USAGE, isScreenUsageSelected)
-            if(isScreenUsageSelected) {
-                val sensorData = SensorData()
-                sensorData.sensorName = "Screen Record"
-                val id = RealmManager.saveData(sensorData)
-                SharedPreferencesManager.write(C.RUNNING_SENSOR_SCREEN_USAGE_ID, id)
-            }
-
-            btnStartStop.text = getString(R.string.data_collection_stop)
-        } else { // Stopping
-            SharedPreferencesManager.write(C.RUNNING_DATA_COLLECTION, false)
-            if(isWifiSelected) {
-                var id = SharedPreferencesManager.read(C.RUNNING_SENSOR_WIFI_ID, "")
-                id?.let {
-                    RealmManager.updateData(it)
-                }
-            }
-
-            SharedPreferencesManager.write(C.RUNNING_SENSOR_WIFI, false)
-            if(isBluetoothSelected){
-                var id = SharedPreferencesManager.read(C.RUNNING_SENSOR_BLUETOOTH_ID, "")
-                id?.let {
-                    RealmManager.updateData(it)
-                }
-            }
-
-            SharedPreferencesManager.write(C.RUNNING_SENSOR_BLUETOOTH, false)
-            if(isScreenUsageSelected){
-                var id = SharedPreferencesManager.read(C.RUNNING_SENSOR_SCREEN_USAGE_ID, "")
-                id?.let {
-                    RealmManager.updateData(it)
-                }
-            }
-            SharedPreferencesManager.write(C.RUNNING_SENSOR_SCREEN_USAGE, false)
-            btnStartStop.text = getString(R.string.data_collection_start)
-
-            finish()
-        }
-    }
-
-    private fun updateSelectedSensors(){
+    private fun initSensors(){
         selectedWifiView = findViewById(R.id.data_collection_list_wifi)
         selectedWifiView.configureSensor(getResIcon(R.drawable.ic_wifi_sensor), getString(R.string.sensor_wifi))
         selectedWifiView.removeCheckBox()
@@ -144,6 +77,33 @@ class DataCollectionActivity : BaseActivity() {
 
         if(!isScreenUsageSelected) {
             selectedScreenUsageView.visibility = View.GONE
+        }
+    }
+
+    private fun startStopButton() {
+        fun startDataCollection() {
+            SharedPreferencesManager.write(C.RUNNING_DATA_COLLECTION, true)
+            btnStartStop.text = getString(R.string.data_collection_stop)
+
+            if(isWifiSelected) { DataCollectionManager.startWifiCollection(this) }
+            if(isBluetoothSelected) { DataCollectionManager.startBluetoothCollection(this) }
+            if(isScreenUsageSelected) {  DataCollectionManager.startScreenUsageCollection() }
+        }
+
+        fun stopDataCollection() {
+            SharedPreferencesManager.write(DataCollectionManager.C.RUNNING_DATA_COLLECTION, false)
+            btnStartStop.text = getString(R.string.data_collection_start)
+
+            if(isWifiSelected) { DataCollectionManager.stopWifiCollection() }
+            if(isBluetoothSelected){ DataCollectionManager.stopBluetoothCollection() }
+            if(isScreenUsageSelected){ DataCollectionManager.stopScreenUsageCollection() }
+        }
+
+        if(!isRunning()) { // Starting
+            startDataCollection()
+        } else { // Stopping
+            stopDataCollection()
+            finish()
         }
     }
 

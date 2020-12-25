@@ -22,7 +22,7 @@ class SensorSelectionActivity : BaseActivity(), PermissionDelegate {
 
     private var grantedSensors: Int = 0
     private var rejectedSensors: Int = 0
-    private val activeSensors: Int
+    private val selectedSensors: Int
         get() {
             var num = 0
             if (sensorWifiView.isSensorSelected()) num++
@@ -33,8 +33,9 @@ class SensorSelectionActivity : BaseActivity(), PermissionDelegate {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        checkIfAlreadyRunning()
         setContentView(R.layout.activity_sensor_selection)
+
+        checkIfAlreadyRunning()
 
         UserMessageGenerator.permissionDelegate = this
         setTitle(getString(R.string.sensor_selection_title))
@@ -113,20 +114,20 @@ class SensorSelectionActivity : BaseActivity(), PermissionDelegate {
     }
 
     private fun proceedToDataCollection() {
-        if (activeSensors == 0) {
+        if (selectedSensors == 0) {
             UserMessageGenerator.generateDialogForAlert(this, getString(R.string.sensor_selection_select_at_least_one))
             return
         }
 
-        if (activeSensors == rejectedSensors + grantedSensors) {
+        if (selectedSensors == rejectedSensors + grantedSensors) {
             if (rejectedSensors != 0) {
                 UserMessageGenerator.generateDialogForAlert(this, getString(R.string.sensor_selection_select_at_least_one))
             } else {
-                val selectedSensors = Intent(this, DataCollectionActivity::class.java)
-                selectedSensors.putExtra(C.SENSOR_WIFI, sensorWifiView.isSensorSelected())
-                selectedSensors.putExtra(C.SENSOR_BLUETOOTH, sensorBluetoothView.isSensorSelected())
-                selectedSensors.putExtra(C.SENSOR_SCREEN_USAGE, sensorScreenUsageView.isSensorSelected())
-                startActivity(selectedSensors)
+                val dataCollection = Intent(this, DataCollectionActivity::class.java)
+                dataCollection.putExtra(C.SENSOR_WIFI, sensorWifiView.isSensorSelected())
+                dataCollection.putExtra(C.SENSOR_BLUETOOTH, sensorBluetoothView.isSensorSelected())
+                dataCollection.putExtra(C.SENSOR_SCREEN_USAGE, sensorScreenUsageView.isSensorSelected())
+                startActivity(dataCollection)
             }
         }
     }
