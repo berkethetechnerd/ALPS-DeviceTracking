@@ -49,15 +49,9 @@ class SensorView @JvmOverloads constructor(
         sensorDisabled()
     }
 
-
-    fun sensorEnabled() {
-        tvStatus.text = context.getString(R.string.sensor_item_enabled)
-        tvStatus.setTextColor(context.getColor(R.color.green))
-    }
-
-    fun sensorDisabled() {
-        tvStatus.text = context.getString(R.string.sensor_item_disabled)
-        tvStatus.setTextColor(context.getColor(R.color.red))
+    fun changeSensorStatus(enabled: Boolean) {
+        if (enabled) { sensorEnabled() }
+        else { sensorDisabled() }
     }
 
     fun deselectSensor() {
@@ -66,5 +60,15 @@ class SensorView @JvmOverloads constructor(
 
     fun isSensorSelected(): Boolean {
         return checkbox.isChecked
+    }
+
+    private fun sensorEnabled() {
+        tvStatus.text = context.getString(R.string.sensor_item_enabled)
+        tvStatus.setTextColor(context.getColor(R.color.green))
+    }
+
+    private fun sensorDisabled() {
+        tvStatus.text = context.getString(R.string.sensor_item_disabled)
+        tvStatus.setTextColor(context.getColor(R.color.red))
     }
 }

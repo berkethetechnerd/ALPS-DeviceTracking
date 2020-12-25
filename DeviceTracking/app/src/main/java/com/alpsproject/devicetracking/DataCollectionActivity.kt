@@ -12,6 +12,7 @@ import android.widget.TextView
 import com.alpsproject.devicetracking.delegates.SensorStatusDelegate
 import com.alpsproject.devicetracking.helper.Broadcaster
 import com.alpsproject.devicetracking.helper.DataCollectionManager
+import com.alpsproject.devicetracking.helper.SettingsManager
 import com.alpsproject.devicetracking.helper.SharedPreferencesManager
 import com.alpsproject.devicetracking.views.SensorView
 
@@ -81,10 +82,14 @@ class DataCollectionActivity : BaseActivity(), SensorStatusDelegate {
 
         if(!isWifiSelected) {
             selectedWifiView.visibility = View.GONE
+        } else {
+            selectedWifiView.changeSensorStatus(SettingsManager.isWifiEnabled(this))
         }
 
         if(!isBluetoothSelected) {
             selectedBluetoothView.visibility = View.GONE
+        } else {
+            selectedBluetoothView.changeSensorStatus(SettingsManager.isBluetoothEnabled())
         }
 
         if(!isScreenUsageSelected) {
@@ -120,19 +125,19 @@ class DataCollectionActivity : BaseActivity(), SensorStatusDelegate {
     }
 
     override fun didWifiEnable() {
-        selectedWifiView.sensorEnabled()
+        selectedWifiView.changeSensorStatus(true)
     }
 
     override fun didWifiDisable() {
-        selectedWifiView.sensorDisabled()
+        selectedWifiView.changeSensorStatus(false)
     }
 
     override fun didBluetoothEnable() {
-        selectedBluetoothView.sensorEnabled()
+        selectedBluetoothView.changeSensorStatus(true)
     }
 
     override fun didBluetoothDisable() {
-        selectedBluetoothView.sensorDisabled()
+        selectedBluetoothView.changeSensorStatus(false)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

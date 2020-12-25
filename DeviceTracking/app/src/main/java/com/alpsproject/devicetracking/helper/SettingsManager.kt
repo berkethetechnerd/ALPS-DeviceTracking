@@ -28,6 +28,13 @@ object SettingsManager: ActivationDelegate {
         }
     }
 
+    fun isWifiEnabled(activity: Activity): Boolean {
+        val wifiManager = getWifiManager(activity) ?: return false // Adapter not found
+        return wifiManager.isWifiEnabled
+    }
+
+    fun isBluetoothEnabled(): Boolean = getBluetoothAdapter().isEnabled
+
     override fun sensorActivated(context: Activity, sensor: AccessSensor) {
         when (sensor) {
             AccessSensor.ACCESS_WIFI -> activateWifi(context)
@@ -47,13 +54,6 @@ object SettingsManager: ActivationDelegate {
     }
 
     private fun activateBluetooth() = getBluetoothAdapter().enable()
-
-    private fun isWifiEnabled(activity: Activity): Boolean {
-        val wifiManager = getWifiManager(activity) ?: return false // Adapter not found
-        return wifiManager.isWifiEnabled
-    }
-
-    private fun isBluetoothEnabled(): Boolean = getBluetoothAdapter().isEnabled
 
     private fun getWifiManager(activity: Activity): WifiManager? = activity.applicationContext.getSystemService(Context.WIFI_SERVICE) as? WifiManager?
 
