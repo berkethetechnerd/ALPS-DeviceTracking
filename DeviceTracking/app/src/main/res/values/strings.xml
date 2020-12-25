@@ -78,6 +78,11 @@
         data on %2$s?</string>
     <string name="user_message_positive">I give my consent</string>
     <string name="user_message_negative">Cancel</string>
+    <string name="user_message_sensor_activation_title">Activation of Sensor</string>
+    <string name="user_message_sensor_activation_message">%1$s seems to be disabled. Do you want to
+        turn it on?</string>
+    <string name="user_message_sensor_activation_confirm">Yes, please</string>
+    <string name="user_message_sensor_activation_reject">No, thanks</string>
 
     <string name="content_description_app_logo">ALPS Software Ltd</string>
     <string name="content_description_ifm_logo">Innovation and IP Management LAB</string>

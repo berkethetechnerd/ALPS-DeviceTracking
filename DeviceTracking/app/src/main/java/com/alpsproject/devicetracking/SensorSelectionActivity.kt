@@ -7,9 +7,8 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.widget.Button
-import android.widget.Toast
 import com.alpsproject.devicetracking.delegates.PermissionDelegate
-import com.alpsproject.devicetracking.enums.AccessPermission
+import com.alpsproject.devicetracking.enums.AccessSensor
 import com.alpsproject.devicetracking.helper.PermissionManager
 import com.alpsproject.devicetracking.helper.UserMessageGenerator
 import com.alpsproject.devicetracking.views.SensorView
@@ -37,7 +36,7 @@ class SensorSelectionActivity : BaseActivity(), PermissionDelegate {
         checkIfAlreadyRunning()
         setContentView(R.layout.activity_sensor_selection)
 
-        UserMessageGenerator.delegate = this
+        UserMessageGenerator.permissionDelegate = this
         setTitle(getString(R.string.sensor_selection_title))
         initUI()
     }
@@ -77,24 +76,24 @@ class SensorSelectionActivity : BaseActivity(), PermissionDelegate {
         rejectedSensors = 0
 
         if (sensorScreenUsageView.isSensorSelected()) {
-            if (!PermissionManager.checkPermission(AccessPermission.ACCESS_SCREEN_USAGE)) {
-                PermissionManager.askPermission(this, AccessPermission.ACCESS_SCREEN_USAGE)
+            if (!PermissionManager.checkPermission(AccessSensor.ACCESS_SCREEN_USAGE)) {
+                PermissionManager.askPermission(this, AccessSensor.ACCESS_SCREEN_USAGE)
             } else {
                 grantedSensors++
             }
         }
 
         if (sensorBluetoothView.isSensorSelected()) {
-            if (!PermissionManager.checkPermission(AccessPermission.ACCESS_BLUETOOTH)) {
-                PermissionManager.askPermission(this, AccessPermission.ACCESS_BLUETOOTH)
+            if (!PermissionManager.checkPermission(AccessSensor.ACCESS_BLUETOOTH)) {
+                PermissionManager.askPermission(this, AccessSensor.ACCESS_BLUETOOTH)
             } else {
                 grantedSensors++
             }
         }
 
         if (sensorWifiView.isSensorSelected()) {
-            if (!PermissionManager.checkPermission(AccessPermission.ACCESS_WIFI)) {
-                PermissionManager.askPermission(this, AccessPermission.ACCESS_WIFI)
+            if (!PermissionManager.checkPermission(AccessSensor.ACCESS_WIFI)) {
+                PermissionManager.askPermission(this, AccessSensor.ACCESS_WIFI)
             } else {
                 grantedSensors++
             }

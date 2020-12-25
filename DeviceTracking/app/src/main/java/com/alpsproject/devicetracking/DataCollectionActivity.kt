@@ -63,7 +63,7 @@ class DataCollectionActivity : BaseActivity() {
 
             SharedPreferencesManager.write(C.RUNNING_SENSOR_WIFI, isWifiSelected)
             if(isWifiSelected) {
-                SettingsManager.turnWifiOn(this)
+                SettingsManager.askForWiFi(this)
 
                 val sensorData = SensorData()
                 sensorData.sensorName = "Wifi"
@@ -73,7 +73,7 @@ class DataCollectionActivity : BaseActivity() {
 
             SharedPreferencesManager.write(C.RUNNING_SENSOR_BLUETOOTH, isBluetoothSelected)
             if(isBluetoothSelected) {
-                SettingsManager.turnBluetoothOn()
+                SettingsManager.askForBluetooth(this)
 
                 val sensorData = SensorData()
                 sensorData.sensorName = "Bluetooth"
