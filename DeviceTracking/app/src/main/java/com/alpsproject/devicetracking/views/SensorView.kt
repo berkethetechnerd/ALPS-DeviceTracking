@@ -19,6 +19,7 @@ class SensorView @JvmOverloads constructor(
 
     private var ivIcon: ImageView
     private var tvName: TextView
+    private var tvStatus: TextView
     private var checkbox: CheckBox
 
     init {
@@ -26,6 +27,7 @@ class SensorView @JvmOverloads constructor(
 
         ivIcon = findViewById(R.id.iv_icon_sensor)
         tvName = findViewById(R.id.tv_name_sensor)
+        tvStatus = findViewById(R.id.tv_sensor_status)
         checkbox = findViewById(R.id.cb_select_sensor)
     }
 
@@ -41,15 +43,28 @@ class SensorView @JvmOverloads constructor(
         checkbox.isSelected = false
     }
 
-    fun isSensorSelected(): Boolean {
-        return checkbox.isChecked
+    fun switchToStatusView() {
+        tvStatus.visibility = View.VISIBLE
+        checkbox.visibility = View.GONE
+        sensorDisabled()
+    }
+
+
+    fun sensorEnabled() {
+        tvStatus.text = context.getString(R.string.sensor_item_enabled)
+        tvStatus.setTextColor(context.getColor(R.color.green))
+    }
+
+    fun sensorDisabled() {
+        tvStatus.text = context.getString(R.string.sensor_item_disabled)
+        tvStatus.setTextColor(context.getColor(R.color.red))
     }
 
     fun deselectSensor() {
         checkbox.isChecked = false
     }
 
-    fun removeCheckBox() {
-        checkbox.visibility = View.GONE
+    fun isSensorSelected(): Boolean {
+        return checkbox.isChecked
     }
 }

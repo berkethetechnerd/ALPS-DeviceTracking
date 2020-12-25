@@ -9,11 +9,13 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Button
 import android.widget.TextView
+import com.alpsproject.devicetracking.delegates.SensorStatusDelegate
+import com.alpsproject.devicetracking.helper.Broadcaster
 import com.alpsproject.devicetracking.helper.DataCollectionManager
 import com.alpsproject.devicetracking.helper.SharedPreferencesManager
 import com.alpsproject.devicetracking.views.SensorView
 
-class DataCollectionActivity : BaseActivity() {
+class DataCollectionActivity : BaseActivity(), SensorStatusDelegate {
 
     private lateinit var tvTitle: TextView
     private lateinit var btnStartStop: Button
@@ -40,6 +42,16 @@ class DataCollectionActivity : BaseActivity() {
         initSensors()
     }
 
+    override fun onStart() {
+        super.onStart()
+        Broadcaster.registerForBroadcasting(this)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Broadcaster.deregisterForBroadcasting(this)
+    }
+
     private fun initUI() {
         tvTitle = findViewById(R.id.tv_data_collection_title)
         tvTitle.text = getString(R.string.data_collection_title)
@@ -57,15 +69,15 @@ class DataCollectionActivity : BaseActivity() {
     private fun initSensors(){
         selectedWifiView = findViewById(R.id.data_collection_list_wifi)
         selectedWifiView.configureSensor(getResIcon(R.drawable.ic_wifi_sensor), getString(R.string.sensor_wifi))
-        selectedWifiView.removeCheckBox()
+        selectedWifiView.switchToStatusView()
 
         selectedBluetoothView = findViewById(R.id.data_collection_list_bluetooth)
         selectedBluetoothView.configureSensor(getResIcon(R.drawable.ic_bluetooth_sensor), getString(R.string.sensor_bluetooth))
-        selectedBluetoothView.removeCheckBox()
+        selectedBluetoothView.switchToStatusView()
 
         selectedScreenUsageView = findViewById(R.id.data_collection_list_screen_usage)
         selectedScreenUsageView.configureSensor(getResIcon(R.drawable.ic_screen_usage_sensor), getString(R.string.sensor_screen_usage))
-        selectedScreenUsageView.removeCheckBox()
+        selectedScreenUsageView.switchToStatusView()
 
         if(!isWifiSelected) {
             selectedWifiView.visibility = View.GONE
@@ -105,6 +117,14 @@ class DataCollectionActivity : BaseActivity() {
             stopDataCollection()
             finish()
         }
+    }
+
+    override fun didWifiEnable() {
+        selectedWifiView.sensorEnabled()
+    }
+
+    override fun didWifiDisable() {
+        selectedWifiView.sensorDisabled()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

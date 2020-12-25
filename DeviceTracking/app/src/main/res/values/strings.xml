@@ -65,7 +65,6 @@
 
     <string name="menu_item_report">Report</string>
 
-
     <string name="user_message_alert_title">Something is wrong</string>
     <string name="user_message_title">We need your permission!</string>
     <string name="user_message_title_wifi">Wi-Fi</string>
@@ -83,6 +82,9 @@
         turn it on?</string>
     <string name="user_message_sensor_activation_confirm">Yes, please</string>
     <string name="user_message_sensor_activation_reject">No, thanks</string>
+
+    <string name="sensor_item_enabled">ON</string>
+    <string name="sensor_item_disabled">OFF</string>
 
     <string name="content_description_app_logo">ALPS Software Ltd</string>
     <string name="content_description_ifm_logo">Innovation and IP Management LAB</string>
