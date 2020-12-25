@@ -19,6 +19,7 @@ class ConsentActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_consent)
 
+        setTitle(getString(R.string.consent_title_page))
         initUI()
     }
 

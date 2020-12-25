@@ -9,6 +9,7 @@
         \'Next\' button. </string>
 
     <string name="consent_title">Consent of Data Collection</string>
+    <string name="consent_title_page">Disclaimer</string>
     <string name="consent_disclaimer">Lorem ipsum dolor sit amet, consectetur adipiscing elit.
         Praesent mollis luctus lacus. Nullam eu nulla lacus. Vestibulum elementum tincidunt sagittis.
         Mauris venenatis ornare mauris, vitae consequat felis mattis in. Integer mi metus, scelerisque

@@ -16,4 +16,5 @@ open class BaseActivity : AppCompatActivity() {
 
     fun isRunning() = SharedPreferencesManager.read(C.RUNNING_DATA_COLLECTION, false)
     fun getResIcon(id: Int) = ContextCompat.getDrawable(applicationContext, id)
+    fun setTitle(title: String) { this.title = title }
 }

@@ -38,7 +38,7 @@ class SensorSelectionActivity : BaseActivity(), PermissionDelegate {
         setContentView(R.layout.activity_sensor_selection)
 
         UserMessageGenerator.delegate = this
-        title = getString(R.string.sensor_selection_title)
+        setTitle(getString(R.string.sensor_selection_title))
         initUI()
     }
 
