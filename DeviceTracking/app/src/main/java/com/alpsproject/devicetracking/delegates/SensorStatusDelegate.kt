@@ -5,4 +5,6 @@ interface SensorStatusDelegate {
     fun didWifiDisable()
     fun didBluetoothEnable()
     fun didBluetoothDisable()
+    fun didTurnScreenOn()
+    fun didTurnScreenOff()
 }

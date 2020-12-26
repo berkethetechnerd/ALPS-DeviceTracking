@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.wifi.WifiManager
 import android.os.Build
+import android.os.PowerManager
 import android.provider.Settings
 import com.alpsproject.devicetracking.delegates.ActivationDelegate
 import com.alpsproject.devicetracking.enums.AccessSensor
@@ -35,6 +36,11 @@ object SettingsManager: ActivationDelegate {
 
     fun isBluetoothEnabled(): Boolean = getBluetoothAdapter().isEnabled
 
+    fun isScreenTurnedOn(activity: Activity): Boolean {
+        val powerManager = getPowerManager(activity) ?: return false // Screen not found
+        return powerManager.isInteractive
+    }
+
     override fun sensorActivated(context: Activity, sensor: AccessSensor) {
         when (sensor) {
             AccessSensor.ACCESS_WIFI -> activateWifi(context)
@@ -58,4 +64,6 @@ object SettingsManager: ActivationDelegate {
     private fun getWifiManager(activity: Activity): WifiManager? = activity.applicationContext.getSystemService(Context.WIFI_SERVICE) as? WifiManager?
 
     private fun getBluetoothAdapter(): BluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
+
+    private fun getPowerManager(activity: Activity): PowerManager? = activity.getSystemService(Context.POWER_SERVICE) as? PowerManager?
 }
