@@ -24,11 +24,11 @@ class SensorSelectionActivity : BaseActivity(), PermissionDelegate {
     private var rejectedSensors: Int = 0
     private val selectedSensors: Int
         get() {
-            var num = 0
-            if (sensorWifiView.isSensorSelected()) num++
-            if (sensorBluetoothView.isSensorSelected()) num++
-            if (sensorScreenUsageView.isSensorSelected()) num++
-            return num
+            var numberOfSensors = 0
+            if (sensorWifiView.isSensorSelected()) numberOfSensors++
+            if (sensorBluetoothView.isSensorSelected()) numberOfSensors++
+            if (sensorScreenUsageView.isSensorSelected()) numberOfSensors++
+            return numberOfSensors
         }
 
     override fun onCreate(savedInstanceState: Bundle?) {

@@ -50,7 +50,7 @@ class DataCollectionActivity : BaseActivity(), SensorStatusDelegate {
 
     override fun onStop() {
         super.onStop()
-        Broadcaster.deregisterForBroadcasting(this)
+        Broadcaster.unregisterForBroadcasting(this)
     }
 
     private fun initUI() {
@@ -69,31 +69,31 @@ class DataCollectionActivity : BaseActivity(), SensorStatusDelegate {
 
     private fun initSensors(){
         selectedWifiView = findViewById(R.id.data_collection_list_wifi)
-        selectedWifiView.configureSensor(getResIcon(R.drawable.ic_wifi_sensor), getString(R.string.sensor_wifi))
-        selectedWifiView.switchToStatusView()
-
         selectedBluetoothView = findViewById(R.id.data_collection_list_bluetooth)
-        selectedBluetoothView.configureSensor(getResIcon(R.drawable.ic_bluetooth_sensor), getString(R.string.sensor_bluetooth))
-        selectedBluetoothView.switchToStatusView()
-
         selectedScreenUsageView = findViewById(R.id.data_collection_list_screen_usage)
-        selectedScreenUsageView.configureSensor(getResIcon(R.drawable.ic_screen_usage_sensor), getString(R.string.sensor_screen_usage))
-        selectedScreenUsageView.switchToStatusView()
 
         if(!isWifiSelected) {
             selectedWifiView.visibility = View.GONE
         } else {
+            selectedWifiView.configureSensor(getResIcon(R.drawable.ic_wifi_sensor), getString(R.string.sensor_wifi))
             selectedWifiView.changeSensorStatus(SettingsManager.isWifiEnabled(this))
+            selectedWifiView.switchToStatusView()
         }
 
         if(!isBluetoothSelected) {
             selectedBluetoothView.visibility = View.GONE
         } else {
+            selectedBluetoothView.configureSensor(getResIcon(R.drawable.ic_bluetooth_sensor), getString(R.string.sensor_bluetooth))
             selectedBluetoothView.changeSensorStatus(SettingsManager.isBluetoothEnabled())
+            selectedBluetoothView.switchToStatusView()
         }
 
         if(!isScreenUsageSelected) {
             selectedScreenUsageView.visibility = View.GONE
+        } else {
+            selectedScreenUsageView.configureSensor(getResIcon(R.drawable.ic_screen_usage_sensor), getString(R.string.sensor_screen_usage))
+            selectedScreenUsageView.changeSensorStatus(true)
+            selectedScreenUsageView.switchToStatusView()
         }
     }
 

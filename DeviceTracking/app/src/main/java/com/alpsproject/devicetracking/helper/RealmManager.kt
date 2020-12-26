@@ -32,7 +32,7 @@ object RealmManager {
         realm.commitTransaction()
     }
 
-    fun printData() {
+    fun printSensorData() {
         val results = realm.where(SensorData::class.java).findAll()
         for (result in results) {
             Log.d("REALM_ENTRY", result.toString())

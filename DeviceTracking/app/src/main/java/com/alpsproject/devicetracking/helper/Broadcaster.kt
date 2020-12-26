@@ -25,7 +25,7 @@ object Broadcaster {
         }
     }
 
-    fun deregisterForBroadcasting(receiver: Activity) {
+    fun unregisterForBroadcasting(receiver: Activity) {
         receiver.unregisterReceiver(wifiStateReceiver)
         receiver.unregisterReceiver(bluetoothStateReceiver)
 
