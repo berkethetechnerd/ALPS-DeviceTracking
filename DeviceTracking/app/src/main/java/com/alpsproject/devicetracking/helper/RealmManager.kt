@@ -17,23 +17,25 @@ object RealmManager {
         return managedSensorData.id
     }
 
-    fun updateData(id: String){
+    fun updateData(id: String) {
         val results = realm.where(SensorData::class.java).equalTo("id", id).findAll()
         if(results.size == 0) return
 
         realm.beginTransaction()
-        var currentResultData = results[0]
+
+        val currentResultData = results[0]
         currentResultData?.let {
             it.endTime = Date()
             realm.copyToRealmOrUpdate(it)
         }
+
         realm.commitTransaction()
     }
 
-    fun readData(){
+    fun printSensorData() {
         val results = realm.where(SensorData::class.java).findAll()
         for (result in results) {
-            Log.d("result data", result.toString())
+            Log.d("REALM_ENTRY", result.toString())
         }
     }
 }

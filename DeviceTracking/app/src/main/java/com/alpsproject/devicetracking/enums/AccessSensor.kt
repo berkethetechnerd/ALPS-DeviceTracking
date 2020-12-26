@@ -1,6 +1,6 @@
 package com.alpsproject.devicetracking.enums
 
-enum class AccessPermission {
+enum class AccessSensor {
     ACCESS_WIFI,
     ACCESS_BLUETOOTH,
     ACCESS_SCREEN_USAGE
