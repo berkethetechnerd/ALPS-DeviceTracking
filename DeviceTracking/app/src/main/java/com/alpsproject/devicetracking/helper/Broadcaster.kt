@@ -9,6 +9,7 @@ import android.content.IntentFilter
 import android.net.wifi.WifiManager
 import android.util.Log
 import com.alpsproject.devicetracking.delegates.SensorStatusDelegate
+import com.alpsproject.devicetracking.enums.AccessSensor
 
 object Broadcaster {
 
@@ -47,8 +48,16 @@ object Broadcaster {
         override fun onReceive(context: Context?, intent: Intent?) {
             intent?.let {
                 val wifiStateExtra = it.getIntExtra(WifiManager.EXTRA_WIFI_STATE, WifiManager.WIFI_STATE_UNKNOWN)
-                val wifiStatus = wifiStateExtra == WifiManager.WIFI_STATE_ENABLED
-                broadcastWifiChange(wifiStatus)
+                val wifiOnStatus = wifiStateExtra == WifiManager.WIFI_STATE_ENABLED
+                val wifiOffStatus = wifiStateExtra == WifiManager.WIFI_STATE_DISABLED
+
+                if (wifiOnStatus) {
+                    Logger.logSensorUpdate(AccessSensor.ACCESS_WIFI, true)
+                    broadcastWifiChange(true)
+                } else if (wifiOffStatus) {
+                    Logger.logSensorUpdate(AccessSensor.ACCESS_WIFI, false)
+                    broadcastWifiChange(false)
+                }
             }
         }
     }
@@ -57,8 +66,16 @@ object Broadcaster {
         override fun onReceive(context: Context?, intent: Intent?) {
             intent?.let {
                 val bluetoothStateExtra = it.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.ERROR)
-                val bluetoothStatus = bluetoothStateExtra == BluetoothAdapter.STATE_ON
-                broadcastBluetoothChange(bluetoothStatus)
+                val bluetoothOnStatus = bluetoothStateExtra == BluetoothAdapter.STATE_ON
+                val bluetoothOffStatus = bluetoothStateExtra == BluetoothAdapter.STATE_OFF
+
+                if (bluetoothOnStatus) {
+                    Logger.logSensorUpdate(AccessSensor.ACCESS_BLUETOOTH, true)
+                    broadcastBluetoothChange(true)
+                } else if (bluetoothOffStatus) {
+                    Logger.logSensorUpdate(AccessSensor.ACCESS_BLUETOOTH, false)
+                    broadcastBluetoothChange(false)
+                }
             }
         }
     }
@@ -66,30 +83,39 @@ object Broadcaster {
     private val screenUsageReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             intent?.let {
-                val screenOnStatus = it.action.equals(Intent.ACTION_SCREEN_ON)
-                broadcastScreenStateChange(screenOnStatus)
+                val screenStateExtra = it.action
+                val screenOnStatus = screenStateExtra.equals(Intent.ACTION_SCREEN_ON)
+                val screenOffStatus = screenStateExtra.equals(Intent.ACTION_SCREEN_OFF)
+
+                if (screenOnStatus) {
+                    Logger.logSensorUpdate(AccessSensor.ACCESS_SCREEN_USAGE, true)
+                    broadcastScreenStateChange(true)
+                } else if (screenOffStatus) {
+                    Logger.logSensorUpdate(AccessSensor.ACCESS_SCREEN_USAGE, false)
+                    broadcastScreenStateChange(false)
+                }
             }
         }
     }
 
     private fun broadcastWifiChange(status: Boolean) {
-        for (receiver in receivers) {
-            if (status) { receiver.didWifiEnable() }
-            else { receiver.didWifiDisable() }
+        receivers.forEach {
+            if (status) { it.didWifiEnable() }
+            else { it.didWifiDisable() }
         }
     }
 
     private fun broadcastBluetoothChange(status: Boolean) {
-        for (receiver in receivers) {
-            if (status) { receiver.didBluetoothEnable() }
-            else { receiver.didBluetoothDisable() }
+        receivers.forEach {
+            if (status) { it.didBluetoothEnable() }
+            else { it.didBluetoothDisable() }
         }
     }
 
     private fun broadcastScreenStateChange(status: Boolean) {
-        for (receiver in receivers) {
-            if (status) { receiver.didTurnScreenOn() }
-            else { receiver.didTurnScreenOff() }
+        receivers.forEach {
+            if (status) { it.didTurnScreenOn() }
+            else { it.didTurnScreenOff() }
         }
     }
 }
