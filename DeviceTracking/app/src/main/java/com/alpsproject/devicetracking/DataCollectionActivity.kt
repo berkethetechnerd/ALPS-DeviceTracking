@@ -48,8 +48,8 @@ class DataCollectionActivity : BaseActivity(), SensorStatusDelegate {
         Broadcaster.registerForBroadcasting(this)
     }
 
-    override fun onStop() {
-        super.onStop()
+    override fun onDestroy() {
+        super.onDestroy()
         Broadcaster.unregisterForBroadcasting(this)
     }
 
@@ -75,25 +75,25 @@ class DataCollectionActivity : BaseActivity(), SensorStatusDelegate {
         if(!isWifiSelected) {
             selectedWifiView.visibility = View.GONE
         } else {
+            selectedWifiView.switchToStatusView()
             selectedWifiView.configureSensor(getResIcon(R.drawable.ic_wifi_sensor), getString(R.string.sensor_wifi))
             selectedWifiView.changeSensorStatus(SettingsManager.isWifiEnabled(this))
-            selectedWifiView.switchToStatusView()
         }
 
         if(!isBluetoothSelected) {
             selectedBluetoothView.visibility = View.GONE
         } else {
+            selectedBluetoothView.switchToStatusView()
             selectedBluetoothView.configureSensor(getResIcon(R.drawable.ic_bluetooth_sensor), getString(R.string.sensor_bluetooth))
             selectedBluetoothView.changeSensorStatus(SettingsManager.isBluetoothEnabled())
-            selectedBluetoothView.switchToStatusView()
         }
 
         if(!isScreenUsageSelected) {
             selectedScreenUsageView.visibility = View.GONE
         } else {
-            selectedScreenUsageView.configureSensor(getResIcon(R.drawable.ic_screen_usage_sensor), getString(R.string.sensor_screen_usage))
-            selectedScreenUsageView.changeSensorStatus(true)
             selectedScreenUsageView.switchToStatusView()
+            selectedScreenUsageView.configureSensor(getResIcon(R.drawable.ic_screen_usage_sensor), getString(R.string.sensor_screen_usage))
+            selectedScreenUsageView.changeSensorStatus(SettingsManager.isScreenTurnedOn(this))
         }
     }
 
@@ -124,21 +124,17 @@ class DataCollectionActivity : BaseActivity(), SensorStatusDelegate {
         }
     }
 
-    override fun didWifiEnable() {
-        selectedWifiView.changeSensorStatus(true)
-    }
+    override fun didWifiEnable() = selectedWifiView.changeSensorStatus(true)
 
-    override fun didWifiDisable() {
-        selectedWifiView.changeSensorStatus(false)
-    }
+    override fun didWifiDisable() = selectedWifiView.changeSensorStatus(false)
 
-    override fun didBluetoothEnable() {
-        selectedBluetoothView.changeSensorStatus(true)
-    }
+    override fun didBluetoothEnable() = selectedBluetoothView.changeSensorStatus(true)
 
-    override fun didBluetoothDisable() {
-        selectedBluetoothView.changeSensorStatus(false)
-    }
+    override fun didBluetoothDisable() = selectedBluetoothView.changeSensorStatus(false)
+
+    override fun didTurnScreenOn() = selectedScreenUsageView.changeSensorStatus(true)
+
+    override fun didTurnScreenOff() = selectedScreenUsageView.changeSensorStatus(false)
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val inflater: MenuInflater = menuInflater

@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.net.wifi.WifiManager
+import android.util.Log
 import com.alpsproject.devicetracking.delegates.SensorStatusDelegate
 
 object Broadcaster {
@@ -20,6 +21,11 @@ object Broadcaster {
         val bluetoothFilter = IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED)
         receiver.registerReceiver(bluetoothStateReceiver, bluetoothFilter)
 
+        val screenUsageFilter = IntentFilter()
+        screenUsageFilter.addAction(Intent.ACTION_SCREEN_ON)
+        screenUsageFilter.addAction(Intent.ACTION_SCREEN_OFF)
+        receiver.registerReceiver(screenUsageReceiver, screenUsageFilter)
+
         (receiver as? SensorStatusDelegate)?.let {
             receivers.add(it)
         }
@@ -28,6 +34,7 @@ object Broadcaster {
     fun unregisterForBroadcasting(receiver: Activity) {
         receiver.unregisterReceiver(wifiStateReceiver)
         receiver.unregisterReceiver(bluetoothStateReceiver)
+        receiver.unregisterReceiver(screenUsageReceiver)
 
         (receiver as? SensorStatusDelegate)?.let {
             if (receivers.contains(it)) {
@@ -56,6 +63,15 @@ object Broadcaster {
         }
     }
 
+    private val screenUsageReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            intent?.let {
+                val screenOnStatus = it.action.equals(Intent.ACTION_SCREEN_ON)
+                broadcastScreenStateChange(screenOnStatus)
+            }
+        }
+    }
+
     private fun broadcastWifiChange(status: Boolean) {
         for (receiver in receivers) {
             if (status) { receiver.didWifiEnable() }
@@ -67,6 +83,13 @@ object Broadcaster {
         for (receiver in receivers) {
             if (status) { receiver.didBluetoothEnable() }
             else { receiver.didBluetoothDisable() }
+        }
+    }
+
+    private fun broadcastScreenStateChange(status: Boolean) {
+        for (receiver in receivers) {
+            if (status) { receiver.didTurnScreenOn() }
+            else { receiver.didTurnScreenOff() }
         }
     }
 }
