@@ -41,8 +41,8 @@ object DataCollectionManager {
     }
 
     private fun createNewSensorEntry(forSensor: AccessSensor) {
-        val sensorName = getSensorName(forSensor)
-        val sensorKey = getSensorKey(forSensor)
+        val sensorName = C.getSensorName(forSensor)
+        val sensorKey = C.getRunningSensorKey(forSensor)
 
         val sensorData = SensorData()
         sensorData.sensorName = sensorName
@@ -51,24 +51,8 @@ object DataCollectionManager {
     }
 
     private fun patchSensorEntryUponFinish(forSensor: AccessSensor) {
-        SharedPreferencesManager.read(getSensorKey(forSensor), "")?.let { entryId ->
+        SharedPreferencesManager.read(C.getRunningSensorKey(forSensor), "")?.let { entryId ->
             RealmManager.updateData(entryId)
-        }
-    }
-
-    private fun getSensorName(forSensor: AccessSensor): String {
-        return when (forSensor) {
-            AccessSensor.ACCESS_WIFI -> C.SENSOR_WIFI
-            AccessSensor.ACCESS_BLUETOOTH -> C.SENSOR_BLUETOOTH
-            AccessSensor.ACCESS_SCREEN_USAGE -> C.SENSOR_SCREEN_USAGE
-        }
-    }
-
-    private fun getSensorKey(forSensor: AccessSensor): String {
-        return when (forSensor) {
-            AccessSensor.ACCESS_WIFI -> C.RUNNING_SENSOR_WIFI_ID
-            AccessSensor.ACCESS_BLUETOOTH -> C.RUNNING_SENSOR_BLUETOOTH_ID
-            AccessSensor.ACCESS_SCREEN_USAGE -> C.RUNNING_SENSOR_SCREEN_USAGE_ID
         }
     }
 

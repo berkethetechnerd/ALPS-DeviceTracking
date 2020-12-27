@@ -26,7 +26,7 @@ object UserMessageGenerator {
     }
 
     fun generateDialogForPermission(activity: Activity, sensor: AccessSensor) {
-        val typeOfSensor = getSensorTitle(activity, sensor)
+        val typeOfSensor = ConstantsManager.getSensorName(sensor)
         val title = activity.getString(R.string.user_message_title)
         val message = activity.getString(R.string.user_message_message, typeOfSensor, typeOfSensor)
 
@@ -48,7 +48,7 @@ object UserMessageGenerator {
     }
 
     fun generateDialogForActivation(activity: Activity, sensor: AccessSensor) {
-        val typeOfSensor = getSensorTitle(activity, sensor)
+        val typeOfSensor = ConstantsManager.getSensorName(sensor)
         val title = activity.getString(R.string.user_message_sensor_activation_title)
         val message = activity.getString(R.string.user_message_sensor_activation_message, typeOfSensor)
 
@@ -65,13 +65,5 @@ object UserMessageGenerator {
                 }
                 .build()
         mBottomSheetDialog.show()
-    }
-
-    private fun getSensorTitle(activity: Activity, sensor: AccessSensor): String {
-        return when (sensor) {
-            AccessSensor.ACCESS_WIFI -> activity.getString(R.string.user_message_title_wifi)
-            AccessSensor.ACCESS_BLUETOOTH -> activity.getString(R.string.user_message_title_bluetooth)
-            AccessSensor.ACCESS_SCREEN_USAGE -> activity.getString(R.string.user_message_title_screen_usage)
-        }
     }
 }

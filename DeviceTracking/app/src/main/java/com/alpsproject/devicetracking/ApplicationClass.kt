@@ -7,6 +7,8 @@ import io.realm.RealmConfiguration
 
 class ApplicationClass: Application() {
 
+    private val database = "DeviceTracker.realm"
+
     override fun onCreate() {
         super.onCreate()
 
@@ -15,7 +17,7 @@ class ApplicationClass: Application() {
         Realm.init(this)
         Realm.setDefaultConfiguration(
             RealmConfiguration.Builder()
-                .name("DeviceTracker.realm")
+                .name(database)
                 .build()
         )
     }

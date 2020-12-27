@@ -22,12 +22,7 @@ object PermissionManager {
     }
 
     fun grantPermission(forSensor: AccessSensor) {
-        val key = when (forSensor) {
-            AccessSensor.ACCESS_WIFI -> ConstantsManager.CONSENT_OF_WIFI
-            AccessSensor.ACCESS_BLUETOOTH -> ConstantsManager.CONSENT_OF_BLUETOOTH
-            AccessSensor.ACCESS_SCREEN_USAGE -> ConstantsManager.CONSENT_OF_SCREEN_USAGE
-        }
-
-        SharedPreferencesManager.write(key, true)
+        val consentKey = ConstantsManager.getConsentSensorKey(forSensor)
+        SharedPreferencesManager.write(consentKey, true)
     }
 }
