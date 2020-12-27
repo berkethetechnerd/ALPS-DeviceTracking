@@ -53,12 +53,10 @@ class ColumnReportFragment : Fragment() {
     private fun initUI(view: View) {
         noDataLayout = view.findViewById(R.id.rl_no_data)
         progressBar = view.findViewById(R.id.sensor_progress_bar)
+        tvDescription = view.findViewById(R.id.tv_report_description)
 
         usageChart = view.findViewById(R.id.sensor_usage_chart)
         usageChart.setProgressBar(progressBar)
-
-        tvDescription = view.findViewById(R.id.tv_report_description)
-        tvDescription.text = getString(R.string.report_usage_description, reportName)
     }
 
     private fun initChart() {
@@ -68,11 +66,13 @@ class ColumnReportFragment : Fragment() {
             val chartData = RealmManager.queryForDatesInSensor(chartDates, sensorType)
 
             if (isDataExistForSelectedTimeFrame(chartData)) {
+                tvDescription.text = getString(R.string.report_usage_description, it, chartData.average())
                 drawChart(chartDates, chartData)
                 return
             }
         }
 
+        tvDescription.text = getString(R.string.report_usage_description, reportName, 0.0)
         hideChart()
     }
 
@@ -80,7 +80,6 @@ class ColumnReportFragment : Fragment() {
         noDataLayout.visibility = View.GONE
 
         // TODO: Add dropdown options
-        // TODO: Add average value
 
         val cartesian: Cartesian = AnyChart.column()
         val data: MutableList<DataEntry> = ArrayList()

@@ -33,8 +33,7 @@
             android:text="@string/report_no_data_found"/>
 
     </RelativeLayout>
-
-
+    
     <com.anychart.AnyChartView
         android:id="@+id/sensor_usage_chart"
         android:layout_width="match_parent"
