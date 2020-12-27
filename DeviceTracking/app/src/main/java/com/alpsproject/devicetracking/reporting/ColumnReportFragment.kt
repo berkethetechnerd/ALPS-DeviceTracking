@@ -4,9 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ProgressBar
-import android.widget.RelativeLayout
-import android.widget.TextView
+import android.widget.*
 import androidx.fragment.app.Fragment
 import com.alpsproject.devicetracking.R
 import com.alpsproject.devicetracking.enums.AccessSensor
@@ -32,6 +30,7 @@ class ColumnReportFragment : Fragment() {
     private lateinit var progressBar: ProgressBar
     private lateinit var noDataLayout: RelativeLayout
     private lateinit var tvDescription: TextView
+    private lateinit var spTimeFrame: Spinner
 
     private var reportName: String? = null
     private var timeFrame: CalendarDays = CalendarDays.LAST_7_DAYS
@@ -46,6 +45,7 @@ class ColumnReportFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_column_report, container, false)
         initUI(view)
+        initSpinner()
         initChart()
         return view
     }
@@ -57,6 +57,27 @@ class ColumnReportFragment : Fragment() {
 
         usageChart = view.findViewById(R.id.sensor_usage_chart)
         usageChart.setProgressBar(progressBar)
+
+        spTimeFrame = view.findViewById(R.id.sp_time_frame)
+        spTimeFrame.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                // TODO: Implement this function : Change average, day number of description. Update chart!
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                // TODO: Implement this function
+            }
+        }
+    }
+
+    private fun initSpinner() {
+        context?.let {
+            ArrayAdapter.createFromResource(it, R.array.report_time_frames, android.R.layout.simple_spinner_item).also { adapter ->
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                spTimeFrame.adapter = adapter
+                spTimeFrame.setSelection(1) // Last 7 days
+            }
+        }
     }
 
     private fun initChart() {
@@ -77,10 +98,6 @@ class ColumnReportFragment : Fragment() {
     }
 
     private fun drawChart(chartDates: Array<String>, chartData: DoubleArray) {
-        noDataLayout.visibility = View.GONE
-
-        // TODO: Add dropdown options
-
         val cartesian: Cartesian = AnyChart.column()
         val data: MutableList<DataEntry> = ArrayList()
 
