@@ -19,7 +19,8 @@
     <RelativeLayout
         android:id="@+id/rl_no_data"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" >
+        android:layout_height="match_parent"
+        android:visibility="gone" >
 
         <TextView
             android:layout_width="match_parent"

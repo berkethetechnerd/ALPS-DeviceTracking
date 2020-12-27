@@ -34,6 +34,7 @@ class ColumnReportFragment : Fragment() {
     private lateinit var tvDescription: TextView
 
     private var reportName: String? = null
+    private var timeFrame: CalendarDays = CalendarDays.LAST_7_DAYS
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,13 +46,13 @@ class ColumnReportFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_column_report, container, false)
         initUI(view)
-        initChart(view)
+        initChart()
         return view
     }
 
     private fun initUI(view: View) {
-        progressBar = view.findViewById(R.id.sensor_progress_bar)
         noDataLayout = view.findViewById(R.id.rl_no_data)
+        progressBar = view.findViewById(R.id.sensor_progress_bar)
 
         usageChart = view.findViewById(R.id.sensor_usage_chart)
         usageChart.setProgressBar(progressBar)
@@ -60,17 +61,29 @@ class ColumnReportFragment : Fragment() {
         tvDescription.text = getString(R.string.report_usage_description, reportName)
     }
 
-    private fun initChart(view: View) {
-        // TODO: Check for data existence, if null show no data!
+    private fun initChart() {
+        reportName?.let {
+            val sensorType = getSensorType(it)
+            val chartDates = CalendarManager.fetchCalendarDays(timeFrame)
+            val chartData = RealmManager.queryForDatesInSensor(chartDates, sensorType)
+
+            if (isDataExistForSelectedTimeFrame(chartData)) {
+                drawChart(chartDates, chartData)
+                return
+            }
+        }
+
+        hideChart()
+    }
+
+    private fun drawChart(chartDates: Array<String>, chartData: DoubleArray) {
         noDataLayout.visibility = View.GONE
 
-        // TODO: Check for respective sensor
+        // TODO: Add dropdown options
+        // TODO: Add average value
 
         val cartesian: Cartesian = AnyChart.column()
         val data: MutableList<DataEntry> = ArrayList()
-
-        val chartDates = CalendarManager.fetchCalendarDays(CalendarDays.LAST_7_DAYS)
-        val chartData = RealmManager.queryForDatesInSensor(chartDates, AccessSensor.ACCESS_WIFI)
 
         for (index in chartData.indices) {
             data.add(ValueDataEntry(chartDates[index], chartData[index]))
@@ -78,12 +91,12 @@ class ColumnReportFragment : Fragment() {
 
         val column: Column = cartesian.column(data)
         column.tooltip()
-            .titleFormat("{%X}")
-            .position(Position.CENTER_BOTTOM)
-            .anchor(Anchor.CENTER_BOTTOM)
-            .offsetX(0.0)
-            .offsetY(5.0)
-            .format("{%Value}{groupsSeparator: } Hours")
+                .titleFormat("{%X}")
+                .position(Position.CENTER_BOTTOM)
+                .anchor(Anchor.CENTER_BOTTOM)
+                .offsetX(0.0)
+                .offsetY(5.0)
+                .format("{%Value}{groupsSeparator: } Hours")
 
         cartesian.animation(true)
         cartesian.yScale().minimum(0.0)
@@ -94,6 +107,30 @@ class ColumnReportFragment : Fragment() {
         cartesian.yAxis(0).title(getString(R.string.report_usage_hours_total))
 
         usageChart.setChart(cartesian)
+    }
+
+    private fun hideChart() {
+        usageChart.visibility = View.GONE
+        progressBar.visibility = View.GONE
+        noDataLayout.visibility = View.VISIBLE
+    }
+
+    private fun isDataExistForSelectedTimeFrame(chartData: DoubleArray): Boolean {
+        chartData.forEach { data ->
+            if (data != 0.0) {
+                return true
+            }
+        }
+
+        return false
+    }
+
+    private fun getSensorType(reportName: String): AccessSensor {
+        return when(reportName) {
+            getString(R.string.report_tab_screen_usage) -> AccessSensor.ACCESS_SCREEN_USAGE
+            getString(R.string.report_tab_wifi) -> AccessSensor.ACCESS_WIFI
+            else -> AccessSensor.ACCESS_BLUETOOTH
+        }
     }
 
     companion object {
