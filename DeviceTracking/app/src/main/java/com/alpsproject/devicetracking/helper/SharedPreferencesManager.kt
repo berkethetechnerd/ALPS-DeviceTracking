@@ -16,19 +16,11 @@ object SharedPreferencesManager {
     }
 
     fun read(key: String, defValue: String): String? = preferences.getString(key, defValue)
-    fun read(key: String, defValue: Long): Long = preferences.getLong(key, defValue)
     fun read(key: String, defValue: Boolean): Boolean = preferences.getBoolean(key, defValue)
 
     fun write(key: String, value: String) {
         with(preferencesEditor) {
             putString(key, value)
-            commit()
-        }
-    }
-
-    fun write(key: String, value: Long) {
-        with(preferencesEditor) {
-            putLong(key, value)
             commit()
         }
     }

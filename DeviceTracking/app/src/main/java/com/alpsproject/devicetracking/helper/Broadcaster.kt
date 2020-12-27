@@ -7,7 +7,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.net.wifi.WifiManager
-import android.util.Log
 import com.alpsproject.devicetracking.delegates.SensorStatusDelegate
 import com.alpsproject.devicetracking.enums.AccessSensor
 
@@ -16,16 +15,9 @@ object Broadcaster {
     private val receivers: ArrayList<SensorStatusDelegate> = ArrayList()
 
     fun registerForBroadcasting(receiver: Activity) {
-        val wifiFilter = IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION)
-        receiver.registerReceiver(wifiStateReceiver, wifiFilter)
-
-        val bluetoothFilter = IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED)
-        receiver.registerReceiver(bluetoothStateReceiver, bluetoothFilter)
-
-        val screenUsageFilter = IntentFilter()
-        screenUsageFilter.addAction(Intent.ACTION_SCREEN_ON)
-        screenUsageFilter.addAction(Intent.ACTION_SCREEN_OFF)
-        receiver.registerReceiver(screenUsageReceiver, screenUsageFilter)
+        registerForWifi(receiver)
+        registerForBluetooth(receiver)
+        registerForScreenUsage(receiver)
 
         (receiver as? SensorStatusDelegate)?.let {
             receivers.add(it)
@@ -42,6 +34,23 @@ object Broadcaster {
                 receivers.remove(it)
             }
         }
+    }
+
+    private fun registerForWifi(receiver: Activity) {
+        val wifiFilter = IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION)
+        receiver.registerReceiver(wifiStateReceiver, wifiFilter)
+    }
+
+    private fun registerForBluetooth(receiver: Activity) {
+        val bluetoothFilter = IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED)
+        receiver.registerReceiver(bluetoothStateReceiver, bluetoothFilter)
+    }
+
+    private fun registerForScreenUsage(receiver: Activity) {
+        val screenUsageFilter = IntentFilter()
+        screenUsageFilter.addAction(Intent.ACTION_SCREEN_ON)
+        screenUsageFilter.addAction(Intent.ACTION_SCREEN_OFF)
+        receiver.registerReceiver(screenUsageReceiver, screenUsageFilter)
     }
 
     private val wifiStateReceiver = object : BroadcastReceiver() {

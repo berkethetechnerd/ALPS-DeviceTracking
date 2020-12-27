@@ -14,13 +14,7 @@ private val TAB_TITLES = arrayOf(
 
 class SectionsPagerAdapter(private val context: Context, fm: FragmentManager) : FragmentPagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
-    override fun getItem(position: Int): Fragment {
-        return when(position) {
-            0 -> ColumnReportFragment.newInstance(context.getString(R.string.report_tab_screen_usage), 700)
-            1 -> ColumnReportFragment.newInstance(context.getString(R.string.report_tab_wifi), 10)
-            else -> ColumnReportFragment.newInstance(context.getString(R.string.report_tab_bluetooth), 123)
-        }
-    }
+    override fun getItem(position: Int): Fragment = ColumnReportFragment.newInstance(context.getString(TAB_TITLES[position]))
 
     override fun getPageTitle(position: Int): CharSequence = context.resources.getString(TAB_TITLES[position])
 
