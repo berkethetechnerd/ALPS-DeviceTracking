@@ -8,7 +8,7 @@ object ConstantsManager {
     const val SENSOR_BLUETOOTH = "Bluetooth"
     const val SENSOR_SCREEN_USAGE = "Screen Usage"
 
-    const val CONSENT_OF_USER = "ConsentOfUser"
+    const val CONSENT_OF_USER = "ConsentForDisclaimer"
     const val CONSENT_OF_WIFI = CONSENT_OF_USER + SENSOR_WIFI
     const val CONSENT_OF_BLUETOOTH = CONSENT_OF_USER + SENSOR_BLUETOOTH
     const val CONSENT_OF_SCREEN_USAGE = CONSENT_OF_USER + SENSOR_SCREEN_USAGE

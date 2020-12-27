@@ -9,6 +9,7 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.alpsproject.devicetracking.R
+import com.alpsproject.devicetracking.enums.CalendarDays
 import com.alpsproject.devicetracking.helper.CalendarManager
 import com.alpsproject.devicetracking.helper.DummyDataGenerator
 import com.anychart.AnyChart
@@ -68,13 +69,11 @@ class ColumnReportFragment : Fragment() {
     private fun initChart(view: View) {
         usageChart.setProgressBar(progressBar)
 
-        CalendarManager.last7Days()
-
         val cartesian: Cartesian = AnyChart.column()
         val data: MutableList<DataEntry> = ArrayList()
 
         val dummyData = DummyDataGenerator.generateUsageHours(dummyDataSeed)
-        val dummyDates = CalendarManager.last7Days()
+        val dummyDates = CalendarManager.fetchCalendarDays(CalendarDays.LAST_7_DAYS)
 
         data.add(ValueDataEntry(dummyDates[0], dummyData[0]))
         data.add(ValueDataEntry(dummyDates[1], dummyData[1]))

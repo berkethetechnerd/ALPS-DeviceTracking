@@ -9,5 +9,9 @@ open class SensorData (
     var sensorName: String = "",
     var startTime: Date = Date(),
     var endTime: Date = Date()
-): RealmObject()
+): RealmObject() {
+    override fun toString(): String {
+        return "$sensorName has been collected between $startTime -> $endTime"
+    }
+}
 

@@ -7,7 +7,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.net.wifi.WifiManager
-import android.util.Log
 import com.alpsproject.devicetracking.delegates.SensorStatusDelegate
 import com.alpsproject.devicetracking.enums.AccessSensor
 

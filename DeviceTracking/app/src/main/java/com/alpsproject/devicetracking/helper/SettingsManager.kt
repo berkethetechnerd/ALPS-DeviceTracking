@@ -45,7 +45,7 @@ object SettingsManager: ActivationDelegate {
         when (sensor) {
             AccessSensor.ACCESS_WIFI -> activateWifi(context)
             AccessSensor.ACCESS_BLUETOOTH -> activateBluetooth()
-            AccessSensor.ACCESS_SCREEN_USAGE -> { }
+            AccessSensor.ACCESS_SCREEN_USAGE -> return
         }
     }
 
