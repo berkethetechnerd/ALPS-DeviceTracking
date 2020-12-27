@@ -44,7 +44,17 @@ object RealmManager {
 
     // ** QUERY : CALCULATING TOTAL HOURS FOR A SPECIFIC DATE **
 
-    fun queryForHoursInDate(stringDate: String, sensor: AccessSensor): Double {
+    fun queryForDatesInSensor(dates: Array<String>, sensor: AccessSensor): DoubleArray {
+        val data = DoubleArray(dates.size)
+
+        for (i in data.indices) {
+            data[i] = calcHoursInDate(dates[i], sensor)
+        }
+
+        return data
+    }
+
+    fun calcHoursInDate(stringDate: String, sensor: AccessSensor): Double {
         val date = CalendarManager.stringToDate(stringDate) ?: return 0.0
         val startDate = CalendarManager.extractStartDate(date)
         val endDate = CalendarManager.extractStopDate(date)

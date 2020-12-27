@@ -9,9 +9,10 @@ import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.alpsproject.devicetracking.R
+import com.alpsproject.devicetracking.enums.AccessSensor
 import com.alpsproject.devicetracking.enums.CalendarDays
 import com.alpsproject.devicetracking.helper.CalendarManager
-import com.alpsproject.devicetracking.helper.DummyDataGenerator
+import com.alpsproject.devicetracking.helper.RealmManager
 import com.anychart.AnyChart
 import com.anychart.AnyChartView
 import com.anychart.chart.common.dataentry.DataEntry
@@ -24,22 +25,20 @@ import com.anychart.enums.Position
 import com.anychart.enums.TooltipPositionMode
 
 private const val ARG_REPORT_TYPE = "REPORT_NAME"
-private const val ARG_SEED = "REPORT_SEED"
 
 class ColumnReportFragment : Fragment() {
 
     private lateinit var usageChart: AnyChartView
     private lateinit var progressBar: ProgressBar
     private lateinit var noDataLayout: RelativeLayout
+    private lateinit var tvDescription: TextView
 
     private var reportName: String? = null
-    private var dummyDataSeed: Long = 100
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             reportName = it.getString(ARG_REPORT_TYPE)
-            dummyDataSeed = it.getLong(ARG_SEED, 100)
         }
     }
 
@@ -51,37 +50,31 @@ class ColumnReportFragment : Fragment() {
     }
 
     private fun initUI(view: View) {
-        usageChart = view.findViewById(R.id.sensor_usage_chart)
         progressBar = view.findViewById(R.id.sensor_progress_bar)
         noDataLayout = view.findViewById(R.id.rl_no_data)
 
-        val tvDescription: TextView = view.findViewById(R.id.tv_report_description)
-        tvDescription.text = getString(R.string.report_usage_description, reportName)
+        usageChart = view.findViewById(R.id.sensor_usage_chart)
+        usageChart.setProgressBar(progressBar)
 
-        if (dummyDataSeed.toInt() % 2 == 0) {
-            noDataLayout.visibility = View.GONE
-        } else {
-            usageChart.visibility = View.GONE
-            progressBar.visibility = View.GONE
-        }
+        tvDescription = view.findViewById(R.id.tv_report_description)
+        tvDescription.text = getString(R.string.report_usage_description, reportName)
     }
 
     private fun initChart(view: View) {
-        usageChart.setProgressBar(progressBar)
+        // TODO: Check for data existence, if null show no data!
+        noDataLayout.visibility = View.GONE
+
+        // TODO: Check for respective sensor
 
         val cartesian: Cartesian = AnyChart.column()
         val data: MutableList<DataEntry> = ArrayList()
 
-        val dummyData = DummyDataGenerator.generateUsageHours(dummyDataSeed)
-        val dummyDates = CalendarManager.fetchCalendarDays(CalendarDays.LAST_7_DAYS)
+        val chartDates = CalendarManager.fetchCalendarDays(CalendarDays.LAST_7_DAYS)
+        val chartData = RealmManager.queryForDatesInSensor(chartDates, AccessSensor.ACCESS_WIFI)
 
-        data.add(ValueDataEntry(dummyDates[0], dummyData[0]))
-        data.add(ValueDataEntry(dummyDates[1], dummyData[1]))
-        data.add(ValueDataEntry(dummyDates[2], dummyData[2]))
-        data.add(ValueDataEntry(dummyDates[3], dummyData[3]))
-        data.add(ValueDataEntry(dummyDates[4], dummyData[4]))
-        data.add(ValueDataEntry(dummyDates[5], dummyData[5]))
-        data.add(ValueDataEntry(dummyDates[6], dummyData[6]))
+        for (index in chartData.indices) {
+            data.add(ValueDataEntry(chartDates[index], chartData[index]))
+        }
 
         val column: Column = cartesian.column(data)
         column.tooltip()
@@ -105,10 +98,9 @@ class ColumnReportFragment : Fragment() {
 
     companion object {
         @JvmStatic
-        fun newInstance(name: String, seed: Long) = ColumnReportFragment().apply {
+        fun newInstance(name: String) = ColumnReportFragment().apply {
             arguments = Bundle().apply {
                 putString(ARG_REPORT_TYPE, name)
-                putLong(ARG_SEED, seed)
             }
         }
     }
