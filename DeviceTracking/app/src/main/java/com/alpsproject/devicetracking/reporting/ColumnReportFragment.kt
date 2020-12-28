@@ -4,15 +4,14 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ProgressBar
-import android.widget.RelativeLayout
-import android.widget.TextView
+import android.widget.*
 import androidx.fragment.app.Fragment
 import com.alpsproject.devicetracking.R
 import com.alpsproject.devicetracking.enums.AccessSensor
 import com.alpsproject.devicetracking.enums.CalendarDays
 import com.alpsproject.devicetracking.helper.CalendarManager
 import com.alpsproject.devicetracking.helper.RealmManager
+import com.anychart.APIlib
 import com.anychart.AnyChart
 import com.anychart.AnyChartView
 import com.anychart.chart.common.dataentry.DataEntry
@@ -32,9 +31,23 @@ class ColumnReportFragment : Fragment() {
     private lateinit var progressBar: ProgressBar
     private lateinit var noDataLayout: RelativeLayout
     private lateinit var tvDescription: TextView
+    private lateinit var spTimeFrame: Spinner
+
+    private lateinit var cartesian: Cartesian
+    private lateinit var data: MutableList<DataEntry>
 
     private var reportName: String? = null
     private var timeFrame: CalendarDays = CalendarDays.LAST_7_DAYS
+
+    private val numberOfDays: Int
+        get() {
+            return when(timeFrame) {
+                CalendarDays.LAST_24_HOURS -> 1
+                CalendarDays.LAST_3_DAYS -> 3
+                CalendarDays.LAST_7_DAYS -> 7
+                CalendarDays.LAST_15_DAYS -> 15
+            }
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,67 +59,100 @@ class ColumnReportFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_column_report, container, false)
         initUI(view)
-        initChart()
+        initSpinner()
+        initChart(isUpdate = false)
         return view
     }
 
     private fun initUI(view: View) {
         noDataLayout = view.findViewById(R.id.rl_no_data)
         progressBar = view.findViewById(R.id.sensor_progress_bar)
+        tvDescription = view.findViewById(R.id.tv_report_description)
 
         usageChart = view.findViewById(R.id.sensor_usage_chart)
         usageChart.setProgressBar(progressBar)
 
-        tvDescription = view.findViewById(R.id.tv_report_description)
-        tvDescription.text = getString(R.string.report_usage_description, reportName)
+        spTimeFrame = view.findViewById(R.id.sp_time_frame)
+        spTimeFrame.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                timeFrame = when (position) {
+                    0 -> CalendarDays.LAST_3_DAYS
+                    1 -> CalendarDays.LAST_7_DAYS
+                    else -> CalendarDays.LAST_15_DAYS
+                }
+
+                initChart(isUpdate = true)
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) { }
+        }
     }
 
-    private fun initChart() {
+    private fun initSpinner() {
+        context?.let {
+            ArrayAdapter.createFromResource(it, R.array.report_time_frames, android.R.layout.simple_spinner_item).also { adapter ->
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                spTimeFrame.adapter = adapter
+                spTimeFrame.setSelection(1) // Last 7 days
+            }
+        }
+    }
+
+    private fun initChart(isUpdate: Boolean) {
         reportName?.let {
             val sensorType = getSensorType(it)
             val chartDates = CalendarManager.fetchCalendarDays(timeFrame)
             val chartData = RealmManager.queryForDatesInSensor(chartDates, sensorType)
 
             if (isDataExistForSelectedTimeFrame(chartData)) {
-                drawChart(chartDates, chartData)
+                tvDescription.text = getString(R.string.report_usage_description, it, numberOfDays, chartData.average())
+                APIlib.getInstance().setActiveAnyChartView(usageChart)
+                drawChart(chartDates, chartData, isUpdate)
                 return
             }
         }
 
+        tvDescription.text = getString(R.string.report_usage_description, reportName, numberOfDays, 0.0)
         hideChart()
     }
 
-    private fun drawChart(chartDates: Array<String>, chartData: DoubleArray) {
-        noDataLayout.visibility = View.GONE
+    private fun drawChart(chartDates: Array<String>, chartData: DoubleArray, isUpdate: Boolean) {
+        if (!isUpdate) {
+            cartesian = AnyChart.column()
+            data = ArrayList()
 
-        // TODO: Add dropdown options
-        // TODO: Add average value
+            for (index in chartData.indices) {
+                data.add(ValueDataEntry(chartDates[index], chartData[index]))
+            }
 
-        val cartesian: Cartesian = AnyChart.column()
-        val data: MutableList<DataEntry> = ArrayList()
+            val column: Column = cartesian.column(data)
+            column.tooltip()
+                    .titleFormat("{%X}")
+                    .position(Position.CENTER_BOTTOM)
+                    .anchor(Anchor.CENTER_BOTTOM)
+                    .offsetX(0.0)
+                    .offsetY(5.0)
+                    .format("{%Value}{groupsSeparator: } Hours")
 
-        for (index in chartData.indices) {
-            data.add(ValueDataEntry(chartDates[index], chartData[index]))
+            cartesian.animation(true)
+            cartesian.yScale().minimum(0.0)
+            cartesian.yAxis(0).labels().format("{%Value}{groupsSeparator: }")
+            cartesian.tooltip().positionMode(TooltipPositionMode.POINT)
+            cartesian.interactivity().hoverMode(HoverMode.BY_X)
+            cartesian.xAxis(0).title(getString(R.string.report_usage_dates))
+            cartesian.yAxis(0).title(getString(R.string.report_usage_hours_total))
+
+            usageChart.setChart(cartesian)
+        } else {
+            cartesian.removeAllSeries()
+            data.clear()
+
+            for (index in chartData.indices) {
+                data.add(ValueDataEntry(chartDates[index], chartData[index]))
+            }
+
+            cartesian.column(data)
         }
-
-        val column: Column = cartesian.column(data)
-        column.tooltip()
-                .titleFormat("{%X}")
-                .position(Position.CENTER_BOTTOM)
-                .anchor(Anchor.CENTER_BOTTOM)
-                .offsetX(0.0)
-                .offsetY(5.0)
-                .format("{%Value}{groupsSeparator: } Hours")
-
-        cartesian.animation(true)
-        cartesian.yScale().minimum(0.0)
-        cartesian.yAxis(0).labels().format("{%Value}{groupsSeparator: }")
-        cartesian.tooltip().positionMode(TooltipPositionMode.POINT)
-        cartesian.interactivity().hoverMode(HoverMode.BY_X)
-        cartesian.xAxis(0).title(getString(R.string.report_usage_dates))
-        cartesian.yAxis(0).title(getString(R.string.report_usage_hours_total))
-
-        usageChart.setChart(cartesian)
     }
 
     private fun hideChart() {

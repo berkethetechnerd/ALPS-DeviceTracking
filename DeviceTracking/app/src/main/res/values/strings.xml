@@ -58,10 +58,17 @@
     <string name="report_tab_bluetooth">Bluetooth</string>
     <string name="report_tab_wifi">Wi-Fi</string>
     <string name="report_usage_description">In this screen, you can see your \'%1$s\' sensor data
-        for the last 7 days. The statistics for each day start at midnight.</string>
+        for the last %2$d days. Over this period of time, your average use of this sensor was
+        %3$.3f hours/day.</string>
     <string name="report_no_data_found">(ø_ø)\n\nNo data found</string>
     <string name="report_usage_dates">Dates</string>
     <string name="report_usage_hours_total">Hours in Total</string>
+    <string name="report_selected_time_frame">Selected time frame: </string>
+    <string-array name="report_time_frames">
+        <item>Last 3 Days</item>
+        <item>Last 7 Days</item>
+        <item>Last 15 Days</item>
+    </string-array>
 
     <string name="menu_item_report">Report</string>
 
