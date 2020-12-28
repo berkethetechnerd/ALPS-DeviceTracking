@@ -32,8 +32,21 @@ class ColumnReportFragment : Fragment() {
     private lateinit var tvDescription: TextView
     private lateinit var spTimeFrame: Spinner
 
+    private lateinit var cartesian: Cartesian
+    private lateinit var data: MutableList<DataEntry>
+
     private var reportName: String? = null
     private var timeFrame: CalendarDays = CalendarDays.LAST_7_DAYS
+
+    private val numberOfDays: Int
+        get() {
+            return when(timeFrame) {
+                CalendarDays.LAST_24_HOURS -> 1
+                CalendarDays.LAST_3_DAYS -> 3
+                CalendarDays.LAST_7_DAYS -> 7
+                CalendarDays.LAST_15_DAYS -> 15
+            }
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,7 +59,7 @@ class ColumnReportFragment : Fragment() {
         val view = inflater.inflate(R.layout.fragment_column_report, container, false)
         initUI(view)
         initSpinner()
-        initChart()
+        initChart(isUpdate = false)
         return view
     }
 
@@ -61,12 +74,16 @@ class ColumnReportFragment : Fragment() {
         spTimeFrame = view.findViewById(R.id.sp_time_frame)
         spTimeFrame.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                // TODO: Implement this function : Change average, day number of description. Update chart!
+                timeFrame = when (position) {
+                    0 -> CalendarDays.LAST_3_DAYS
+                    1 -> CalendarDays.LAST_7_DAYS
+                    else -> CalendarDays.LAST_15_DAYS
+                }
+
+                initChart(isUpdate = true)
             }
 
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-                // TODO: Implement this function
-            }
+            override fun onNothingSelected(parent: AdapterView<*>?) { }
         }
     }
 
@@ -80,49 +97,60 @@ class ColumnReportFragment : Fragment() {
         }
     }
 
-    private fun initChart() {
+    private fun initChart(isUpdate: Boolean) {
         reportName?.let {
             val sensorType = getSensorType(it)
             val chartDates = CalendarManager.fetchCalendarDays(timeFrame)
             val chartData = RealmManager.queryForDatesInSensor(chartDates, sensorType)
 
             if (isDataExistForSelectedTimeFrame(chartData)) {
-                tvDescription.text = getString(R.string.report_usage_description, it, chartData.average())
-                drawChart(chartDates, chartData)
+                tvDescription.text = getString(R.string.report_usage_description, it, numberOfDays, chartData.average())
+                drawChart(chartDates, chartData, isUpdate)
                 return
             }
         }
 
-        tvDescription.text = getString(R.string.report_usage_description, reportName, 0.0)
+        tvDescription.text = getString(R.string.report_usage_description, reportName, numberOfDays, 0.0)
         hideChart()
     }
 
-    private fun drawChart(chartDates: Array<String>, chartData: DoubleArray) {
-        val cartesian: Cartesian = AnyChart.column()
-        val data: MutableList<DataEntry> = ArrayList()
+    private fun drawChart(chartDates: Array<String>, chartData: DoubleArray, isUpdate: Boolean) {
+        if (!isUpdate) {
+            cartesian = AnyChart.column()
+            data = ArrayList()
 
-        for (index in chartData.indices) {
-            data.add(ValueDataEntry(chartDates[index], chartData[index]))
+            for (index in chartData.indices) {
+                data.add(ValueDataEntry(chartDates[index], chartData[index]))
+            }
+
+            val column: Column = cartesian.column(data)
+            column.tooltip()
+                    .titleFormat("{%X}")
+                    .position(Position.CENTER_BOTTOM)
+                    .anchor(Anchor.CENTER_BOTTOM)
+                    .offsetX(0.0)
+                    .offsetY(5.0)
+                    .format("{%Value}{groupsSeparator: } Hours")
+
+            cartesian.animation(true)
+            cartesian.yScale().minimum(0.0)
+            cartesian.yAxis(0).labels().format("{%Value}{groupsSeparator: }")
+            cartesian.tooltip().positionMode(TooltipPositionMode.POINT)
+            cartesian.interactivity().hoverMode(HoverMode.BY_X)
+            cartesian.xAxis(0).title(getString(R.string.report_usage_dates))
+            cartesian.yAxis(0).title(getString(R.string.report_usage_hours_total))
+
+            usageChart.setChart(cartesian)
+        } else {
+            cartesian.removeAllSeries()
+            data.clear()
+
+            for (index in chartData.indices) {
+                data.add(ValueDataEntry(chartDates[index], chartData[index]))
+            }
+
+            cartesian.column(data)
         }
-
-        val column: Column = cartesian.column(data)
-        column.tooltip()
-                .titleFormat("{%X}")
-                .position(Position.CENTER_BOTTOM)
-                .anchor(Anchor.CENTER_BOTTOM)
-                .offsetX(0.0)
-                .offsetY(5.0)
-                .format("{%Value}{groupsSeparator: } Hours")
-
-        cartesian.animation(true)
-        cartesian.yScale().minimum(0.0)
-        cartesian.yAxis(0).labels().format("{%Value}{groupsSeparator: }")
-        cartesian.tooltip().positionMode(TooltipPositionMode.POINT)
-        cartesian.interactivity().hoverMode(HoverMode.BY_X)
-        cartesian.xAxis(0).title(getString(R.string.report_usage_dates))
-        cartesian.yAxis(0).title(getString(R.string.report_usage_hours_total))
-
-        usageChart.setChart(cartesian)
     }
 
     private fun hideChart() {
