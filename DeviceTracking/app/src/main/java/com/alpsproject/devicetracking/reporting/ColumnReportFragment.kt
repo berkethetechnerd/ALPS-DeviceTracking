@@ -11,6 +11,7 @@ import com.alpsproject.devicetracking.enums.AccessSensor
 import com.alpsproject.devicetracking.enums.CalendarDays
 import com.alpsproject.devicetracking.helper.CalendarManager
 import com.alpsproject.devicetracking.helper.RealmManager
+import com.anychart.APIlib
 import com.anychart.AnyChart
 import com.anychart.AnyChartView
 import com.anychart.chart.common.dataentry.DataEntry
@@ -105,6 +106,7 @@ class ColumnReportFragment : Fragment() {
 
             if (isDataExistForSelectedTimeFrame(chartData)) {
                 tvDescription.text = getString(R.string.report_usage_description, it, numberOfDays, chartData.average())
+                APIlib.getInstance().setActiveAnyChartView(usageChart)
                 drawChart(chartDates, chartData, isUpdate)
                 return
             }
