@@ -31,11 +31,19 @@ object ConstantsManager {
         }
     }
 
-    fun getRunningSensorKey(forSensor: AccessSensor): String {
+    fun getRunningSensorID(forSensor: AccessSensor): String {
         return when (forSensor) {
             AccessSensor.ACCESS_WIFI -> RUNNING_SENSOR_WIFI_ID
             AccessSensor.ACCESS_BLUETOOTH -> RUNNING_SENSOR_BLUETOOTH_ID
             AccessSensor.ACCESS_SCREEN_USAGE -> RUNNING_SENSOR_SCREEN_USAGE_ID
+        }
+    }
+
+    fun getRunningSensorKey(forSensor: AccessSensor): String {
+        return when (forSensor) {
+            AccessSensor.ACCESS_WIFI -> RUNNING_SENSOR_WIFI
+            AccessSensor.ACCESS_BLUETOOTH -> RUNNING_SENSOR_BLUETOOTH
+            AccessSensor.ACCESS_SCREEN_USAGE -> RUNNING_SENSOR_SCREEN_USAGE
         }
     }
 
