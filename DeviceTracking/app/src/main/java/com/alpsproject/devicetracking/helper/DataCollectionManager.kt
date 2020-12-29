@@ -10,7 +10,9 @@ object DataCollectionManager {
 
     fun startWifiCollection(ctx: Activity) {
         SettingsManager.askForWiFi(ctx)
-        createNewSensorEntry(AccessSensor.ACCESS_WIFI)
+        if (SettingsManager.isWifiEnabled(ctx)) {
+            createNewSensorEntry(AccessSensor.ACCESS_WIFI)
+        }
         SharedPreferencesManager.write(C.RUNNING_SENSOR_WIFI, true)
     }
 
@@ -21,7 +23,9 @@ object DataCollectionManager {
 
     fun startBluetoothCollection(ctx: Activity) {
         SettingsManager.askForBluetooth(ctx)
-        createNewSensorEntry(AccessSensor.ACCESS_BLUETOOTH)
+        if (SettingsManager.isBluetoothEnabled()) {
+            createNewSensorEntry(AccessSensor.ACCESS_BLUETOOTH)
+        }
         SharedPreferencesManager.write(C.RUNNING_SENSOR_BLUETOOTH, true)
     }
 
@@ -42,7 +46,7 @@ object DataCollectionManager {
 
     private fun createNewSensorEntry(forSensor: AccessSensor) {
         val sensorName = C.getSensorName(forSensor)
-        val sensorKey = C.getRunningSensorKey(forSensor)
+        val sensorKey = C.getRunningSensorID(forSensor)
 
         val sensorData = SensorData()
         sensorData.sensorName = sensorName
@@ -51,8 +55,22 @@ object DataCollectionManager {
     }
 
     private fun patchSensorEntryUponFinish(forSensor: AccessSensor) {
-        SharedPreferencesManager.read(C.getRunningSensorKey(forSensor), "")?.let { entryId ->
+        SharedPreferencesManager.read(C.getRunningSensorID(forSensor), "")?.let { entryId ->
             RealmManager.updateData(entryId)
+        }
+    }
+    
+    fun startRegisterDataCollection(forSensor: AccessSensor){
+        val sensorKey = C.getRunningSensorKey(forSensor)
+        if(SharedPreferencesManager.read(sensorKey, false)){
+            createNewSensorEntry(forSensor)
+        }
+    }
+
+    fun stopRegisterDataCollection(forSensor: AccessSensor){
+        val sensorKey = C.getRunningSensorKey(forSensor)
+        if(SharedPreferencesManager.read(sensorKey, false)){
+            patchSensorEntryUponFinish(forSensor)
         }
     }
 
