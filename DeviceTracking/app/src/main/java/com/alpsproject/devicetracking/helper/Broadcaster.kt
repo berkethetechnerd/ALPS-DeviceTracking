@@ -109,22 +109,40 @@ object Broadcaster {
 
     private fun broadcastWifiChange(status: Boolean) {
         receivers.forEach {
-            if (status) { it.didWifiEnable() }
-            else { it.didWifiDisable() }
+            if (status) {
+                it.didWifiEnable()
+                DataCollectionManager.startRegisterDataCollection(AccessSensor.ACCESS_WIFI)
+            }
+            else {
+                it.didWifiDisable()
+                DataCollectionManager.stopRegisterDataCollection(AccessSensor.ACCESS_WIFI)
+            }
         }
     }
 
     private fun broadcastBluetoothChange(status: Boolean) {
         receivers.forEach {
-            if (status) { it.didBluetoothEnable() }
-            else { it.didBluetoothDisable() }
+            if (status) {
+                it.didBluetoothEnable()
+                DataCollectionManager.startRegisterDataCollection(AccessSensor.ACCESS_BLUETOOTH)
+            }
+            else {
+                it.didBluetoothDisable()
+                DataCollectionManager.stopRegisterDataCollection(AccessSensor.ACCESS_BLUETOOTH)
+            }
         }
     }
 
     private fun broadcastScreenStateChange(status: Boolean) {
         receivers.forEach {
-            if (status) { it.didTurnScreenOn() }
-            else { it.didTurnScreenOff() }
+            if (status) {
+                it.didTurnScreenOn()
+                DataCollectionManager.startRegisterDataCollection(AccessSensor.ACCESS_SCREEN_USAGE)
+            }
+            else {
+                it.didTurnScreenOff()
+                DataCollectionManager.stopRegisterDataCollection(AccessSensor.ACCESS_SCREEN_USAGE)
+            }
         }
     }
 }
