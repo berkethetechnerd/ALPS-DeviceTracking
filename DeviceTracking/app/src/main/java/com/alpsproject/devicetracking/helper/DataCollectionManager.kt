@@ -44,6 +44,19 @@ object DataCollectionManager {
         SharedPreferencesManager.write(C.RUNNING_SENSOR_SCREEN_USAGE, false)
     }
 
+    fun startMobileDataCollection(ctx: Activity) {
+        SettingsManager.askForMobileData(ctx)
+        if (SettingsManager.isMobileDataEnabled(ctx)) {
+            createNewSensorEntry(AccessSensor.ACCESS_MOBILE_DATA)
+        }
+        SharedPreferencesManager.write(C.RUNNING_SENSOR_MOBILE_DATA, true)
+    }
+
+    fun stopMobileDataCollection() {
+        patchSensorEntryUponFinish(AccessSensor.ACCESS_MOBILE_DATA)
+        SharedPreferencesManager.write(C.RUNNING_SENSOR_MOBILE_DATA, false)
+    }
+
     private fun createNewSensorEntry(forSensor: AccessSensor) {
         val sensorName = C.getSensorName(forSensor)
         val sensorKey = C.getRunningSensorID(forSensor)
