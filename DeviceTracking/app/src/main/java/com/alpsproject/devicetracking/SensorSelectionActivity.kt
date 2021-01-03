@@ -18,6 +18,7 @@ class SensorSelectionActivity : BaseActivity(), PermissionDelegate {
     private lateinit var sensorWifiView: SensorView
     private lateinit var sensorBluetoothView: SensorView
     private lateinit var sensorScreenUsageView: SensorView
+    private lateinit var sensorMobileDataView: SensorView
     private lateinit var btnNext: Button
 
     private var grantedSensors: Int = 0
@@ -28,6 +29,7 @@ class SensorSelectionActivity : BaseActivity(), PermissionDelegate {
             if (sensorWifiView.isSensorSelected()) numberOfSensors++
             if (sensorBluetoothView.isSensorSelected()) numberOfSensors++
             if (sensorScreenUsageView.isSensorSelected()) numberOfSensors++
+            if (sensorMobileDataView.isSensorSelected()) numberOfSensors++
             return numberOfSensors
         }
 
@@ -50,6 +52,7 @@ class SensorSelectionActivity : BaseActivity(), PermissionDelegate {
         sensorWifiView.deselectSensor()
         sensorBluetoothView.deselectSensor()
         sensorScreenUsageView.deselectSensor()
+        sensorMobileDataView.deselectSensor()
     }
 
     private fun checkIfAlreadyRunning() {
@@ -68,6 +71,9 @@ class SensorSelectionActivity : BaseActivity(), PermissionDelegate {
         sensorScreenUsageView = findViewById(R.id.sensor_view_screen_usage)
         sensorScreenUsageView.configureSensor(getResIcon(R.drawable.ic_screen_usage_sensor), getString(R.string.sensor_screen_usage))
 
+        sensorMobileDataView = findViewById(R.id.sensor_view_mobile_data)
+        sensorMobileDataView.configureSensor(getResIcon(R.drawable.ic_mobile_data_sensor), getString(R.string.sensor_mobile_data))
+
         btnNext = findViewById(R.id.btn_next_data_collection)
         btnNext.setOnClickListener { requestPermissions() }
     }
@@ -75,6 +81,14 @@ class SensorSelectionActivity : BaseActivity(), PermissionDelegate {
     private fun requestPermissions() {
         grantedSensors = 0
         rejectedSensors = 0
+
+        if (sensorMobileDataView.isSensorSelected()) {
+            if (!PermissionManager.checkPermission(AccessSensor.ACCESS_MOBILE_DATA)) {
+                PermissionManager.askPermission(this, AccessSensor.ACCESS_MOBILE_DATA)
+            } else {
+                grantedSensors++
+            }
+        }
 
         if (sensorScreenUsageView.isSensorSelected()) {
             if (!PermissionManager.checkPermission(AccessSensor.ACCESS_SCREEN_USAGE)) {
@@ -127,6 +141,7 @@ class SensorSelectionActivity : BaseActivity(), PermissionDelegate {
                 dataCollection.putExtra(C.SENSOR_WIFI, sensorWifiView.isSensorSelected())
                 dataCollection.putExtra(C.SENSOR_BLUETOOTH, sensorBluetoothView.isSensorSelected())
                 dataCollection.putExtra(C.SENSOR_SCREEN_USAGE, sensorScreenUsageView.isSensorSelected())
+                dataCollection.putExtra(C.SENSOR_MOBILE_DATA, sensorMobileDataView.isSensorSelected())
                 startActivity(dataCollection)
             }
         }
