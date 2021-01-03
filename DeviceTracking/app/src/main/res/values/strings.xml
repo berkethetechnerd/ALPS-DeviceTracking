@@ -40,6 +40,7 @@
     <string name="sensor_wifi">WiFi</string>
     <string name="sensor_bluetooth">Bluetooth</string>
     <string name="sensor_screen_usage">Screen Usage</string>
+    <string name="sensor_mobile_data">Mobile Data</string>
     <string name="sensor_selection_next">Next</string>
     <string name="sensor_selection_description">Please select at least one sensor from below
         available sensor list. \n\nYou will be then asked to give permission for us to observe the
@@ -54,6 +55,7 @@
     <string name="data_collection_selected_sensors">Selected Sensors</string>
 
     <string name="report_title">Reports of Usage</string>
+    <string name="report_tab_mobile_data">Mobile Data</string>
     <string name="report_tab_screen_usage">Screen Usage</string>
     <string name="report_tab_bluetooth">Bluetooth</string>
     <string name="report_tab_wifi">Wi-Fi</string>
@@ -77,6 +79,7 @@
     <string name="user_message_title_wifi">Wi-Fi</string>
     <string name="user_message_title_bluetooth">Bluetooth</string>
     <string name="user_message_title_screen_usage">Screen Usage</string>
+    <string name="user_message_title_mobile_data">Mobile Data</string>
     <string name="user_message_message">In order to collect your data on %1$s, we do need your
         consent. The data collected on this sensor will be stored locally and uploaded to our
         servers. This data will not be illustrated with your personal identity in any way, and
