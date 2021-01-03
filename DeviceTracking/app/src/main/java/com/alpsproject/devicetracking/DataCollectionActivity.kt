@@ -23,6 +23,7 @@ class DataCollectionActivity : BaseActivity(), SensorStatusDelegate {
     private lateinit var selectedWifiView: SensorView
     private lateinit var selectedBluetoothView: SensorView
     private lateinit var selectedScreenUsageView: SensorView
+    private lateinit var selectedMobileDataView: SensorView
 
     private val isWifiSelected: Boolean
         get() = intent.getBooleanExtra(C.SENSOR_WIFI, false)
@@ -33,6 +34,9 @@ class DataCollectionActivity : BaseActivity(), SensorStatusDelegate {
     private val isScreenUsageSelected: Boolean
         get() = intent.getBooleanExtra(C.SENSOR_SCREEN_USAGE, false)
                 || SharedPreferencesManager.read(C.RUNNING_SENSOR_SCREEN_USAGE, false)
+    private val isMobileDataSelected: Boolean
+        get() = intent.getBooleanExtra(C.SENSOR_MOBILE_DATA, false)
+                || SharedPreferencesManager.read(C.RUNNING_SENSOR_MOBILE_DATA, false)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -71,6 +75,7 @@ class DataCollectionActivity : BaseActivity(), SensorStatusDelegate {
         selectedWifiView = findViewById(R.id.data_collection_list_wifi)
         selectedBluetoothView = findViewById(R.id.data_collection_list_bluetooth)
         selectedScreenUsageView = findViewById(R.id.data_collection_list_screen_usage)
+        selectedMobileDataView = findViewById(R.id.data_collection_list_mobile_data)
 
         if(!isWifiSelected) {
             selectedWifiView.visibility = View.GONE
@@ -95,6 +100,14 @@ class DataCollectionActivity : BaseActivity(), SensorStatusDelegate {
             selectedScreenUsageView.configureSensor(getResIcon(R.drawable.ic_screen_usage_sensor), getString(R.string.sensor_screen_usage))
             selectedScreenUsageView.changeSensorStatus(SettingsManager.isScreenTurnedOn(this))
         }
+
+        if(!isMobileDataSelected) {
+            selectedMobileDataView.visibility = View.GONE
+        } else {
+            selectedMobileDataView.switchToStatusView()
+            selectedMobileDataView.configureSensor(getResIcon(R.drawable.ic_mobile_data_sensor), getString(R.string.sensor_mobile_data))
+            selectedMobileDataView.changeSensorStatus(SettingsManager.isMobileDataEnabled(this))
+        }
     }
 
     private fun startStopButton() {
@@ -105,6 +118,7 @@ class DataCollectionActivity : BaseActivity(), SensorStatusDelegate {
             if(isWifiSelected) { DataCollectionManager.startWifiCollection(this) }
             if(isBluetoothSelected) { DataCollectionManager.startBluetoothCollection(this) }
             if(isScreenUsageSelected) {  DataCollectionManager.startScreenUsageCollection() }
+            if(isMobileDataSelected) { DataCollectionManager.startMobileDataCollection(this) }
         }
 
         fun stopDataCollection() {
@@ -114,6 +128,7 @@ class DataCollectionActivity : BaseActivity(), SensorStatusDelegate {
             if(isWifiSelected) { DataCollectionManager.stopWifiCollection() }
             if(isBluetoothSelected){ DataCollectionManager.stopBluetoothCollection() }
             if(isScreenUsageSelected){ DataCollectionManager.stopScreenUsageCollection() }
+            if(isMobileDataSelected) { DataCollectionManager.stopMobileDataCollection() }
         }
 
         if(!isRunning()) { // Starting
@@ -135,6 +150,10 @@ class DataCollectionActivity : BaseActivity(), SensorStatusDelegate {
     override fun didTurnScreenOn() = selectedScreenUsageView.changeSensorStatus(true)
 
     override fun didTurnScreenOff() = selectedScreenUsageView.changeSensorStatus(false)
+
+    override fun didMobileDataEnable() = selectedMobileDataView.changeSensorStatus(true)
+
+    override fun didMobileDataDisnable() = selectedMobileDataView.changeSensorStatus(false)
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val inflater: MenuInflater = menuInflater
