@@ -10,10 +10,8 @@ import android.net.wifi.WifiManager
 import android.os.Build
 import android.os.PowerManager
 import android.provider.Settings
-import androidx.core.content.ContextCompat.getSystemService
 import com.alpsproject.devicetracking.delegates.ActivationDelegate
 import com.alpsproject.devicetracking.enums.AccessSensor
-
 
 object SettingsManager: ActivationDelegate {
 

@@ -10,10 +10,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import com.alpsproject.devicetracking.delegates.SensorStatusDelegate
-import com.alpsproject.devicetracking.helper.Broadcaster
-import com.alpsproject.devicetracking.helper.DataCollectionManager
-import com.alpsproject.devicetracking.helper.SettingsManager
-import com.alpsproject.devicetracking.helper.SharedPreferencesManager
+import com.alpsproject.devicetracking.helper.*
 import com.alpsproject.devicetracking.views.SensorView
 
 class DataCollectionActivity : BaseActivity(), SensorStatusDelegate {
@@ -133,8 +130,10 @@ class DataCollectionActivity : BaseActivity(), SensorStatusDelegate {
 
         if(!isRunning()) { // Starting
             startDataCollection()
+            ServiceManager.startTrackerService(this)
         } else { // Stopping
             stopDataCollection()
+            ServiceManager.stopTrackerService(this)
             finish()
         }
     }

@@ -6,8 +6,13 @@ import com.alpsproject.devicetracking.model.SensorData
 
 object Logger {
 
+    private const val SERVICE_NOTIFICATION = "DTServiceNotification"
     private const val SENSOR_STATUS_CHANGE = "SensorStatusChange"
     private const val SENSOR_DATA_ENTRY = "SensorDataEntry"
+
+    fun logServiceNotification(message: String) {
+        Log.d(SERVICE_NOTIFICATION, message)
+    }
 
     fun logSensorUpdate(sensor: AccessSensor, status: Boolean) {
         Log.d(SENSOR_STATUS_CHANGE, "$sensor -> $status")

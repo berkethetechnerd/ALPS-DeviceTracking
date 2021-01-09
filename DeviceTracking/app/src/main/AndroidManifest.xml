@@ -10,6 +10,8 @@
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <application
         android:allowBackup="true"
@@ -19,6 +21,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.DeviceTracking"
         android:name=".ApplicationClass" >
+
+        <service
+            android:name=".services.TrackerService"
+            android:enabled="true"
+            android:exported="false">
+        </service>
 
         <activity
             android:name=".ReportScreenActivity"
