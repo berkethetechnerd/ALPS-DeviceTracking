@@ -42,6 +42,12 @@ object SettingsManager: ActivationDelegate {
         }
     }
 
+    fun askForGps(activity: Activity) {
+        if (PermissionManager.checkPermission(AccessSensor.ACCESS_GPS) && !isGpsEnabled()) {
+            UserMessageGenerator.generateDialogForActivation(activity, AccessSensor.ACCESS_GPS)
+        }
+    }
+
     fun isWifiEnabled(activity: Activity): Boolean {
         val wifiManager = getWifiManager(activity) ?: return false // Adapter not found
         return wifiManager.isWifiEnabled
@@ -60,12 +66,18 @@ object SettingsManager: ActivationDelegate {
         return activeInfo?.type == ConnectivityManager.TYPE_MOBILE
     }
 
+    fun isGpsEnabled(): Boolean {
+        // Todo: Find a way :D
+        return true;
+    }
+
     override fun sensorActivated(context: Activity, sensor: AccessSensor) {
         when (sensor) {
             AccessSensor.ACCESS_WIFI -> activateWifi(context)
             AccessSensor.ACCESS_BLUETOOTH -> activateBluetooth()
             AccessSensor.ACCESS_SCREEN_USAGE -> return
             AccessSensor.ACCESS_MOBILE_DATA -> return
+            AccessSensor.ACCESS_GPS -> return
         }
     }
 
