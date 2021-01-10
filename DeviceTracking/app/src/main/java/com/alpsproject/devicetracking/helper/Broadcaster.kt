@@ -66,7 +66,7 @@ object Broadcaster {
     }
 
     private fun registerForGps(receiver: Activity) {
-        val gpdFilter = IntentFilter(LocationManager.MODE_CHANGED_ACTION)
+        val gpdFilter = IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION)
         receiver.registerReceiver(gpsReceiver, gpdFilter)
     }
 
