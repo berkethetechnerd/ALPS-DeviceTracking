@@ -24,6 +24,7 @@ class DataCollectionActivity : BaseActivity(), SensorStatusDelegate {
     private lateinit var selectedBluetoothView: SensorView
     private lateinit var selectedScreenUsageView: SensorView
     private lateinit var selectedMobileDataView: SensorView
+    private lateinit var selectedGpsView: SensorView
 
     private val isWifiSelected: Boolean
         get() = intent.getBooleanExtra(C.SENSOR_WIFI, false)
@@ -37,6 +38,9 @@ class DataCollectionActivity : BaseActivity(), SensorStatusDelegate {
     private val isMobileDataSelected: Boolean
         get() = intent.getBooleanExtra(C.SENSOR_MOBILE_DATA, false)
                 || SharedPreferencesManager.read(C.RUNNING_SENSOR_MOBILE_DATA, false)
+    private val isGpsSelected: Boolean
+        get() = intent.getBooleanExtra(C.SENSOR_GPS, false)
+                || SharedPreferencesManager.read(C.RUNNING_SENSOR_GPS, false)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -76,6 +80,7 @@ class DataCollectionActivity : BaseActivity(), SensorStatusDelegate {
         selectedBluetoothView = findViewById(R.id.data_collection_list_bluetooth)
         selectedScreenUsageView = findViewById(R.id.data_collection_list_screen_usage)
         selectedMobileDataView = findViewById(R.id.data_collection_list_mobile_data)
+        selectedGpsView = findViewById(R.id.data_collection_list_gps)
 
         if(!isWifiSelected) {
             selectedWifiView.visibility = View.GONE
@@ -108,6 +113,14 @@ class DataCollectionActivity : BaseActivity(), SensorStatusDelegate {
             selectedMobileDataView.configureSensor(getResIcon(R.drawable.ic_mobile_data_sensor), getString(R.string.sensor_mobile_data))
             selectedMobileDataView.changeSensorStatus(SettingsManager.isMobileDataEnabled(this))
         }
+
+        if(!isGpsSelected) {
+            selectedGpsView.visibility = View.GONE
+        } else {
+            selectedGpsView.switchToStatusView()
+            selectedGpsView.configureSensor(getResIcon(R.drawable.ic_gps_sensor), getString(R.string.sensor_gps))
+            selectedGpsView.changeSensorStatus(SettingsManager.isGpsEnabled())
+        }
     }
 
     private fun startStopButton() {
@@ -119,6 +132,7 @@ class DataCollectionActivity : BaseActivity(), SensorStatusDelegate {
             if(isBluetoothSelected) { DataCollectionManager.startBluetoothCollection(this) }
             if(isScreenUsageSelected) {  DataCollectionManager.startScreenUsageCollection() }
             if(isMobileDataSelected) { DataCollectionManager.startMobileDataCollection(this) }
+            if(isGpsSelected) { DataCollectionManager.startGpsCollection(this) }
         }
 
         fun stopDataCollection() {
@@ -129,6 +143,7 @@ class DataCollectionActivity : BaseActivity(), SensorStatusDelegate {
             if(isBluetoothSelected){ DataCollectionManager.stopBluetoothCollection() }
             if(isScreenUsageSelected){ DataCollectionManager.stopScreenUsageCollection() }
             if(isMobileDataSelected) { DataCollectionManager.stopMobileDataCollection() }
+            if(isGpsSelected) { DataCollectionManager.stopGpsCollection() }
         }
 
         if(!isRunning()) { // Starting
@@ -153,7 +168,11 @@ class DataCollectionActivity : BaseActivity(), SensorStatusDelegate {
 
     override fun didMobileDataEnable() = selectedMobileDataView.changeSensorStatus(true)
 
-    override fun didMobileDataDisnable() = selectedMobileDataView.changeSensorStatus(false)
+    override fun didMobileDataDisable() = selectedMobileDataView.changeSensorStatus(false)
+
+    override fun didGpsEnable() = selectedGpsView.changeSensorStatus(true)
+
+    override fun didGpsDisable() = selectedGpsView.changeSensorStatus(false)
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val inflater: MenuInflater = menuInflater
