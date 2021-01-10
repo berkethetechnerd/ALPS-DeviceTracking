@@ -177,6 +177,7 @@ class ColumnReportFragment : Fragment() {
             getString(R.string.report_tab_wifi) -> AccessSensor.ACCESS_WIFI
             getString(R.string.report_tab_bluetooth) -> AccessSensor.ACCESS_BLUETOOTH
             getString(R.string.report_tab_mobile_data) -> AccessSensor.ACCESS_MOBILE_DATA
+            getString(R.string.report_tab_gps) -> AccessSensor.ACCESS_GPS
             else -> AccessSensor.ACCESS_SCREEN_USAGE
         }
     }
