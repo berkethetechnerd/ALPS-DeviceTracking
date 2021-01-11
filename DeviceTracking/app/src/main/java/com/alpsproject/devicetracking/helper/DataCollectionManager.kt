@@ -59,7 +59,7 @@ object DataCollectionManager {
 
     fun startGpsCollection(ctx: Activity) {
         SettingsManager.askForGps(ctx)
-        if (SettingsManager.isGpsEnabled()) {
+        if (SettingsManager.isGpsEnabled(ctx)) {
             createNewSensorEntry(AccessSensor.ACCESS_GPS)
         }
         SharedPreferencesManager.write(C.RUNNING_SENSOR_GPS, true)

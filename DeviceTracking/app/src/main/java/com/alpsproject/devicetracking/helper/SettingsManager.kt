@@ -4,6 +4,7 @@ import android.app.Activity
 import android.bluetooth.BluetoothAdapter
 import android.content.Context
 import android.content.Intent
+import android.location.LocationManager
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
 import android.net.wifi.WifiManager
@@ -43,7 +44,7 @@ object SettingsManager: ActivationDelegate {
     }
 
     fun askForGps(activity: Activity) {
-        if (PermissionManager.checkPermission(AccessSensor.ACCESS_GPS) && !isGpsEnabled()) {
+        if (PermissionManager.checkPermission(AccessSensor.ACCESS_GPS) && !isGpsEnabled(activity)) {
             UserMessageGenerator.generateDialogForActivation(activity, AccessSensor.ACCESS_GPS)
         }
     }
@@ -66,9 +67,9 @@ object SettingsManager: ActivationDelegate {
         return activeInfo?.type == ConnectivityManager.TYPE_MOBILE
     }
 
-    fun isGpsEnabled(): Boolean {
-        // Todo: Find a way :D
-        return true;
+    fun isGpsEnabled(activity: Activity): Boolean {
+        val locationManager = getLocationManager(activity) ?: return false
+        return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
     }
 
     override fun sensorActivated(context: Activity, sensor: AccessSensor) {
@@ -106,4 +107,8 @@ object SettingsManager: ActivationDelegate {
     private fun getConnectivityManager(activity: Activity): ConnectivityManager? = activity.applicationContext.getSystemService(
         Context.CONNECTIVITY_SERVICE
     ) as? ConnectivityManager?
+
+    private fun getLocationManager(activity: Activity): LocationManager? = activity.getSystemService(
+            Context.LOCATION_SERVICE
+    )as? LocationManager?
 }

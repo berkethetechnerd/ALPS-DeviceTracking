@@ -119,7 +119,7 @@ class DataCollectionActivity : BaseActivity(), SensorStatusDelegate {
         } else {
             selectedGpsView.switchToStatusView()
             selectedGpsView.configureSensor(getResIcon(R.drawable.ic_gps_sensor), getString(R.string.sensor_gps))
-            selectedGpsView.changeSensorStatus(SettingsManager.isGpsEnabled())
+            selectedGpsView.changeSensorStatus(SettingsManager.isGpsEnabled(this))
         }
     }
 
