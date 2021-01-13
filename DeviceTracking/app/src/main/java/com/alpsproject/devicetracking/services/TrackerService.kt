@@ -9,14 +9,16 @@ import android.os.IBinder
 import android.os.PowerManager
 import com.alpsproject.devicetracking.DataCollectionActivity
 import com.alpsproject.devicetracking.R
+import com.alpsproject.devicetracking.delegates.SensorStatusDelegate
 import com.alpsproject.devicetracking.enums.ServiceState
+import com.alpsproject.devicetracking.helper.Broadcaster
 import com.alpsproject.devicetracking.helper.Logger
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-class TrackerService : Service() {
+class TrackerService : Service(), SensorStatusDelegate {
 
     private var wakeLock: PowerManager.WakeLock? = null
     private var isServiceStarted: Boolean = false
@@ -49,6 +51,7 @@ class TrackerService : Service() {
 
     override fun onDestroy() {
         super.onDestroy()
+        Broadcaster.unregisterForBroadcasting(this)
         Logger.logServiceNotification("The service has been destroyed")
     }
 
@@ -56,6 +59,7 @@ class TrackerService : Service() {
         if (isServiceStarted) return
 
         Logger.logServiceNotification("Starting the foreground service task")
+        Broadcaster.registerForBroadcasting(this)
         isServiceStarted = true
 
         // We need this lock so our service gets not affected by Doze Mode
@@ -64,18 +68,6 @@ class TrackerService : Service() {
                     acquire()
                 }
             }
-
-        // We're starting a loop in a coroutine
-        GlobalScope.launch(Dispatchers.IO) {
-            while (isServiceStarted) {
-                launch(Dispatchers.IO) {
-                    Logger.logServiceNotification("Hello there")
-                }
-                delay(1 * 1 * 1000)
-            }
-
-            Logger.logServiceNotification("End of the loop for the service")
-        }
     }
 
     private fun stopService() {
@@ -134,6 +126,38 @@ class TrackerService : Service() {
             .setTicker("Ticker text")
             .setPriority(Notification.PRIORITY_HIGH) // for under android 26 compatibility
             .build()
+    }
+
+    override fun didWifiEnable() {
+        Logger.logServiceNotification("WIFI enabled")
+    }
+
+    override fun didWifiDisable() {
+        Logger.logServiceNotification("WIFI disabled")
+    }
+
+    override fun didBluetoothEnable() {
+        Logger.logServiceNotification("Bluetooth enabled")
+    }
+
+    override fun didBluetoothDisable() {
+        Logger.logServiceNotification("Bluetooth disabled")
+    }
+
+    override fun didTurnScreenOn() {
+        Logger.logServiceNotification("Screen Usage enabled")
+    }
+
+    override fun didTurnScreenOff() {
+        Logger.logServiceNotification("Screen Usage disabled")
+    }
+
+    override fun didMobileDataEnable() {
+        Logger.logServiceNotification("Mobile Data enabled")
+    }
+
+    override fun didMobileDataDisnable() {
+        Logger.logServiceNotification("Mobile Data disabled")
     }
 
 }

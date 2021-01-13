@@ -58,6 +58,8 @@ object DataCollectionManager {
     }
 
     private fun createNewSensorEntry(forSensor: AccessSensor) {
+        if (RealmManager.queryForOpenEntryInSensor(forSensor)) return // Due to multiple broadcast wake
+
         val sensorName = C.getSensorName(forSensor)
         val sensorKey = C.getRunningSensorID(forSensor)
 

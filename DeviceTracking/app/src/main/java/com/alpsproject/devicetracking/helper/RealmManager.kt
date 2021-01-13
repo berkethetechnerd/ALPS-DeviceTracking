@@ -133,4 +133,13 @@ object RealmManager {
         val startTime = result.startTime
         return (endTime.time - startTime.time) / 1000.0
     }
+
+    // ** QUERY : THE SENSOR HAS ALREADY AN OPEN ENTRY **
+
+    fun queryForOpenEntryInSensor(sensor: AccessSensor): Boolean {
+        val sensorName = ConstantsManager.getSensorName(sensor)
+        val preliminaryResults = realm.where(SensorData::class.java).equalTo(ENTRY_SENSOR_NAME, sensorName).findAll()
+        val results = preliminaryResults.filter { it.endTime == null }
+        return results.isNotEmpty()
+    }
 }

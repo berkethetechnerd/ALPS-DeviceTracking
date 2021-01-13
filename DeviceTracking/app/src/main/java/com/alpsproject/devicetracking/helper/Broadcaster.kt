@@ -1,6 +1,5 @@
 package com.alpsproject.devicetracking.helper
 
-import android.app.Activity
 import android.bluetooth.BluetoothAdapter
 import android.content.BroadcastReceiver
 import android.content.Context
@@ -15,7 +14,7 @@ object Broadcaster {
 
     private val receivers: ArrayList<SensorStatusDelegate> = ArrayList()
 
-    fun registerForBroadcasting(receiver: Activity) {
+    fun registerForBroadcasting(receiver: Context) {
         registerForWifi(receiver)
         registerForBluetooth(receiver)
         registerForScreenUsage(receiver)
@@ -26,7 +25,7 @@ object Broadcaster {
         }
     }
 
-    fun unregisterForBroadcasting(receiver: Activity) {
+    fun unregisterForBroadcasting(receiver: Context) {
         receiver.unregisterReceiver(wifiStateReceiver)
         receiver.unregisterReceiver(bluetoothStateReceiver)
         receiver.unregisterReceiver(screenUsageReceiver)
@@ -39,24 +38,24 @@ object Broadcaster {
         }
     }
 
-    private fun registerForWifi(receiver: Activity) {
+    private fun registerForWifi(receiver: Context) {
         val wifiFilter = IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION)
         receiver.registerReceiver(wifiStateReceiver, wifiFilter)
     }
 
-    private fun registerForBluetooth(receiver: Activity) {
+    private fun registerForBluetooth(receiver: Context) {
         val bluetoothFilter = IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED)
         receiver.registerReceiver(bluetoothStateReceiver, bluetoothFilter)
     }
 
-    private fun registerForScreenUsage(receiver: Activity) {
+    private fun registerForScreenUsage(receiver: Context) {
         val screenUsageFilter = IntentFilter()
         screenUsageFilter.addAction(Intent.ACTION_SCREEN_ON)
         screenUsageFilter.addAction(Intent.ACTION_SCREEN_OFF)
         receiver.registerReceiver(screenUsageReceiver, screenUsageFilter)
     }
 
-    private fun registerForMobileData(receiver: Activity) {
+    private fun registerForMobileData(receiver: Context) {
         val mobileDataFilter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
         receiver.registerReceiver(mobileDataReceiver, mobileDataFilter)
     }
@@ -73,10 +72,10 @@ object Broadcaster {
 
                 if (wifiOnStatus) {
                     Logger.logSensorUpdate(AccessSensor.ACCESS_WIFI, true)
-                    broadcastWifiChange(true)
+                    broadcastSensorChange(AccessSensor.ACCESS_WIFI, true)
                 } else if (wifiOffStatus) {
                     Logger.logSensorUpdate(AccessSensor.ACCESS_WIFI, false)
-                    broadcastWifiChange(false)
+                    broadcastSensorChange(AccessSensor.ACCESS_WIFI, false)
                 }
             }
         }
@@ -94,10 +93,10 @@ object Broadcaster {
 
                 if (bluetoothOnStatus) {
                     Logger.logSensorUpdate(AccessSensor.ACCESS_BLUETOOTH, true)
-                    broadcastBluetoothChange(true)
+                    broadcastSensorChange(AccessSensor.ACCESS_BLUETOOTH, true)
                 } else if (bluetoothOffStatus) {
                     Logger.logSensorUpdate(AccessSensor.ACCESS_BLUETOOTH, false)
-                    broadcastBluetoothChange(false)
+                    broadcastSensorChange(AccessSensor.ACCESS_BLUETOOTH, false)
                 }
             }
         }
@@ -112,10 +111,10 @@ object Broadcaster {
 
                 if (screenOnStatus) {
                     Logger.logSensorUpdate(AccessSensor.ACCESS_SCREEN_USAGE, true)
-                    broadcastScreenStateChange(true)
+                    broadcastSensorChange(AccessSensor.ACCESS_SCREEN_USAGE, true)
                 } else if (screenOffStatus) {
                     Logger.logSensorUpdate(AccessSensor.ACCESS_SCREEN_USAGE, false)
-                    broadcastScreenStateChange(false)
+                    broadcastSensorChange(AccessSensor.ACCESS_SCREEN_USAGE, false)
                 }
             }
         }
@@ -129,64 +128,61 @@ object Broadcaster {
                 )
                 if (!noConnectivity) {
                     Logger.logSensorUpdate(AccessSensor.ACCESS_MOBILE_DATA, true)
-                    broadcastMobileDataChange(true)
+                    broadcastSensorChange(AccessSensor.ACCESS_MOBILE_DATA, true)
                 } else {
                     Logger.logSensorUpdate(AccessSensor.ACCESS_MOBILE_DATA, false)
-                    broadcastMobileDataChange(false)
+                    broadcastSensorChange(AccessSensor.ACCESS_MOBILE_DATA, false)
                 }
             }
         }
     }
 
-    private fun broadcastWifiChange(status: Boolean) {
+    private fun broadcastSensorChange(sensor: AccessSensor, status: Boolean) {
+        if (status) {
+            DataCollectionManager.startRegisterDataCollection(sensor)
+        } else {
+            DataCollectionManager.stopRegisterDataCollection(sensor)
+        }
+
         receivers.forEach {
-            if (status) {
-                it.didWifiEnable()
-                DataCollectionManager.startRegisterDataCollection(AccessSensor.ACCESS_WIFI)
-            }
-            else {
-                it.didWifiDisable()
-                DataCollectionManager.stopRegisterDataCollection(AccessSensor.ACCESS_WIFI)
+            when (sensor) {
+                AccessSensor.ACCESS_WIFI -> broadcastWifiChange(it, status)
+                AccessSensor.ACCESS_BLUETOOTH -> broadcastBluetoothChange(it, status)
+                AccessSensor.ACCESS_SCREEN_USAGE -> broadcastScreenStateChange(it, status)
+                AccessSensor.ACCESS_MOBILE_DATA -> broadcastMobileDataChange(it, status)
             }
         }
     }
 
-    private fun broadcastBluetoothChange(status: Boolean) {
-        receivers.forEach {
-            if (status) {
-                it.didBluetoothEnable()
-                DataCollectionManager.startRegisterDataCollection(AccessSensor.ACCESS_BLUETOOTH)
-            }
-            else {
-                it.didBluetoothDisable()
-                DataCollectionManager.stopRegisterDataCollection(AccessSensor.ACCESS_BLUETOOTH)
-            }
+    private fun broadcastWifiChange(delegate: SensorStatusDelegate, status: Boolean) {
+        if (status) {
+            delegate.didWifiEnable()
+        } else {
+            delegate.didWifiDisable()
         }
     }
 
-    private fun broadcastScreenStateChange(status: Boolean) {
-        receivers.forEach {
-            if (status) {
-                it.didTurnScreenOn()
-                DataCollectionManager.startRegisterDataCollection(AccessSensor.ACCESS_SCREEN_USAGE)
-            }
-            else {
-                it.didTurnScreenOff()
-                DataCollectionManager.stopRegisterDataCollection(AccessSensor.ACCESS_SCREEN_USAGE)
-            }
+    private fun broadcastBluetoothChange(delegate: SensorStatusDelegate, status: Boolean) {
+        if (status) {
+            delegate.didBluetoothEnable()
+        } else {
+            delegate.didBluetoothDisable()
         }
     }
 
-    private fun broadcastMobileDataChange(status: Boolean) {
-        receivers.forEach {
-            if (status) {
-                it.didMobileDataEnable()
-                DataCollectionManager.startRegisterDataCollection(AccessSensor.ACCESS_MOBILE_DATA)
-            }
-            else {
-                it.didMobileDataDisnable()
-                DataCollectionManager.stopRegisterDataCollection(AccessSensor.ACCESS_MOBILE_DATA)
-            }
+    private fun broadcastScreenStateChange(delegate: SensorStatusDelegate, status: Boolean) {
+        if (status) {
+            delegate.didTurnScreenOn()
+        } else {
+            delegate.didTurnScreenOff()
+        }
+    }
+
+    private fun broadcastMobileDataChange(delegate: SensorStatusDelegate, status: Boolean) {
+        if (status) {
+            delegate.didMobileDataEnable()
+        } else {
+            delegate.didMobileDataDisnable()
         }
     }
 }
