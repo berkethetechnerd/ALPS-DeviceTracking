@@ -1,7 +1,7 @@
 package com.alpsproject.devicetracking.helper
 
 import android.util.Log
-import com.alpsproject.devicetracking.enums.AccessSensor
+import com.alpsproject.devicetracking.enums.DeviceSensor
 import com.alpsproject.devicetracking.model.SensorData
 
 object Logger {
@@ -14,7 +14,7 @@ object Logger {
         Log.d(SERVICE_NOTIFICATION, message)
     }
 
-    fun logSensorUpdate(sensor: AccessSensor, status: Boolean) {
+    fun logSensorUpdate(sensor: DeviceSensor, status: Boolean) {
         Log.d(SENSOR_STATUS_CHANGE, "$sensor -> $status")
     }
 

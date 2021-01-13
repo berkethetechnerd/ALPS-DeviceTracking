@@ -1,8 +1,8 @@
 package com.alpsproject.devicetracking.delegates
 
 import android.app.Activity
-import com.alpsproject.devicetracking.enums.AccessSensor
+import com.alpsproject.devicetracking.enums.DeviceSensor
 
 interface ActivationDelegate {
-    fun sensorActivated(context: Activity, sensor: AccessSensor)
+    fun sensorActivationRequested(activity: Activity, sensor: DeviceSensor)
 }

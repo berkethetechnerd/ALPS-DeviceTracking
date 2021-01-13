@@ -10,6 +10,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import com.alpsproject.devicetracking.delegates.SensorStatusDelegate
+import com.alpsproject.devicetracking.enums.DeviceSensor
 import com.alpsproject.devicetracking.helper.*
 import com.alpsproject.devicetracking.views.SensorView
 
@@ -39,6 +40,15 @@ class DataCollectionActivity : BaseActivity(), SensorStatusDelegate {
         get() = intent.getBooleanExtra(C.SENSOR_GPS, false)
                 || SharedPreferencesManager.read(C.RUNNING_SENSOR_GPS, false)
 
+    private val arrOfSelectedSensors: Array<Boolean>
+        get() = arrayOf(
+                isWifiSelected,
+                isBluetoothSelected,
+                isScreenUsageSelected,
+                isMobileDataSelected,
+                isGpsSelected
+        )
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_data_collection)
@@ -50,12 +60,12 @@ class DataCollectionActivity : BaseActivity(), SensorStatusDelegate {
 
     override fun onStart() {
         super.onStart()
-        Broadcaster.registerForBroadcasting(this)
+        Broadcaster.registerForBroadcasting(this, arrOfSelectedSensors)
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        Broadcaster.unregisterForBroadcasting(this)
+        Broadcaster.unregisterForBroadcasting(this, arrOfSelectedSensors)
     }
 
     private fun initUI() {
@@ -125,22 +135,22 @@ class DataCollectionActivity : BaseActivity(), SensorStatusDelegate {
             SharedPreferencesManager.write(C.RUNNING_DATA_COLLECTION, true)
             btnStartStop.text = getString(R.string.data_collection_stop)
 
-            if(isWifiSelected) { DataCollectionManager.startWifiCollection(this) }
-            if(isBluetoothSelected) { DataCollectionManager.startBluetoothCollection(this) }
-            if(isScreenUsageSelected) {  DataCollectionManager.startScreenUsageCollection() }
-            if(isMobileDataSelected) { DataCollectionManager.startMobileDataCollection(this) }
-            if(isGpsSelected) { DataCollectionManager.startGpsCollection(this) }
+            if(isWifiSelected) { DataCollectionManager.startCollectionForSensor(DeviceSensor.ACCESS_WIFI, this) }
+            if(isBluetoothSelected) { DataCollectionManager.startCollectionForSensor(DeviceSensor.ACCESS_BLUETOOTH, this) }
+            if(isScreenUsageSelected) {  DataCollectionManager.startCollectionForSensor(DeviceSensor.ACCESS_SCREEN_USAGE, this) }
+            if(isMobileDataSelected) { DataCollectionManager.startCollectionForSensor(DeviceSensor.ACCESS_MOBILE_DATA, this) }
+            if(isGpsSelected) { DataCollectionManager.startCollectionForSensor(DeviceSensor.ACCESS_GPS, this) }
         }
 
         fun stopDataCollection() {
-            SharedPreferencesManager.write(DataCollectionManager.C.RUNNING_DATA_COLLECTION, false)
+            SharedPreferencesManager.write(C.RUNNING_DATA_COLLECTION, false)
             btnStartStop.text = getString(R.string.data_collection_start)
 
-            if(isWifiSelected) { DataCollectionManager.stopWifiCollection() }
-            if(isBluetoothSelected){ DataCollectionManager.stopBluetoothCollection() }
-            if(isScreenUsageSelected){ DataCollectionManager.stopScreenUsageCollection() }
-            if(isMobileDataSelected) { DataCollectionManager.stopMobileDataCollection() }
-            if(isGpsSelected) { DataCollectionManager.stopGpsCollection() }
+            if(isWifiSelected) { DataCollectionManager.stopCollectionForSensor(DeviceSensor.ACCESS_WIFI) }
+            if(isBluetoothSelected){ DataCollectionManager.stopCollectionForSensor(DeviceSensor.ACCESS_BLUETOOTH) }
+            if(isScreenUsageSelected){ DataCollectionManager.stopCollectionForSensor(DeviceSensor.ACCESS_SCREEN_USAGE) }
+            if(isMobileDataSelected) { DataCollectionManager.stopCollectionForSensor(DeviceSensor.ACCESS_MOBILE_DATA) }
+            if(isGpsSelected) { DataCollectionManager.stopCollectionForSensor(DeviceSensor.ACCESS_GPS) }
         }
 
         if(!isRunning()) { // Starting

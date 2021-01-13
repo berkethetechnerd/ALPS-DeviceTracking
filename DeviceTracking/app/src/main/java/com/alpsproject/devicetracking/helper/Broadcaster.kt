@@ -9,30 +9,30 @@ import android.location.LocationManager
 import android.net.ConnectivityManager
 import android.net.wifi.WifiManager
 import com.alpsproject.devicetracking.delegates.SensorStatusDelegate
-import com.alpsproject.devicetracking.enums.AccessSensor
+import com.alpsproject.devicetracking.enums.DeviceSensor
 
 object Broadcaster {
 
     private val receivers: ArrayList<SensorStatusDelegate> = ArrayList()
 
-    fun registerForBroadcasting(receiver: Context) {
-        registerForWifi(receiver)
-        registerForBluetooth(receiver)
-        registerForScreenUsage(receiver)
-        registerForMobileData(receiver)
-        registerForGps(receiver)
+    fun registerForBroadcasting(receiver: Context, arrOfSensors: Array<Boolean>) {
+        if (arrOfSensors[0]) { registerForWifi(receiver) }
+        if (arrOfSensors[1]) { registerForBluetooth(receiver) }
+        if (arrOfSensors[2]) { registerForScreenUsage(receiver) }
+        if (arrOfSensors[3]) { registerForMobileData(receiver) }
+        if (arrOfSensors[4]) { registerForGps(receiver) }
 
         (receiver as? SensorStatusDelegate)?.let {
             receivers.add(it)
         }
     }
 
-    fun unregisterForBroadcasting(receiver: Context) {
-        receiver.unregisterReceiver(wifiStateReceiver)
-        receiver.unregisterReceiver(bluetoothStateReceiver)
-        receiver.unregisterReceiver(screenUsageReceiver)
-        receiver.unregisterReceiver(mobileDataReceiver)
-        receiver.unregisterReceiver(gpsReceiver)
+    fun unregisterForBroadcasting(receiver: Context, arrOfSensors: Array<Boolean>) {
+        if (arrOfSensors[0]) { receiver.unregisterReceiver(wifiStateReceiver) }
+        if (arrOfSensors[1]) { receiver.unregisterReceiver(bluetoothStateReceiver) }
+        if (arrOfSensors[2]) { receiver.unregisterReceiver(screenUsageReceiver) }
+        if (arrOfSensors[3]) { receiver.unregisterReceiver(mobileDataReceiver) }
+        if (arrOfSensors[4]) { receiver.unregisterReceiver(gpsReceiver) }
 
         (receiver as? SensorStatusDelegate)?.let {
             if (receivers.contains(it)) {
@@ -64,8 +64,8 @@ object Broadcaster {
     }
 
     private fun registerForGps(receiver: Context) {
-        val gpdFilter = IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION)
-        receiver.registerReceiver(gpsReceiver, gpdFilter)
+        val gpsFilter = IntentFilter(LocationManager.PROVIDERS_CHANGED_ACTION)
+        receiver.registerReceiver(gpsReceiver, gpsFilter)
     }
 
     private val wifiStateReceiver = object : BroadcastReceiver() {
@@ -75,15 +75,16 @@ object Broadcaster {
                         WifiManager.EXTRA_WIFI_STATE,
                         WifiManager.WIFI_STATE_UNKNOWN
                 )
+
                 val wifiOnStatus = wifiStateExtra == WifiManager.WIFI_STATE_ENABLED
                 val wifiOffStatus = wifiStateExtra == WifiManager.WIFI_STATE_DISABLED
 
                 if (wifiOnStatus) {
-                    Logger.logSensorUpdate(AccessSensor.ACCESS_WIFI, true)
-                    broadcastSensorChange(AccessSensor.ACCESS_WIFI, true)
+                    Logger.logSensorUpdate(DeviceSensor.ACCESS_WIFI, true)
+                    broadcastSensorChange(DeviceSensor.ACCESS_WIFI, true)
                 } else if (wifiOffStatus) {
-                    Logger.logSensorUpdate(AccessSensor.ACCESS_WIFI, false)
-                    broadcastSensorChange(AccessSensor.ACCESS_WIFI, false)
+                    Logger.logSensorUpdate(DeviceSensor.ACCESS_WIFI, false)
+                    broadcastSensorChange(DeviceSensor.ACCESS_WIFI, false)
                 }
             }
         }
@@ -96,15 +97,16 @@ object Broadcaster {
                         BluetoothAdapter.EXTRA_STATE,
                         BluetoothAdapter.ERROR
                 )
+
                 val bluetoothOnStatus = bluetoothStateExtra == BluetoothAdapter.STATE_ON
                 val bluetoothOffStatus = bluetoothStateExtra == BluetoothAdapter.STATE_OFF
 
                 if (bluetoothOnStatus) {
-                    Logger.logSensorUpdate(AccessSensor.ACCESS_BLUETOOTH, true)
-                    broadcastSensorChange(AccessSensor.ACCESS_BLUETOOTH, true)
+                    Logger.logSensorUpdate(DeviceSensor.ACCESS_BLUETOOTH, true)
+                    broadcastSensorChange(DeviceSensor.ACCESS_BLUETOOTH, true)
                 } else if (bluetoothOffStatus) {
-                    Logger.logSensorUpdate(AccessSensor.ACCESS_BLUETOOTH, false)
-                    broadcastSensorChange(AccessSensor.ACCESS_BLUETOOTH, false)
+                    Logger.logSensorUpdate(DeviceSensor.ACCESS_BLUETOOTH, false)
+                    broadcastSensorChange(DeviceSensor.ACCESS_BLUETOOTH, false)
                 }
             }
         }
@@ -118,101 +120,104 @@ object Broadcaster {
                 val screenOffStatus = screenStateExtra.equals(Intent.ACTION_SCREEN_OFF)
 
                 if (screenOnStatus) {
-                    Logger.logSensorUpdate(AccessSensor.ACCESS_SCREEN_USAGE, true)
-                    broadcastSensorChange(AccessSensor.ACCESS_SCREEN_USAGE, true)
+                    Logger.logSensorUpdate(DeviceSensor.ACCESS_SCREEN_USAGE, true)
+                    broadcastSensorChange(DeviceSensor.ACCESS_SCREEN_USAGE, true)
                 } else if (screenOffStatus) {
-                    Logger.logSensorUpdate(AccessSensor.ACCESS_SCREEN_USAGE, false)
-                    broadcastSensorChange(AccessSensor.ACCESS_SCREEN_USAGE, false)
+                    Logger.logSensorUpdate(DeviceSensor.ACCESS_SCREEN_USAGE, false)
+                    broadcastSensorChange(DeviceSensor.ACCESS_SCREEN_USAGE, false)
                 }
             }
         }
     }
 
     private val mobileDataReceiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context?, intent: Intent) {
-            if (intent.action == ConnectivityManager.CONNECTIVITY_ACTION) {
-                val noConnectivity = intent.getBooleanExtra(
-                        ConnectivityManager.EXTRA_NO_CONNECTIVITY, false
-                )
-                if (!noConnectivity) {
-                    Logger.logSensorUpdate(AccessSensor.ACCESS_MOBILE_DATA, true)
-                    broadcastSensorChange(AccessSensor.ACCESS_MOBILE_DATA, true)
-                } else {
-                    Logger.logSensorUpdate(AccessSensor.ACCESS_MOBILE_DATA, false)
-                    broadcastSensorChange(AccessSensor.ACCESS_MOBILE_DATA, false)
+        override fun onReceive(context: Context?, intent: Intent?) {
+            intent?.let {
+                val mobileDataExtra = it.action
+                val isMobileDataChangeReceived = mobileDataExtra.equals(ConnectivityManager.CONNECTIVITY_ACTION)
+
+                if (isMobileDataChangeReceived) {
+                    val mobileDataOffStatus = intent.getBooleanExtra(ConnectivityManager.EXTRA_NO_CONNECTIVITY, false)
+
+                    if (!mobileDataOffStatus) {
+                        Logger.logSensorUpdate(DeviceSensor.ACCESS_MOBILE_DATA, true)
+                        broadcastSensorChange(DeviceSensor.ACCESS_MOBILE_DATA, true)
+                    } else {
+                        Logger.logSensorUpdate(DeviceSensor.ACCESS_MOBILE_DATA, false)
+                        broadcastSensorChange(DeviceSensor.ACCESS_MOBILE_DATA, false)
+                    }
                 }
             }
         }
     }
 
     private val gpsReceiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context, intent: Intent?) {
-            val manager = context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-            if (manager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-                Logger.logSensorUpdate(AccessSensor.ACCESS_GPS, true)
-                broadcastSensorChange(AccessSensor.ACCESS_GPS, true)
-            } else {
-                Logger.logSensorUpdate(AccessSensor.ACCESS_GPS, false)
-                broadcastSensorChange(AccessSensor.ACCESS_GPS, false)
+        override fun onReceive(context: Context?, intent: Intent?) {
+            context?.let { ctx ->
+                SettingsManager.getLocationManager(ctx)?.let { locationManager ->
+                    val gpsOnStatus = locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+
+                    if (gpsOnStatus) {
+                        Logger.logSensorUpdate(DeviceSensor.ACCESS_GPS, true)
+                        broadcastSensorChange(DeviceSensor.ACCESS_GPS, true)
+                    } else {
+                        Logger.logSensorUpdate(DeviceSensor.ACCESS_GPS, false)
+                        broadcastSensorChange(DeviceSensor.ACCESS_GPS, false)
+                    }
+                }
             }
         }
     }
 
-    private fun broadcastSensorChange(sensor: AccessSensor, status: Boolean) {
-        if (status) {
-            DataCollectionManager.startRegisterDataCollection(sensor)
-        } else {
-            DataCollectionManager.stopRegisterDataCollection(sensor)
-        }
+    private fun broadcastSensorChange(sensor: DeviceSensor, status: Boolean) {
+        DataCollectionManager.updateDataCollection(sensor, status)
 
-        receivers.forEach {
-            when (sensor) {
-                AccessSensor.ACCESS_WIFI -> broadcastWifiChange(it, status)
-                AccessSensor.ACCESS_BLUETOOTH -> broadcastBluetoothChange(it, status)
-                AccessSensor.ACCESS_SCREEN_USAGE -> broadcastScreenStateChange(it, status)
-                AccessSensor.ACCESS_MOBILE_DATA -> broadcastMobileDataChange(it, status)
-                AccessSensor.ACCESS_GPS -> broadcastGpsChange(it, status)
-            }
+        when (sensor) {
+            DeviceSensor.ACCESS_WIFI -> broadcastWifiChange(status)
+            DeviceSensor.ACCESS_BLUETOOTH -> broadcastBluetoothChange(status)
+            DeviceSensor.ACCESS_SCREEN_USAGE -> broadcastScreenStateChange(status)
+            DeviceSensor.ACCESS_MOBILE_DATA -> broadcastMobileDataChange(status)
+            DeviceSensor.ACCESS_GPS -> broadcastGpsChange(status)
         }
     }
 
-    private fun broadcastWifiChange(delegate: SensorStatusDelegate, status: Boolean) {
+    private fun broadcastWifiChange(status: Boolean) {
         if (status) {
-            delegate.didWifiEnable()
+            receivers.forEach { it.didWifiEnable() }
         } else {
-            delegate.didWifiDisable()
+            receivers.forEach { it.didWifiDisable() }
         }
     }
 
-    private fun broadcastBluetoothChange(delegate: SensorStatusDelegate, status: Boolean) {
+    private fun broadcastBluetoothChange(status: Boolean) {
         if (status) {
-            delegate.didBluetoothEnable()
+            receivers.forEach { it.didBluetoothEnable() }
         } else {
-            delegate.didBluetoothDisable()
+            receivers.forEach { it.didBluetoothDisable() }
         }
     }
 
-    private fun broadcastScreenStateChange(delegate: SensorStatusDelegate, status: Boolean) {
+    private fun broadcastScreenStateChange(status: Boolean) {
         if (status) {
-            delegate.didTurnScreenOn()
+            receivers.forEach { it.didTurnScreenOn() }
         } else {
-            delegate.didTurnScreenOff()
+            receivers.forEach { it.didTurnScreenOff() }
         }
     }
 
-    private fun broadcastMobileDataChange(delegate: SensorStatusDelegate, status: Boolean) {
+    private fun broadcastMobileDataChange(status: Boolean) {
         if (status) {
-            delegate.didMobileDataEnable()
+            receivers.forEach { it.didMobileDataEnable() }
         } else {
-            delegate.didMobileDataDisable()
+            receivers.forEach { it.didMobileDataDisable() }
         }
     }
 
-    private fun broadcastGpsChange(delegate: SensorStatusDelegate, status: Boolean) {
+    private fun broadcastGpsChange(status: Boolean) {
         if (status) {
-            delegate.didGpsEnable()
+            receivers.forEach { it.didGpsEnable() }
         } else {
-            delegate.didGpsDisable()
+            receivers.forEach { it.didGpsDisable() }
         }
     }
 

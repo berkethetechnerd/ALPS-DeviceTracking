@@ -1,6 +1,6 @@
 package com.alpsproject.devicetracking.helper
 
-import com.alpsproject.devicetracking.enums.AccessSensor
+import com.alpsproject.devicetracking.enums.DeviceSensor
 import com.alpsproject.devicetracking.model.SensorData
 import io.realm.Realm
 import java.util.Date
@@ -24,7 +24,7 @@ object RealmManager {
 
     fun updateData(id: String) {
         val results = realm.where(SensorData::class.java).equalTo(ENTRY_ID, id).findAll()
-        if(results.size == 0) { return }
+        if (results.size == 0) { return }
 
         realm.beginTransaction()
 
@@ -44,7 +44,7 @@ object RealmManager {
 
     // ** QUERY : CALCULATING TOTAL HOURS FOR A SPECIFIC DATE **
 
-    fun queryForDatesInSensor(dates: Array<String>, sensor: AccessSensor): DoubleArray {
+    fun queryForDatesInSensor(dates: Array<String>, sensor: DeviceSensor): DoubleArray {
         val data = DoubleArray(dates.size)
 
         for (i in dates.indices) {
@@ -54,7 +54,7 @@ object RealmManager {
         return data
     }
 
-    private fun calcHoursInDate(stringDate: String, sensor: AccessSensor): Double {
+    private fun calcHoursInDate(stringDate: String, sensor: DeviceSensor): Double {
         val date = CalendarManager.stringToDate(stringDate) ?: return 0.0
         val startDate = CalendarManager.extractStartDate(date)
         val endDate = CalendarManager.extractStopDate(date)
@@ -136,7 +136,7 @@ object RealmManager {
 
     // ** QUERY : THE SENSOR HAS ALREADY AN OPEN ENTRY **
 
-    fun queryForOpenEntryInSensor(sensor: AccessSensor): Boolean {
+    fun queryForOpenEntryInSensor(sensor: DeviceSensor): Boolean {
         val sensorName = ConstantsManager.getSensorName(sensor)
         val preliminaryResults = realm.where(SensorData::class.java).equalTo(ENTRY_SENSOR_NAME, sensorName).findAll()
         val results = preliminaryResults.filter { it.endTime == null }

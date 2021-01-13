@@ -8,7 +8,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.widget.Button
 import com.alpsproject.devicetracking.delegates.PermissionDelegate
-import com.alpsproject.devicetracking.enums.AccessSensor
+import com.alpsproject.devicetracking.enums.DeviceSensor
 import com.alpsproject.devicetracking.helper.PermissionManager
 import com.alpsproject.devicetracking.helper.UserMessageGenerator
 import com.alpsproject.devicetracking.views.SensorView
@@ -89,40 +89,40 @@ class SensorSelectionActivity : BaseActivity(), PermissionDelegate {
         rejectedSensors = 0
 
         if (sensorGpsView.isSensorSelected()) {
-            if (!PermissionManager.checkPermission(AccessSensor.ACCESS_GPS)) {
-                PermissionManager.askPermission(this, AccessSensor.ACCESS_GPS)
+            if (!PermissionManager.checkPermission(DeviceSensor.ACCESS_GPS)) {
+                PermissionManager.askPermission(this, DeviceSensor.ACCESS_GPS)
             } else {
                 grantedSensors++
             }
         }
 
         if (sensorMobileDataView.isSensorSelected()) {
-            if (!PermissionManager.checkPermission(AccessSensor.ACCESS_MOBILE_DATA)) {
-                PermissionManager.askPermission(this, AccessSensor.ACCESS_MOBILE_DATA)
+            if (!PermissionManager.checkPermission(DeviceSensor.ACCESS_MOBILE_DATA)) {
+                PermissionManager.askPermission(this, DeviceSensor.ACCESS_MOBILE_DATA)
             } else {
                 grantedSensors++
             }
         }
 
         if (sensorScreenUsageView.isSensorSelected()) {
-            if (!PermissionManager.checkPermission(AccessSensor.ACCESS_SCREEN_USAGE)) {
-                PermissionManager.askPermission(this, AccessSensor.ACCESS_SCREEN_USAGE)
+            if (!PermissionManager.checkPermission(DeviceSensor.ACCESS_SCREEN_USAGE)) {
+                PermissionManager.askPermission(this, DeviceSensor.ACCESS_SCREEN_USAGE)
             } else {
                 grantedSensors++
             }
         }
 
         if (sensorBluetoothView.isSensorSelected()) {
-            if (!PermissionManager.checkPermission(AccessSensor.ACCESS_BLUETOOTH)) {
-                PermissionManager.askPermission(this, AccessSensor.ACCESS_BLUETOOTH)
+            if (!PermissionManager.checkPermission(DeviceSensor.ACCESS_BLUETOOTH)) {
+                PermissionManager.askPermission(this, DeviceSensor.ACCESS_BLUETOOTH)
             } else {
                 grantedSensors++
             }
         }
 
         if (sensorWifiView.isSensorSelected()) {
-            if (!PermissionManager.checkPermission(AccessSensor.ACCESS_WIFI)) {
-                PermissionManager.askPermission(this, AccessSensor.ACCESS_WIFI)
+            if (!PermissionManager.checkPermission(DeviceSensor.ACCESS_WIFI)) {
+                PermissionManager.askPermission(this, DeviceSensor.ACCESS_WIFI)
             } else {
                 grantedSensors++
             }

@@ -9,27 +9,31 @@ import android.os.IBinder
 import android.os.PowerManager
 import com.alpsproject.devicetracking.DataCollectionActivity
 import com.alpsproject.devicetracking.R
-import com.alpsproject.devicetracking.delegates.SensorStatusDelegate
 import com.alpsproject.devicetracking.enums.ServiceState
 import com.alpsproject.devicetracking.helper.Broadcaster
 import com.alpsproject.devicetracking.helper.Logger
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import com.alpsproject.devicetracking.helper.SharedPreferencesManager
+import com.alpsproject.devicetracking.helper.ConstantsManager as C
 
-class TrackerService : Service(), SensorStatusDelegate {
+class TrackerService : Service() {
 
     private var wakeLock: PowerManager.WakeLock? = null
     private var isServiceStarted: Boolean = false
+
+    private val arrOfSensors: Array<Boolean>
+        get() = arrayOf(
+                SharedPreferencesManager.read(C.RUNNING_SENSOR_WIFI, false),
+                SharedPreferencesManager.read(C.RUNNING_SENSOR_BLUETOOTH, false),
+                SharedPreferencesManager.read(C.RUNNING_SENSOR_SCREEN_USAGE, false),
+                SharedPreferencesManager.read(C.RUNNING_SENSOR_MOBILE_DATA, false),
+                SharedPreferencesManager.read(C.RUNNING_SENSOR_GPS, false)
+        )
 
     override fun onBind(intent: Intent?): IBinder? {
         return null // We don't provide binding, so return null
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        Logger.logServiceNotification("onStartCommand executed with startId: $startId")
-
         if (intent == null) {
             Logger.logServiceNotification("Started with a null intent. It's been probably restarted by the system.")
         } else {
@@ -45,13 +49,13 @@ class TrackerService : Service(), SensorStatusDelegate {
 
     override fun onCreate() {
         super.onCreate()
-        Logger.logServiceNotification("The service has been created")
         startForeground(1, createNotification())
+        Logger.logServiceNotification("The service has been created")
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        Broadcaster.unregisterForBroadcasting(this)
+        Broadcaster.unregisterForBroadcasting(this, arrOfSensors)
         Logger.logServiceNotification("The service has been destroyed")
     }
 
@@ -59,7 +63,7 @@ class TrackerService : Service(), SensorStatusDelegate {
         if (isServiceStarted) return
 
         Logger.logServiceNotification("Starting the foreground service task")
-        Broadcaster.registerForBroadcasting(this)
+        Broadcaster.registerForBroadcasting(this, arrOfSensors)
         isServiceStarted = true
 
         // We need this lock so our service gets not affected by Doze Mode
@@ -123,41 +127,9 @@ class TrackerService : Service(), SensorStatusDelegate {
             .setContentText("The service is enabled and currently collecting data.")
             .setContentIntent(pendingIntent)
             .setSmallIcon(R.mipmap.ic_launcher)
-            .setTicker("Ticker text")
+            .setTicker("")
             .setPriority(Notification.PRIORITY_HIGH) // for under android 26 compatibility
             .build()
-    }
-
-    override fun didWifiEnable() {
-        Logger.logServiceNotification("WIFI enabled")
-    }
-
-    override fun didWifiDisable() {
-        Logger.logServiceNotification("WIFI disabled")
-    }
-
-    override fun didBluetoothEnable() {
-        Logger.logServiceNotification("Bluetooth enabled")
-    }
-
-    override fun didBluetoothDisable() {
-        Logger.logServiceNotification("Bluetooth disabled")
-    }
-
-    override fun didTurnScreenOn() {
-        Logger.logServiceNotification("Screen Usage enabled")
-    }
-
-    override fun didTurnScreenOff() {
-        Logger.logServiceNotification("Screen Usage disabled")
-    }
-
-    override fun didMobileDataEnable() {
-        Logger.logServiceNotification("Mobile Data enabled")
-    }
-
-    override fun didMobileDataDisnable() {
-        Logger.logServiceNotification("Mobile Data disabled")
     }
 
 }

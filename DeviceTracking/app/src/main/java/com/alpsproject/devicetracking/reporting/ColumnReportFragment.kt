@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
 import com.alpsproject.devicetracking.R
-import com.alpsproject.devicetracking.enums.AccessSensor
+import com.alpsproject.devicetracking.enums.DeviceSensor
 import com.alpsproject.devicetracking.enums.CalendarDays
 import com.alpsproject.devicetracking.helper.CalendarManager
 import com.alpsproject.devicetracking.helper.RealmManager
@@ -171,14 +171,14 @@ class ColumnReportFragment : Fragment() {
         return false
     }
 
-    private fun getSensorType(reportName: String): AccessSensor {
+    private fun getSensorType(reportName: String): DeviceSensor {
         return when(reportName) {
-            getString(R.string.report_tab_screen_usage) -> AccessSensor.ACCESS_SCREEN_USAGE
-            getString(R.string.report_tab_wifi) -> AccessSensor.ACCESS_WIFI
-            getString(R.string.report_tab_bluetooth) -> AccessSensor.ACCESS_BLUETOOTH
-            getString(R.string.report_tab_mobile_data) -> AccessSensor.ACCESS_MOBILE_DATA
-            getString(R.string.report_tab_gps) -> AccessSensor.ACCESS_GPS
-            else -> AccessSensor.ACCESS_SCREEN_USAGE
+            getString(R.string.report_tab_wifi) -> DeviceSensor.ACCESS_WIFI
+            getString(R.string.report_tab_bluetooth) -> DeviceSensor.ACCESS_BLUETOOTH
+            getString(R.string.report_tab_screen_usage) -> DeviceSensor.ACCESS_SCREEN_USAGE
+            getString(R.string.report_tab_mobile_data) -> DeviceSensor.ACCESS_MOBILE_DATA
+            getString(R.string.report_tab_gps) -> DeviceSensor.ACCESS_GPS
+            else -> DeviceSensor.ACCESS_SCREEN_USAGE
         }
     }
 

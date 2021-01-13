@@ -1,105 +1,102 @@
 package com.alpsproject.devicetracking.helper
 
 import android.app.Activity
-import com.alpsproject.devicetracking.enums.AccessSensor
+import com.alpsproject.devicetracking.enums.DeviceSensor
 import com.alpsproject.devicetracking.model.SensorData
+import com.alpsproject.devicetracking.helper.ConstantsManager as C
 
 object DataCollectionManager {
 
-    val C = ConstantsManager
-
-    fun startWifiCollection(ctx: Activity) {
-        SettingsManager.askForWiFi(ctx)
-        if (SettingsManager.isWifiEnabled(ctx)) {
-            createNewSensorEntry(AccessSensor.ACCESS_WIFI)
+    fun startCollectionForSensor(sensor: DeviceSensor, activity: Activity) {
+        when (sensor) {
+            DeviceSensor.ACCESS_WIFI -> startWifiCollection(activity)
+            DeviceSensor.ACCESS_BLUETOOTH -> startBluetoothCollection(activity)
+            DeviceSensor.ACCESS_SCREEN_USAGE -> startScreenUsageCollection()
+            DeviceSensor.ACCESS_MOBILE_DATA -> startMobileDataCollection(activity)
+            DeviceSensor.ACCESS_GPS -> startGpsCollection(activity)
         }
-        SharedPreferencesManager.write(C.RUNNING_SENSOR_WIFI, true)
+
+        SharedPreferencesManager.write(C.getRunningSensorKey(sensor), true)
     }
 
-    fun stopWifiCollection() {
-        patchSensorEntryUponFinish(AccessSensor.ACCESS_WIFI)
-        SharedPreferencesManager.write(C.RUNNING_SENSOR_WIFI, false)
+    fun stopCollectionForSensor(sensor: DeviceSensor) {
+        patchSensorEntryUponFinish(sensor)
+        SharedPreferencesManager.write(C.getRunningSensorKey(sensor), false)
     }
 
-    fun startBluetoothCollection(ctx: Activity) {
-        SettingsManager.askForBluetooth(ctx)
+    fun updateDataCollection(sensor: DeviceSensor, status: Boolean) {
+        if (status) {
+            registerDataCollectionOnSensorStart(sensor)
+        } else {
+            registerDataCollectionOnSensorStop(sensor)
+        }
+    }
+
+    private fun startWifiCollection(activity: Activity) {
+        if (SettingsManager.isWifiEnabled(activity)) {
+            createNewSensorEntry(DeviceSensor.ACCESS_WIFI)
+        } else {
+            SettingsManager.askForSensor(activity, DeviceSensor.ACCESS_WIFI)
+        }
+    }
+
+    private fun startBluetoothCollection(activity: Activity) {
         if (SettingsManager.isBluetoothEnabled()) {
-            createNewSensorEntry(AccessSensor.ACCESS_BLUETOOTH)
+            createNewSensorEntry(DeviceSensor.ACCESS_BLUETOOTH)
+        } else {
+            SettingsManager.askForSensor(activity, DeviceSensor.ACCESS_BLUETOOTH)
         }
-        SharedPreferencesManager.write(C.RUNNING_SENSOR_BLUETOOTH, true)
     }
 
-    fun stopBluetoothCollection() {
-        patchSensorEntryUponFinish(AccessSensor.ACCESS_BLUETOOTH)
-        SharedPreferencesManager.write(C.RUNNING_SENSOR_BLUETOOTH, false)
-    }
+    private fun startScreenUsageCollection() = createNewSensorEntry(DeviceSensor.ACCESS_SCREEN_USAGE)
 
-    fun startScreenUsageCollection() {
-        createNewSensorEntry(AccessSensor.ACCESS_SCREEN_USAGE)
-        SharedPreferencesManager.write(C.RUNNING_SENSOR_SCREEN_USAGE, true)
-    }
-
-    fun stopScreenUsageCollection() {
-        patchSensorEntryUponFinish(AccessSensor.ACCESS_SCREEN_USAGE)
-        SharedPreferencesManager.write(C.RUNNING_SENSOR_SCREEN_USAGE, false)
-    }
-
-    fun startMobileDataCollection(ctx: Activity) {
-        SettingsManager.askForMobileData(ctx)
-        if (SettingsManager.isMobileDataEnabled(ctx)) {
-            createNewSensorEntry(AccessSensor.ACCESS_MOBILE_DATA)
+    private fun startMobileDataCollection(activity: Activity) {
+        if (SettingsManager.isMobileDataEnabled(activity)) {
+            createNewSensorEntry(DeviceSensor.ACCESS_MOBILE_DATA)
+        } else {
+            SettingsManager.askForSensor(activity, DeviceSensor.ACCESS_MOBILE_DATA)
         }
-        SharedPreferencesManager.write(C.RUNNING_SENSOR_MOBILE_DATA, true)
     }
 
-    fun stopMobileDataCollection() {
-        patchSensorEntryUponFinish(AccessSensor.ACCESS_MOBILE_DATA)
-        SharedPreferencesManager.write(C.RUNNING_SENSOR_MOBILE_DATA, false)
-    }
-
-    fun startGpsCollection(ctx: Activity) {
-        SettingsManager.askForGps(ctx)
-        if (SettingsManager.isGpsEnabled(ctx)) {
-            createNewSensorEntry(AccessSensor.ACCESS_GPS)
+    private fun startGpsCollection(activity: Activity) {
+        if (SettingsManager.isGpsEnabled(activity)) {
+            createNewSensorEntry(DeviceSensor.ACCESS_GPS)
+        } else {
+            SettingsManager.askForSensor(activity, DeviceSensor.ACCESS_GPS)
         }
-        SharedPreferencesManager.write(C.RUNNING_SENSOR_GPS, true)
     }
 
-    fun stopGpsCollection() {
-        patchSensorEntryUponFinish(AccessSensor.ACCESS_GPS)
-        SharedPreferencesManager.write(C.RUNNING_SENSOR_GPS, false)
-    }
-
-    private fun createNewSensorEntry(forSensor: AccessSensor) {
+    private fun createNewSensorEntry(forSensor: DeviceSensor) {
         if (RealmManager.queryForOpenEntryInSensor(forSensor)) return // Due to multiple broadcast wake
 
         val sensorName = C.getSensorName(forSensor)
         val sensorKey = C.getRunningSensorID(forSensor)
+        val sensorData = SensorData().apply {
+            this.sensorName = sensorName
+        }
 
-        val sensorData = SensorData()
-        sensorData.sensorName = sensorName
         val id = RealmManager.saveData(sensorData)
         SharedPreferencesManager.write(sensorKey, id)
     }
 
-    private fun patchSensorEntryUponFinish(forSensor: AccessSensor) {
-        SharedPreferencesManager.read(C.getRunningSensorID(forSensor), "")?.let { entryId ->
+    private fun patchSensorEntryUponFinish(sensor: DeviceSensor) {
+        val id = C.getRunningSensorID(sensor)
+        SharedPreferencesManager.read(id, "")?.let { entryId ->
             RealmManager.updateData(entryId)
         }
     }
     
-    fun startRegisterDataCollection(forSensor: AccessSensor){
-        val sensorKey = C.getRunningSensorKey(forSensor)
-        if(SharedPreferencesManager.read(sensorKey, false)){
-            createNewSensorEntry(forSensor)
+    private fun registerDataCollectionOnSensorStart(sensor: DeviceSensor) {
+        val sensorKey = C.getRunningSensorKey(sensor)
+        if (SharedPreferencesManager.read(sensorKey, false)) {
+            createNewSensorEntry(sensor)
         }
     }
 
-    fun stopRegisterDataCollection(forSensor: AccessSensor){
-        val sensorKey = C.getRunningSensorKey(forSensor)
-        if(SharedPreferencesManager.read(sensorKey, false)){
-            patchSensorEntryUponFinish(forSensor)
+    private fun registerDataCollectionOnSensorStop(sensor: DeviceSensor){
+        val sensorKey = C.getRunningSensorKey(sensor)
+        if (SharedPreferencesManager.read(sensorKey, false)) {
+            patchSensorEntryUponFinish(sensor)
         }
     }
-
 }

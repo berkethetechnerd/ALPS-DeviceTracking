@@ -12,7 +12,7 @@ import android.os.Build
 import android.os.PowerManager
 import android.provider.Settings
 import com.alpsproject.devicetracking.delegates.ActivationDelegate
-import com.alpsproject.devicetracking.enums.AccessSensor
+import com.alpsproject.devicetracking.enums.DeviceSensor
 
 object SettingsManager: ActivationDelegate {
 
@@ -20,30 +20,19 @@ object SettingsManager: ActivationDelegate {
         UserMessageGenerator.activationDelegate = this
     }
 
-    fun askForWiFi(activity: Activity) {
-        if (PermissionManager.checkPermission(AccessSensor.ACCESS_WIFI) && !isWifiEnabled(activity)) {
-            UserMessageGenerator.generateDialogForActivation(activity, AccessSensor.ACCESS_WIFI)
-        }
-    }
+    fun askForSensor(activity: Activity, sensor: DeviceSensor) {
+        if (PermissionManager.checkPermission(sensor)) {
+            val isSensorEnabled = when (sensor) {
+                DeviceSensor.ACCESS_WIFI -> isWifiEnabled(activity)
+                DeviceSensor.ACCESS_BLUETOOTH -> isBluetoothEnabled()
+                DeviceSensor.ACCESS_SCREEN_USAGE -> isScreenTurnedOn(activity)
+                DeviceSensor.ACCESS_MOBILE_DATA -> isMobileDataEnabled(activity)
+                DeviceSensor.ACCESS_GPS -> isGpsEnabled(activity)
+            }
 
-    fun askForBluetooth(activity: Activity) {
-        if (PermissionManager.checkPermission(AccessSensor.ACCESS_BLUETOOTH) && !isBluetoothEnabled()) {
-            UserMessageGenerator.generateDialogForActivation(
-                activity,
-                AccessSensor.ACCESS_BLUETOOTH
-            )
-        }
-    }
-
-    fun askForMobileData(activity: Activity) {
-        if (PermissionManager.checkPermission(AccessSensor.ACCESS_MOBILE_DATA) && !isMobileDataEnabled(activity)) {
-            UserMessageGenerator.generateDialogForActivation(activity, AccessSensor.ACCESS_MOBILE_DATA)
-        }
-    }
-
-    fun askForGps(activity: Activity) {
-        if (PermissionManager.checkPermission(AccessSensor.ACCESS_GPS) && !isGpsEnabled(activity)) {
-            UserMessageGenerator.generateDialogForActivation(activity, AccessSensor.ACCESS_GPS)
+            if (!isSensorEnabled) {
+                UserMessageGenerator.generateDialogForActivation(activity, sensor)
+            }
         }
     }
 
@@ -52,7 +41,10 @@ object SettingsManager: ActivationDelegate {
         return wifiManager.isWifiEnabled
     }
 
-    fun isBluetoothEnabled(): Boolean = getBluetoothAdapter().isEnabled
+    fun isBluetoothEnabled(): Boolean {
+        val bluetoothAdapter = getBluetoothAdapter() ?: return false // Adapter not found
+        return bluetoothAdapter.isEnabled
+    }
 
     fun isScreenTurnedOn(activity: Activity): Boolean {
         val powerManager = getPowerManager(activity) ?: return false // Screen not found
@@ -70,13 +62,13 @@ object SettingsManager: ActivationDelegate {
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
     }
 
-    override fun sensorActivated(context: Activity, sensor: AccessSensor) {
+    override fun sensorActivationRequested(activity: Activity, sensor: DeviceSensor) {
         when (sensor) {
-            AccessSensor.ACCESS_WIFI -> activateWifi(context)
-            AccessSensor.ACCESS_BLUETOOTH -> activateBluetooth()
-            AccessSensor.ACCESS_SCREEN_USAGE -> return
-            AccessSensor.ACCESS_MOBILE_DATA -> return
-            AccessSensor.ACCESS_GPS -> return
+            DeviceSensor.ACCESS_WIFI -> activateWifi(activity)
+            DeviceSensor.ACCESS_BLUETOOTH -> activateBluetooth()
+            DeviceSensor.ACCESS_SCREEN_USAGE -> return // Already on
+            DeviceSensor.ACCESS_MOBILE_DATA -> return // Not possible due to security reasons
+            DeviceSensor.ACCESS_GPS -> return // Not possible due to security reasons
         }
     }
 
@@ -90,23 +82,15 @@ object SettingsManager: ActivationDelegate {
         }
     }
 
-    private fun activateBluetooth() = getBluetoothAdapter().enable()
+    private fun activateBluetooth() = getBluetoothAdapter()?.enable()
 
-    private fun getWifiManager(activity: Activity): WifiManager? = activity.applicationContext.getSystemService(
-        Context.WIFI_SERVICE
-    ) as? WifiManager?
+    private fun getWifiManager(activity: Activity): WifiManager? = activity.applicationContext.getSystemService(Context.WIFI_SERVICE) as? WifiManager?
 
-    private fun getBluetoothAdapter(): BluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
+    private fun getBluetoothAdapter(): BluetoothAdapter? = BluetoothAdapter.getDefaultAdapter()
 
-    private fun getPowerManager(activity: Activity): PowerManager? = activity.getSystemService(
-        Context.POWER_SERVICE
-    ) as? PowerManager?
+    private fun getPowerManager(activity: Activity): PowerManager? = activity.getSystemService(Context.POWER_SERVICE) as? PowerManager?
 
-    private fun getConnectivityManager(activity: Activity): ConnectivityManager? = activity.applicationContext.getSystemService(
-        Context.CONNECTIVITY_SERVICE
-    ) as? ConnectivityManager?
+    private fun getConnectivityManager(activity: Activity): ConnectivityManager? = activity.applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager?
 
-    private fun getLocationManager(activity: Activity): LocationManager? = activity.getSystemService(
-            Context.LOCATION_SERVICE
-    )as? LocationManager?
+    fun getLocationManager(context: Context): LocationManager? = context.getSystemService(Context.LOCATION_SERVICE)as? LocationManager?
 }

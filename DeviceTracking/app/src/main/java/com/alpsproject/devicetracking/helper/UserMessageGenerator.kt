@@ -5,7 +5,7 @@ import android.app.AlertDialog
 import com.alpsproject.devicetracking.R
 import com.alpsproject.devicetracking.delegates.ActivationDelegate
 import com.alpsproject.devicetracking.delegates.PermissionDelegate
-import com.alpsproject.devicetracking.enums.AccessSensor
+import com.alpsproject.devicetracking.enums.DeviceSensor
 import com.shreyaspatil.MaterialDialog.BottomSheetMaterialDialog
 
 object UserMessageGenerator {
@@ -25,7 +25,7 @@ object UserMessageGenerator {
         mDialog.show()
     }
 
-    fun generateDialogForPermission(activity: Activity, sensor: AccessSensor) {
+    fun generateDialogForPermission(activity: Activity, sensor: DeviceSensor) {
         val typeOfSensor = ConstantsManager.getSensorName(sensor)
         val title = activity.getString(R.string.user_message_title)
         val message = activity.getString(R.string.user_message_message, typeOfSensor, typeOfSensor)
@@ -47,7 +47,12 @@ object UserMessageGenerator {
         mBottomSheetDialog.show()
     }
 
-    fun generateDialogForActivation(activity: Activity, sensor: AccessSensor) {
+    fun generateDialogForActivation(activity: Activity, sensor: DeviceSensor) {
+        if (sensor == DeviceSensor.ACCESS_MOBILE_DATA || sensor == DeviceSensor.ACCESS_GPS) {
+            generateDialogForUserSensorActivation(activity, sensor)
+            return
+        }
+
         val typeOfSensor = ConstantsManager.getSensorName(sensor)
         val title = activity.getString(R.string.user_message_sensor_activation_title)
         val message = activity.getString(R.string.user_message_sensor_activation_message, typeOfSensor)
@@ -57,10 +62,27 @@ object UserMessageGenerator {
                 .setMessage(message)
                 .setCancelable(false)
                 .setPositiveButton(activity.getString(R.string.user_message_sensor_activation_confirm)) { dialogInterface, _ ->
-                    activationDelegate?.sensorActivated(activity, sensor)
+                    activationDelegate?.sensorActivationRequested(activity, sensor)
                     dialogInterface.dismiss()
                 }
                 .setNegativeButton(activity.getString(R.string.user_message_sensor_activation_reject)) { dialogInterface, _ ->
+                    dialogInterface.dismiss()
+                }
+                .build()
+        mBottomSheetDialog.show()
+    }
+
+    private fun generateDialogForUserSensorActivation(activity: Activity, sensor: DeviceSensor) {
+        val typeOfSensor = ConstantsManager.getSensorName(sensor)
+        val title = activity.getString(R.string.user_message_sensor_activation_title)
+        val message = activity.getString(R.string.user_message_sensor_own_activation_message, typeOfSensor)
+
+        val mBottomSheetDialog = BottomSheetMaterialDialog.Builder(activity)
+                .setTitle(title)
+                .setMessage(message)
+                .setCancelable(false)
+                .setPositiveButton(activity.getString(R.string.user_message_sensor_activation_ok)) { dialogInterface, _ ->
+                    activationDelegate?.sensorActivationRequested(activity, sensor)
                     dialogInterface.dismiss()
                 }
                 .build()
