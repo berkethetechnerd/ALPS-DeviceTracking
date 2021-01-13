@@ -94,9 +94,10 @@
     <string name="user_message_sensor_activation_title">Activation of Sensor</string>
     <string name="user_message_sensor_activation_message">%1$s seems to be disabled. Do you want to
         turn it on?</string>
-    <string name="user_message_sensor_own_activation_message">%1$s seems to be disabled. Due to
-        security concerns carried by Android, we are not allowed to turn on this sensor on your
-        behalf. Later on, you could enable it yourself.</string>
+    <string name="user_message_sensor_own_activation_message">Due to security measures taken by
+        Google, we are not allowed to turn on %1$s on your behalf. Please turn on the sensor if
+        you would like to collect data.</string>
+    
     <string name="user_message_sensor_activation_confirm">Yes, please</string>
     <string name="user_message_sensor_activation_reject">No, thanks</string>
     <string name="user_message_sensor_activation_ok">OK, I understand</string>
