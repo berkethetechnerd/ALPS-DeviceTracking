@@ -57,6 +57,19 @@ object DataCollectionManager {
         SharedPreferencesManager.write(C.RUNNING_SENSOR_MOBILE_DATA, false)
     }
 
+    fun startGpsCollection(ctx: Activity) {
+        SettingsManager.askForGps(ctx)
+        if (SettingsManager.isGpsEnabled(ctx)) {
+            createNewSensorEntry(AccessSensor.ACCESS_GPS)
+        }
+        SharedPreferencesManager.write(C.RUNNING_SENSOR_GPS, true)
+    }
+
+    fun stopGpsCollection() {
+        patchSensorEntryUponFinish(AccessSensor.ACCESS_GPS)
+        SharedPreferencesManager.write(C.RUNNING_SENSOR_GPS, false)
+    }
+
     private fun createNewSensorEntry(forSensor: AccessSensor) {
         if (RealmManager.queryForOpenEntryInSensor(forSensor)) return // Due to multiple broadcast wake
 

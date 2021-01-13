@@ -11,6 +11,7 @@ object PermissionManager {
             AccessSensor.ACCESS_BLUETOOTH -> SharedPreferencesManager.read(ConstantsManager.CONSENT_OF_BLUETOOTH, false)
             AccessSensor.ACCESS_SCREEN_USAGE -> SharedPreferencesManager.read(ConstantsManager.CONSENT_OF_SCREEN_USAGE, false)
             AccessSensor.ACCESS_MOBILE_DATA -> SharedPreferencesManager.read(ConstantsManager.CONSENT_OF_MOBILE_DATA, false)
+            AccessSensor.ACCESS_GPS -> SharedPreferencesManager.read(ConstantsManager.CONSENT_OF_GPS, false)
         }
     }
 
@@ -20,6 +21,7 @@ object PermissionManager {
             AccessSensor.ACCESS_BLUETOOTH -> UserMessageGenerator.generateDialogForPermission(context, AccessSensor.ACCESS_BLUETOOTH)
             AccessSensor.ACCESS_SCREEN_USAGE -> UserMessageGenerator.generateDialogForPermission(context, AccessSensor.ACCESS_SCREEN_USAGE)
             AccessSensor.ACCESS_MOBILE_DATA -> UserMessageGenerator.generateDialogForPermission(context, AccessSensor.ACCESS_MOBILE_DATA)
+            AccessSensor.ACCESS_GPS -> UserMessageGenerator.generateDialogForPermission(context, AccessSensor.ACCESS_GPS)
         }
     }
 
