@@ -85,6 +85,9 @@ object UserMessageGenerator {
                     activationDelegate?.sensorActivationRequested(activity, sensor)
                     dialogInterface.dismiss()
                 }
+                .setNegativeButton(activity.getString(R.string.user_message_sensor_activation_reject)) { dialogInterface, _ ->
+                    dialogInterface.dismiss()
+                }
                 .build()
         mBottomSheetDialog.show()
     }

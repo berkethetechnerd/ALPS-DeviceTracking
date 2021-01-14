@@ -100,7 +100,7 @@
     
     <string name="user_message_sensor_activation_confirm">Yes, please</string>
     <string name="user_message_sensor_activation_reject">No, thanks</string>
-    <string name="user_message_sensor_activation_ok">OK, I understand</string>
+    <string name="user_message_sensor_activation_ok">Go to Settings</string>
 
     <string name="sensor_item_enabled">ON</string>
     <string name="sensor_item_disabled">OFF</string>
