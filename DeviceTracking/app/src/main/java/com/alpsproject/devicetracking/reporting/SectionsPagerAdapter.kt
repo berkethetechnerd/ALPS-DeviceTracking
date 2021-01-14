@@ -7,9 +7,9 @@ import androidx.fragment.app.FragmentPagerAdapter
 import com.alpsproject.devicetracking.R
 
 private val TAB_TITLES = arrayOf(
-        R.string.report_tab_screen_usage,
         R.string.report_tab_wifi,
         R.string.report_tab_bluetooth,
+        R.string.report_tab_screen_usage,
         R.string.report_tab_mobile_data,
         R.string.report_tab_gps
 )

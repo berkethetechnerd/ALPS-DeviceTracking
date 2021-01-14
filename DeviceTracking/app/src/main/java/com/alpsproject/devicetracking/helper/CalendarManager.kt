@@ -2,7 +2,9 @@ package com.alpsproject.devicetracking.helper
 
 import com.alpsproject.devicetracking.enums.CalendarDays
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 import kotlin.collections.ArrayList
 
 object CalendarManager {
