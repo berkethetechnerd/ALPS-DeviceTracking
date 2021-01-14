@@ -3,7 +3,6 @@ package com.alpsproject.devicetracking.services
 import android.app.*
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color
 import android.os.Build
 import android.os.IBinder
 import android.os.PowerManager
@@ -104,10 +103,6 @@ class TrackerService : Service() {
                 NotificationManager.IMPORTANCE_HIGH
             ).let {
                 it.description = "Device Tracker Service channel"
-                it.enableLights(true)
-                it.lightColor = Color.RED
-                it.enableVibration(true)
-                it.vibrationPattern = longArrayOf(100, 200, 300, 400, 500, 400, 300, 200, 400)
                 it
             }
             notificationManager.createNotificationChannel(channel)
@@ -123,11 +118,10 @@ class TrackerService : Service() {
         ) else Notification.Builder(this)
 
         return builder
-            .setContentTitle("Device Tracker")
-            .setContentText("The service is enabled and currently collecting data.")
+            .setContentTitle(getString(R.string.app_name))
+            .setContentText(getString(R.string.service_description))
             .setContentIntent(pendingIntent)
             .setSmallIcon(R.mipmap.ic_launcher)
-            .setTicker("")
             .setPriority(Notification.PRIORITY_HIGH) // for under android 26 compatibility
             .build()
     }
