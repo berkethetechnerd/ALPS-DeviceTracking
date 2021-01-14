@@ -67,8 +67,8 @@ object SettingsManager: ActivationDelegate {
             DeviceSensor.ACCESS_WIFI -> activateWifi(activity)
             DeviceSensor.ACCESS_BLUETOOTH -> activateBluetooth()
             DeviceSensor.ACCESS_SCREEN_USAGE -> return // Already on
-            DeviceSensor.ACCESS_MOBILE_DATA -> return // Not possible due to security reasons
-            DeviceSensor.ACCESS_GPS -> return // Not possible due to security reasons
+            DeviceSensor.ACCESS_MOBILE_DATA -> activateMobileData(activity)
+            DeviceSensor.ACCESS_GPS -> activateGPS(activity)
         }
     }
 
@@ -83,6 +83,10 @@ object SettingsManager: ActivationDelegate {
     }
 
     private fun activateBluetooth() = getBluetoothAdapter()?.enable()
+
+    private fun activateMobileData(context: Context) = context.startActivity(Intent(Settings.ACTION_WIRELESS_SETTINGS))
+
+    private fun activateGPS(context: Context) = context.startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
 
     private fun getWifiManager(activity: Activity): WifiManager? = activity.applicationContext.getSystemService(Context.WIFI_SERVICE) as? WifiManager?
 

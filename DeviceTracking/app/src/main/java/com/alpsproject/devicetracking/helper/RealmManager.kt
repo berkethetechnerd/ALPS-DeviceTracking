@@ -48,10 +48,16 @@ object RealmManager {
         val data = DoubleArray(dates.size)
 
         for (i in dates.indices) {
-            data[i] = calcHoursInDate(dates[i], sensor)
+            data[i] = calcHoursInDate(dates[i], sensor).round(3)
         }
 
         return data
+    }
+
+    private fun Double.round(decimals: Int): Double {
+        var multiplier = 1.0
+        repeat(decimals) { multiplier *= 10 }
+        return kotlin.math.round(this * multiplier) / multiplier
     }
 
     private fun calcHoursInDate(stringDate: String, sensor: DeviceSensor): Double {
