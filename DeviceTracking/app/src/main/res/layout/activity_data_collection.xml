@@ -67,11 +67,6 @@
                 android:layout_height="wrap_content" />
 
             <com.alpsproject.devicetracking.views.SensorView
-                android:id="@+id/data_collection_list_mobile_data"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
-
-            <com.alpsproject.devicetracking.views.SensorView
                 android:id="@+id/data_collection_list_gps"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />

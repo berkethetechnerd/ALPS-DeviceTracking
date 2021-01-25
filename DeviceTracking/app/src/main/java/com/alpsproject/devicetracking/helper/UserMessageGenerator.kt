@@ -48,7 +48,7 @@ object UserMessageGenerator {
     }
 
     fun generateDialogForActivation(activity: Activity, sensor: DeviceSensor) {
-        if (sensor == DeviceSensor.ACCESS_MOBILE_DATA || sensor == DeviceSensor.ACCESS_GPS) {
+        if (sensor == DeviceSensor.ACCESS_GPS) {
             generateDialogForUserSensorActivation(activity, sensor)
             return
         }

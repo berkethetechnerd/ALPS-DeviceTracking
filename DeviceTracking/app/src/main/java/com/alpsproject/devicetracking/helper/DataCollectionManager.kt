@@ -12,7 +12,6 @@ object DataCollectionManager {
             DeviceSensor.ACCESS_WIFI -> startWifiCollection(activity)
             DeviceSensor.ACCESS_BLUETOOTH -> startBluetoothCollection(activity)
             DeviceSensor.ACCESS_SCREEN_USAGE -> startScreenUsageCollection()
-            DeviceSensor.ACCESS_MOBILE_DATA -> startMobileDataCollection(activity)
             DeviceSensor.ACCESS_GPS -> startGpsCollection(activity)
         }
 
@@ -49,14 +48,6 @@ object DataCollectionManager {
     }
 
     private fun startScreenUsageCollection() = createNewSensorEntry(DeviceSensor.ACCESS_SCREEN_USAGE)
-
-    private fun startMobileDataCollection(activity: Activity) {
-        if (SettingsManager.isMobileDataEnabled(activity)) {
-            createNewSensorEntry(DeviceSensor.ACCESS_MOBILE_DATA)
-        } else {
-            SettingsManager.askForSensor(activity, DeviceSensor.ACCESS_MOBILE_DATA)
-        }
-    }
 
     private fun startGpsCollection(activity: Activity) {
         if (SettingsManager.isGpsEnabled(activity)) {

@@ -24,7 +24,6 @@ class TrackerService : Service() {
                 SharedPreferencesManager.read(C.RUNNING_SENSOR_WIFI, false),
                 SharedPreferencesManager.read(C.RUNNING_SENSOR_BLUETOOTH, false),
                 SharedPreferencesManager.read(C.RUNNING_SENSOR_SCREEN_USAGE, false),
-                SharedPreferencesManager.read(C.RUNNING_SENSOR_MOBILE_DATA, false),
                 SharedPreferencesManager.read(C.RUNNING_SENSOR_GPS, false)
         )
 

@@ -7,8 +7,6 @@ interface SensorStatusDelegate {
     fun didBluetoothDisable()
     fun didTurnScreenOn()
     fun didTurnScreenOff()
-    fun didMobileDataEnable()
-    fun didMobileDataDisable()
     fun didGpsEnable()
     fun didGpsDisable()
 }

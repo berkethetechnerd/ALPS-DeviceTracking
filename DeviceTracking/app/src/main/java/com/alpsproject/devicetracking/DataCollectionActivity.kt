@@ -21,7 +21,6 @@ class DataCollectionActivity : BaseActivity(), SensorStatusDelegate {
     private lateinit var selectedWifiView: SensorView
     private lateinit var selectedBluetoothView: SensorView
     private lateinit var selectedScreenUsageView: SensorView
-    private lateinit var selectedMobileDataView: SensorView
     private lateinit var selectedGpsView: SensorView
 
     private val isWifiSelected: Boolean
@@ -33,9 +32,6 @@ class DataCollectionActivity : BaseActivity(), SensorStatusDelegate {
     private val isScreenUsageSelected: Boolean
         get() = intent.getBooleanExtra(C.SENSOR_SCREEN_USAGE, false)
                 || SharedPreferencesManager.read(C.RUNNING_SENSOR_SCREEN_USAGE, false)
-    private val isMobileDataSelected: Boolean
-        get() = intent.getBooleanExtra(C.SENSOR_MOBILE_DATA, false)
-                || SharedPreferencesManager.read(C.RUNNING_SENSOR_MOBILE_DATA, false)
     private val isGpsSelected: Boolean
         get() = intent.getBooleanExtra(C.SENSOR_GPS, false)
                 || SharedPreferencesManager.read(C.RUNNING_SENSOR_GPS, false)
@@ -45,7 +41,6 @@ class DataCollectionActivity : BaseActivity(), SensorStatusDelegate {
                 isWifiSelected,
                 isBluetoothSelected,
                 isScreenUsageSelected,
-                isMobileDataSelected,
                 isGpsSelected
         )
 
@@ -86,7 +81,6 @@ class DataCollectionActivity : BaseActivity(), SensorStatusDelegate {
         selectedWifiView = findViewById(R.id.data_collection_list_wifi)
         selectedBluetoothView = findViewById(R.id.data_collection_list_bluetooth)
         selectedScreenUsageView = findViewById(R.id.data_collection_list_screen_usage)
-        selectedMobileDataView = findViewById(R.id.data_collection_list_mobile_data)
         selectedGpsView = findViewById(R.id.data_collection_list_gps)
 
         if(!isWifiSelected) {
@@ -113,14 +107,6 @@ class DataCollectionActivity : BaseActivity(), SensorStatusDelegate {
             selectedScreenUsageView.changeSensorStatus(SettingsManager.isScreenTurnedOn(this))
         }
 
-        if(!isMobileDataSelected) {
-            selectedMobileDataView.visibility = View.GONE
-        } else {
-            selectedMobileDataView.switchToStatusView()
-            selectedMobileDataView.configureSensor(getResIcon(R.drawable.ic_mobile_data_sensor), getString(R.string.sensor_mobile_data))
-            selectedMobileDataView.changeSensorStatus(SettingsManager.isMobileDataEnabled(this))
-        }
-
         if(!isGpsSelected) {
             selectedGpsView.visibility = View.GONE
         } else {
@@ -138,7 +124,6 @@ class DataCollectionActivity : BaseActivity(), SensorStatusDelegate {
             if(isWifiSelected) { DataCollectionManager.startCollectionForSensor(DeviceSensor.ACCESS_WIFI, this) }
             if(isBluetoothSelected) { DataCollectionManager.startCollectionForSensor(DeviceSensor.ACCESS_BLUETOOTH, this) }
             if(isScreenUsageSelected) {  DataCollectionManager.startCollectionForSensor(DeviceSensor.ACCESS_SCREEN_USAGE, this) }
-            if(isMobileDataSelected) { DataCollectionManager.startCollectionForSensor(DeviceSensor.ACCESS_MOBILE_DATA, this) }
             if(isGpsSelected) { DataCollectionManager.startCollectionForSensor(DeviceSensor.ACCESS_GPS, this) }
         }
 
@@ -149,7 +134,6 @@ class DataCollectionActivity : BaseActivity(), SensorStatusDelegate {
             if(isWifiSelected) { DataCollectionManager.stopCollectionForSensor(DeviceSensor.ACCESS_WIFI) }
             if(isBluetoothSelected){ DataCollectionManager.stopCollectionForSensor(DeviceSensor.ACCESS_BLUETOOTH) }
             if(isScreenUsageSelected){ DataCollectionManager.stopCollectionForSensor(DeviceSensor.ACCESS_SCREEN_USAGE) }
-            if(isMobileDataSelected) { DataCollectionManager.stopCollectionForSensor(DeviceSensor.ACCESS_MOBILE_DATA) }
             if(isGpsSelected) { DataCollectionManager.stopCollectionForSensor(DeviceSensor.ACCESS_GPS) }
         }
 
@@ -174,10 +158,6 @@ class DataCollectionActivity : BaseActivity(), SensorStatusDelegate {
     override fun didTurnScreenOn() = selectedScreenUsageView.changeSensorStatus(true)
 
     override fun didTurnScreenOff() = selectedScreenUsageView.changeSensorStatus(false)
-
-    override fun didMobileDataEnable() = selectedMobileDataView.changeSensorStatus(true)
-
-    override fun didMobileDataDisable() = selectedMobileDataView.changeSensorStatus(false)
 
     override fun didGpsEnable() = selectedGpsView.changeSensorStatus(true)
 

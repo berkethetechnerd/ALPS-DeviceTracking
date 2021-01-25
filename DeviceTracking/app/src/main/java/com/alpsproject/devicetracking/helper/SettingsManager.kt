@@ -26,7 +26,6 @@ object SettingsManager: ActivationDelegate {
                 DeviceSensor.ACCESS_WIFI -> isWifiEnabled(activity)
                 DeviceSensor.ACCESS_BLUETOOTH -> isBluetoothEnabled()
                 DeviceSensor.ACCESS_SCREEN_USAGE -> isScreenTurnedOn(activity)
-                DeviceSensor.ACCESS_MOBILE_DATA -> isMobileDataEnabled(activity)
                 DeviceSensor.ACCESS_GPS -> isGpsEnabled(activity)
             }
 
@@ -51,12 +50,6 @@ object SettingsManager: ActivationDelegate {
         return powerManager.isInteractive
     }
 
-    fun isMobileDataEnabled(activity: Activity): Boolean {
-        val connectivityManager = getConnectivityManager(activity) ?: return false // Adapter not found
-        val activeInfo: NetworkInfo? = connectivityManager.activeNetworkInfo
-        return activeInfo?.type == ConnectivityManager.TYPE_MOBILE
-    }
-
     fun isGpsEnabled(activity: Activity): Boolean {
         val locationManager = getLocationManager(activity) ?: return false
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
@@ -67,7 +60,6 @@ object SettingsManager: ActivationDelegate {
             DeviceSensor.ACCESS_WIFI -> activateWifi(activity)
             DeviceSensor.ACCESS_BLUETOOTH -> activateBluetooth()
             DeviceSensor.ACCESS_SCREEN_USAGE -> return // Already on
-            DeviceSensor.ACCESS_MOBILE_DATA -> activateMobileData(activity)
             DeviceSensor.ACCESS_GPS -> activateGPS(activity)
         }
     }
@@ -84,8 +76,6 @@ object SettingsManager: ActivationDelegate {
 
     private fun activateBluetooth() = getBluetoothAdapter()?.enable()
 
-    private fun activateMobileData(context: Context) = context.startActivity(Intent(Settings.ACTION_WIRELESS_SETTINGS))
-
     private fun activateGPS(context: Context) = context.startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
 
     private fun getWifiManager(activity: Activity): WifiManager? = activity.applicationContext.getSystemService(Context.WIFI_SERVICE) as? WifiManager?
@@ -93,8 +83,6 @@ object SettingsManager: ActivationDelegate {
     private fun getBluetoothAdapter(): BluetoothAdapter? = BluetoothAdapter.getDefaultAdapter()
 
     private fun getPowerManager(activity: Activity): PowerManager? = activity.getSystemService(Context.POWER_SERVICE) as? PowerManager?
-
-    private fun getConnectivityManager(activity: Activity): ConnectivityManager? = activity.applicationContext.getSystemService(Context.CONNECTIVITY_SERVICE) as? ConnectivityManager?
 
     fun getLocationManager(context: Context): LocationManager? = context.getSystemService(Context.LOCATION_SERVICE)as? LocationManager?
 }
