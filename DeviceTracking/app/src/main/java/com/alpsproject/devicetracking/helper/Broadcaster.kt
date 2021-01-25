@@ -19,8 +19,7 @@ object Broadcaster {
         if (arrOfSensors[0]) { registerForWifi(receiver) }
         if (arrOfSensors[1]) { registerForBluetooth(receiver) }
         if (arrOfSensors[2]) { registerForScreenUsage(receiver) }
-        if (arrOfSensors[3]) { registerForMobileData(receiver) }
-        if (arrOfSensors[4]) { registerForGps(receiver) }
+        if (arrOfSensors[3]) { registerForGps(receiver) }
 
         (receiver as? SensorStatusDelegate)?.let {
             receivers.add(it)
@@ -31,8 +30,7 @@ object Broadcaster {
         if (arrOfSensors[0]) { receiver.unregisterReceiver(wifiStateReceiver) }
         if (arrOfSensors[1]) { receiver.unregisterReceiver(bluetoothStateReceiver) }
         if (arrOfSensors[2]) { receiver.unregisterReceiver(screenUsageReceiver) }
-        if (arrOfSensors[3]) { receiver.unregisterReceiver(mobileDataReceiver) }
-        if (arrOfSensors[4]) { receiver.unregisterReceiver(gpsReceiver) }
+        if (arrOfSensors[3]) { receiver.unregisterReceiver(gpsReceiver) }
 
         (receiver as? SensorStatusDelegate)?.let {
             if (receivers.contains(it)) {
@@ -56,11 +54,6 @@ object Broadcaster {
         screenUsageFilter.addAction(Intent.ACTION_SCREEN_ON)
         screenUsageFilter.addAction(Intent.ACTION_SCREEN_OFF)
         receiver.registerReceiver(screenUsageReceiver, screenUsageFilter)
-    }
-
-    private fun registerForMobileData(receiver: Context) {
-        val mobileDataFilter = IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
-        receiver.registerReceiver(mobileDataReceiver, mobileDataFilter)
     }
 
     private fun registerForGps(receiver: Context) {
@@ -130,27 +123,6 @@ object Broadcaster {
         }
     }
 
-    private val mobileDataReceiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context?, intent: Intent?) {
-            intent?.let {
-                val mobileDataExtra = it.action
-                val isMobileDataChangeReceived = mobileDataExtra.equals(ConnectivityManager.CONNECTIVITY_ACTION)
-
-                if (isMobileDataChangeReceived) {
-                    val mobileDataOffStatus = intent.getBooleanExtra(ConnectivityManager.EXTRA_NO_CONNECTIVITY, false)
-
-                    if (!mobileDataOffStatus) {
-                        Logger.logSensorUpdate(DeviceSensor.ACCESS_MOBILE_DATA, true)
-                        broadcastSensorChange(DeviceSensor.ACCESS_MOBILE_DATA, true)
-                    } else {
-                        Logger.logSensorUpdate(DeviceSensor.ACCESS_MOBILE_DATA, false)
-                        broadcastSensorChange(DeviceSensor.ACCESS_MOBILE_DATA, false)
-                    }
-                }
-            }
-        }
-    }
-
     private val gpsReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             context?.let { ctx ->
@@ -176,7 +148,6 @@ object Broadcaster {
             DeviceSensor.ACCESS_WIFI -> broadcastWifiChange(status)
             DeviceSensor.ACCESS_BLUETOOTH -> broadcastBluetoothChange(status)
             DeviceSensor.ACCESS_SCREEN_USAGE -> broadcastScreenStateChange(status)
-            DeviceSensor.ACCESS_MOBILE_DATA -> broadcastMobileDataChange(status)
             DeviceSensor.ACCESS_GPS -> broadcastGpsChange(status)
         }
     }
@@ -202,14 +173,6 @@ object Broadcaster {
             receivers.forEach { it.didTurnScreenOn() }
         } else {
             receivers.forEach { it.didTurnScreenOff() }
-        }
-    }
-
-    private fun broadcastMobileDataChange(status: Boolean) {
-        if (status) {
-            receivers.forEach { it.didMobileDataEnable() }
-        } else {
-            receivers.forEach { it.didMobileDataDisable() }
         }
     }
 
