@@ -1,4 +1,4 @@
-package com.berkethetechnerd.demo.controller;
+package com.berkethetechnerd.devicetrackerapi.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,7 +11,9 @@ public class HomeController {
 
     @GetMapping
     public @ResponseBody String home() {
-        // Welcome message
-        return "Welcome to the TwoImpulse REST demo system!";
+        return """
+                Welcome to the DeviceTracker REST API system!\s
+                To send new data use /data endpoint with new data instance [POST]\s
+                To fetch all data use /data/all endpoint [GET]""";
     }
 }

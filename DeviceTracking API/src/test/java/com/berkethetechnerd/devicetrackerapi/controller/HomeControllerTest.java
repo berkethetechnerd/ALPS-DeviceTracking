@@ -1,4 +1,4 @@
-package com.berkethetechnerd.demo.controller;
+package com.berkethetechnerd.devicetrackerapi.controller;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,7 +19,10 @@ public class HomeControllerTest {
     @Test
     public void it_should_say_hello() {
         // Init
-        String welcomeText = "Welcome to the TwoImpulse REST demo system!";
+        String welcomeText = """
+                Welcome to the DeviceTracker REST API system!\s
+                To send new data use /data endpoint with new data instance [POST]\s
+                To fetch all data use /data/all endpoint [GET]""";
 
         // Execute
         String resultText = homeController.home();
