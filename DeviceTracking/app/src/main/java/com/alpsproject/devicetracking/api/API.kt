@@ -9,7 +9,7 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
-private const val BASE_URL_TEST = "http://192.168.0.2"
+private const val BASE_URL_TEST = "http://192.168.0.3:8080"
 private const val BASE_URL_LIVE = ""
 
 object API {
@@ -31,6 +31,7 @@ object API {
 
                 override fun onResponse(call: Call<SensorData>, response: Response<SensorData>) {
                     val sentData = response.body()
+                    Log.d("SensorDataEntry", "sent")
                     onResult(sentData)
                 }
             }
