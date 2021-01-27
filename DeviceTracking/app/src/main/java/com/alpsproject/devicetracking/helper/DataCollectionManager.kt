@@ -37,7 +37,7 @@ object DataCollectionManager {
         for (data in asyncData) {
             API.sendSensorEntry(data) { sensorData ->
                 sensorData?.id?.let { id ->
-                    RealmManager.updateDataForSynchronization(id)
+                    RealmManager.updateDataAfterSynchronization(id)
                 }
             }
         }

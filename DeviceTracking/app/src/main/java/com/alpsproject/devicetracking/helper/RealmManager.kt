@@ -38,7 +38,7 @@ object RealmManager {
         realm.commitTransaction()
     }
 
-    fun updateDataForSynchronization(id: String) {
+    fun updateDataAfterSynchronization(id: String) {
         val results = realm.where(SensorData::class.java).equalTo(ENTRY_ID, id).findAll()
         if (results.size == 0) { return }
 
