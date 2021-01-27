@@ -1,6 +1,7 @@
 package com.alpsproject.devicetracking.helper
 
 import android.app.Activity
+import com.alpsproject.devicetracking.api.API
 import com.alpsproject.devicetracking.enums.DeviceSensor
 import com.alpsproject.devicetracking.model.SensorData
 import com.alpsproject.devicetracking.helper.ConstantsManager as C
@@ -28,6 +29,17 @@ object DataCollectionManager {
             registerDataCollectionOnSensorStart(sensor)
         } else {
             registerDataCollectionOnSensorStop(sensor)
+        }
+    }
+
+    fun syncDataWithCloud() {
+        val asyncData = RealmManager.queryForNotSynchronizedData()
+        for (data in asyncData) {
+            API.sendSensorEntry(data) { sensorData ->
+                sensorData?.id?.let { id ->
+                    RealmManager.updateDataAfterSynchronization(id)
+                }
+            }
         }
     }
 

@@ -3,6 +3,7 @@ package com.alpsproject.devicetracking
 import android.content.Intent
 import android.os.Bundle
 import android.widget.*
+import com.alpsproject.devicetracking.helper.DataCollectionManager
 import com.alpsproject.devicetracking.helper.RealmManager
 import com.alpsproject.devicetracking.helper.SharedPreferencesManager
 
@@ -18,6 +19,7 @@ class LoginActivity : BaseActivity() {
 
         initUI()
         RealmManager.printAllData()
+        DataCollectionManager.syncDataWithCloud()
     }
 
     private fun initUI() {

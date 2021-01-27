@@ -9,9 +9,14 @@ object Logger {
     private const val SERVICE_NOTIFICATION = "DTServiceNotification"
     private const val SENSOR_STATUS_CHANGE = "SensorStatusChange"
     private const val SENSOR_DATA_ENTRY = "SensorDataEntry"
+    private const val SYNC_DATA_ENTRY = "DataSentToAPI"
 
     fun logServiceNotification(message: String) {
         Log.d(SERVICE_NOTIFICATION, message)
+    }
+
+    fun logAPINotification() {
+        Log.d(SYNC_DATA_ENTRY, "A data entry is sent to API")
     }
 
     fun logSensorUpdate(sensor: DeviceSensor, status: Boolean) {

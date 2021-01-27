@@ -10,6 +10,7 @@ import kotlin.collections.ArrayList
 object CalendarManager {
 
     private const val DAY_FORMAT = "dd.MM.yyyy"
+    private const val BACKEND_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'"
 
     fun fetchCalendarDays(type: CalendarDays): Array<String> {
         val arrayOfDays = ArrayList<String>()
@@ -53,7 +54,18 @@ object CalendarManager {
 
     private fun calendarToString(date: Calendar): String = getFormatter().format(date.time)
 
+    fun convertDateForBackend(date: Date?): String? {
+        date?.let {
+            return getBackendFormatter().format(date.time)
+        }
+
+        return null
+    }
+
+
     private fun getFormatter(): SimpleDateFormat = SimpleDateFormat(DAY_FORMAT, Locale.getDefault())
+
+    private fun getBackendFormatter(): SimpleDateFormat = SimpleDateFormat(BACKEND_DATE_FORMAT, Locale.getDefault())
 
     private fun getLowerCalendarLimit(type: CalendarDays): Int {
         return when(type) {

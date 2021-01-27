@@ -11,6 +11,7 @@ object RealmManager {
     private const val ENTRY_SENSOR_NAME = "sensorName"
     private const val ENTRY_START_DATE = "startTime"
     private const val ENTRY_END_DATE = "endTime"
+    private const val SYNC_WITH_CLOUD = "isSyncWithCloud"
 
     private val realm = Realm.getDefaultInstance()
 
@@ -31,6 +32,21 @@ object RealmManager {
         val currentResultData = results[0]
         currentResultData?.let {
             it.endTime = Date()
+            realm.copyToRealmOrUpdate(it)
+        }
+
+        realm.commitTransaction()
+    }
+
+    fun updateDataAfterSynchronization(id: String) {
+        val results = realm.where(SensorData::class.java).equalTo(ENTRY_ID, id).findAll()
+        if (results.size == 0) { return }
+
+        realm.beginTransaction()
+
+        val currentResultData = results[0]
+        currentResultData?.let {
+            it.isSyncWithCloud = true
             realm.copyToRealmOrUpdate(it)
         }
 
@@ -147,5 +163,12 @@ object RealmManager {
         val preliminaryResults = realm.where(SensorData::class.java).equalTo(ENTRY_SENSOR_NAME, sensorName).findAll()
         val results = preliminaryResults.filter { it.endTime == null }
         return results.isNotEmpty()
+    }
+
+    // ** QUERY : NOT_SYNCHRONIZED DATA **
+
+    fun queryForNotSynchronizedData(): List<SensorData> {
+        val preliminaryResults = realm.where(SensorData::class.java).equalTo(SYNC_WITH_CLOUD, false).findAll()
+        return preliminaryResults.filter { it.endTime != null }
     }
 }
