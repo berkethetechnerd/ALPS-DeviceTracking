@@ -143,6 +143,7 @@ class DataCollectionActivity : BaseActivity(), SensorStatusDelegate {
         } else { // Stopping
             stopDataCollection()
             ServiceManager.stopTrackerService(this)
+            DataCollectionManager.syncDataWithCloud()
             finish()
         }
     }

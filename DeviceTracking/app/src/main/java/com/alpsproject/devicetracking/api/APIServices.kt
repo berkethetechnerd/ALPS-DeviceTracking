@@ -9,7 +9,7 @@ import retrofit2.http.POST
 interface APIServices {
 
     @Headers("Content-Type: application/json")
-    @POST("data")
+    @POST("/data")
     fun postSensorEntry(@Body sensorEntry: SensorData): Call<SensorData>
 
 }
