@@ -179,6 +179,7 @@ object Broadcaster {
             DeviceSensor.ACCESS_BLUETOOTH -> broadcastBluetoothChange(status)
             DeviceSensor.ACCESS_SCREEN_USAGE -> broadcastScreenStateChange(status)
             DeviceSensor.ACCESS_GPS -> broadcastGpsChange(status)
+            DeviceSensor.ACCESS_NFC -> broadcastNfcChange(status)
         }
     }
 
