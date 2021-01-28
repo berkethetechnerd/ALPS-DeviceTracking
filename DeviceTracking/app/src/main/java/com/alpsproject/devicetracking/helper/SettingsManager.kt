@@ -8,6 +8,7 @@ import android.location.LocationManager
 import android.net.ConnectivityManager
 import android.net.NetworkInfo
 import android.net.wifi.WifiManager
+import android.nfc.NfcManager
 import android.os.Build
 import android.os.PowerManager
 import android.provider.Settings
@@ -27,6 +28,7 @@ object SettingsManager: ActivationDelegate {
                 DeviceSensor.ACCESS_BLUETOOTH -> isBluetoothEnabled()
                 DeviceSensor.ACCESS_SCREEN_USAGE -> isScreenTurnedOn(activity)
                 DeviceSensor.ACCESS_GPS -> isGpsEnabled(activity)
+                DeviceSensor.ACCESS_NFC -> isNfcEnabled(activity)
             }
 
             if (!isSensorEnabled) {
@@ -55,12 +57,18 @@ object SettingsManager: ActivationDelegate {
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
     }
 
+    fun isNfcEnabled(activity: Activity): Boolean {
+        val nfcManager = getNfcManager(activity) ?: return false
+        return nfcManager.defaultAdapter.isEnabled
+    }
+
     override fun sensorActivationRequested(activity: Activity, sensor: DeviceSensor) {
         when (sensor) {
             DeviceSensor.ACCESS_WIFI -> activateWifi(activity)
             DeviceSensor.ACCESS_BLUETOOTH -> activateBluetooth()
             DeviceSensor.ACCESS_SCREEN_USAGE -> return // Already on
             DeviceSensor.ACCESS_GPS -> activateGPS(activity)
+            DeviceSensor.ACCESS_NFC -> activateNFC(activity)
         }
     }
 
@@ -78,6 +86,8 @@ object SettingsManager: ActivationDelegate {
 
     private fun activateGPS(context: Context) = context.startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
 
+    private fun activateNFC(context: Context) = context.startActivity(Intent(Settings.ACTION_NFC_SETTINGS))
+
     private fun getWifiManager(activity: Activity): WifiManager? = activity.applicationContext.getSystemService(Context.WIFI_SERVICE) as? WifiManager?
 
     private fun getBluetoothAdapter(): BluetoothAdapter? = BluetoothAdapter.getDefaultAdapter()
@@ -85,4 +95,6 @@ object SettingsManager: ActivationDelegate {
     private fun getPowerManager(activity: Activity): PowerManager? = activity.getSystemService(Context.POWER_SERVICE) as? PowerManager?
 
     fun getLocationManager(context: Context): LocationManager? = context.getSystemService(Context.LOCATION_SERVICE)as? LocationManager?
+
+    fun getNfcManager(context: Context): NfcManager? = context.getSystemService(Context.NFC_SERVICE)as? NfcManager?
 }
