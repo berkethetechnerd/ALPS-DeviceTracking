@@ -14,6 +14,7 @@ object DataCollectionManager {
             DeviceSensor.ACCESS_BLUETOOTH -> startBluetoothCollection(activity)
             DeviceSensor.ACCESS_SCREEN_USAGE -> startScreenUsageCollection()
             DeviceSensor.ACCESS_GPS -> startGpsCollection(activity)
+            DeviceSensor.ACCESS_NFC -> startNfcCollection(activity)
         }
 
         SharedPreferencesManager.write(C.getRunningSensorKey(sensor), true)
@@ -66,6 +67,14 @@ object DataCollectionManager {
             createNewSensorEntry(DeviceSensor.ACCESS_GPS)
         } else {
             SettingsManager.askForSensor(activity, DeviceSensor.ACCESS_GPS)
+        }
+    }
+
+    private fun startNfcCollection(activity: Activity) {
+        if (SettingsManager.isNfcEnabled(activity)) {
+            createNewSensorEntry(DeviceSensor.ACCESS_NFC)
+        } else {
+            SettingsManager.askForSensor(activity, DeviceSensor.ACCESS_NFC)
         }
     }
 

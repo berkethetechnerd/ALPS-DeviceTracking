@@ -8,8 +8,10 @@ import android.content.IntentFilter
 import android.location.LocationManager
 import android.net.ConnectivityManager
 import android.net.wifi.WifiManager
+import android.nfc.NfcAdapter
 import com.alpsproject.devicetracking.delegates.SensorStatusDelegate
 import com.alpsproject.devicetracking.enums.DeviceSensor
+
 
 object Broadcaster {
 
@@ -20,6 +22,7 @@ object Broadcaster {
         if (arrOfSensors[1]) { registerForBluetooth(receiver) }
         if (arrOfSensors[2]) { registerForScreenUsage(receiver) }
         if (arrOfSensors[3]) { registerForGps(receiver) }
+        if (arrOfSensors[4]) { registerForNfc(receiver) }
 
         (receiver as? SensorStatusDelegate)?.let {
             receivers.add(it)
@@ -31,6 +34,7 @@ object Broadcaster {
         if (arrOfSensors[1]) { receiver.unregisterReceiver(bluetoothStateReceiver) }
         if (arrOfSensors[2]) { receiver.unregisterReceiver(screenUsageReceiver) }
         if (arrOfSensors[3]) { receiver.unregisterReceiver(gpsReceiver) }
+        if (arrOfSensors[4]) { receiver.unregisterReceiver(nfcReceiver) }
 
         (receiver as? SensorStatusDelegate)?.let {
             if (receivers.contains(it)) {
@@ -61,12 +65,17 @@ object Broadcaster {
         receiver.registerReceiver(gpsReceiver, gpsFilter)
     }
 
+    private fun registerForNfc(receiver: Context) {
+        val nfcFilter = IntentFilter(NfcAdapter.ACTION_ADAPTER_STATE_CHANGED)
+        receiver.registerReceiver(nfcReceiver, nfcFilter)
+    }
+
     private val wifiStateReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             intent?.let {
                 val wifiStateExtra = it.getIntExtra(
-                        WifiManager.EXTRA_WIFI_STATE,
-                        WifiManager.WIFI_STATE_UNKNOWN
+                    WifiManager.EXTRA_WIFI_STATE,
+                    WifiManager.WIFI_STATE_UNKNOWN
                 )
 
                 val wifiOnStatus = wifiStateExtra == WifiManager.WIFI_STATE_ENABLED
@@ -87,8 +96,8 @@ object Broadcaster {
         override fun onReceive(context: Context?, intent: Intent?) {
             intent?.let {
                 val bluetoothStateExtra = it.getIntExtra(
-                        BluetoothAdapter.EXTRA_STATE,
-                        BluetoothAdapter.ERROR
+                    BluetoothAdapter.EXTRA_STATE,
+                    BluetoothAdapter.ERROR
                 )
 
                 val bluetoothOnStatus = bluetoothStateExtra == BluetoothAdapter.STATE_ON
@@ -141,6 +150,27 @@ object Broadcaster {
         }
     }
 
+    private val nfcReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent) {
+            val action = intent.action
+            if (action == NfcAdapter.ACTION_ADAPTER_STATE_CHANGED) {
+                val state = intent.getIntExtra(
+                    NfcAdapter.EXTRA_ADAPTER_STATE,
+                    NfcAdapter.STATE_OFF
+                )
+                when (state) {
+                    NfcAdapter.STATE_OFF -> {
+                        Logger.logSensorUpdate(DeviceSensor.ACCESS_NFC, false)
+                        broadcastSensorChange(DeviceSensor.ACCESS_NFC, false)
+                    }
+                    NfcAdapter.STATE_ON -> {
+                        Logger.logSensorUpdate(DeviceSensor.ACCESS_NFC, true)
+                        broadcastSensorChange(DeviceSensor.ACCESS_NFC, true)
+                    }
+                }
+            }
+        }    }
+
     private fun broadcastSensorChange(sensor: DeviceSensor, status: Boolean) {
         DataCollectionManager.updateDataCollection(sensor, status)
 
@@ -149,6 +179,7 @@ object Broadcaster {
             DeviceSensor.ACCESS_BLUETOOTH -> broadcastBluetoothChange(status)
             DeviceSensor.ACCESS_SCREEN_USAGE -> broadcastScreenStateChange(status)
             DeviceSensor.ACCESS_GPS -> broadcastGpsChange(status)
+            DeviceSensor.ACCESS_NFC -> broadcastNfcChange(status)
         }
     }
 
@@ -184,4 +215,11 @@ object Broadcaster {
         }
     }
 
+    private fun broadcastNfcChange(status: Boolean) {
+        if (status) {
+            receivers.forEach { it.didNfcEnable() }
+        } else {
+            receivers.forEach { it.didNfcDisable() }
+        }
+    }
 }
