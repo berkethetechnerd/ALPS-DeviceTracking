@@ -22,6 +22,7 @@ class DataCollectionActivity : BaseActivity(), SensorStatusDelegate {
     private lateinit var selectedBluetoothView: SensorView
     private lateinit var selectedScreenUsageView: SensorView
     private lateinit var selectedGpsView: SensorView
+    private lateinit var selectedNfcView: SensorView
 
     private val isWifiSelected: Boolean
         get() = intent.getBooleanExtra(C.SENSOR_WIFI, false)
@@ -35,13 +36,17 @@ class DataCollectionActivity : BaseActivity(), SensorStatusDelegate {
     private val isGpsSelected: Boolean
         get() = intent.getBooleanExtra(C.SENSOR_GPS, false)
                 || SharedPreferencesManager.read(C.RUNNING_SENSOR_GPS, false)
+    private val isNfcSelected: Boolean
+        get() = intent.getBooleanExtra(C.SENSOR_NFC, false)
+                || SharedPreferencesManager.read(C.RUNNING_SENSOR_NFC, false)
 
     private val arrOfSelectedSensors: Array<Boolean>
         get() = arrayOf(
                 isWifiSelected,
                 isBluetoothSelected,
                 isScreenUsageSelected,
-                isGpsSelected
+                isGpsSelected,
+                isNfcSelected
         )
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -82,6 +87,7 @@ class DataCollectionActivity : BaseActivity(), SensorStatusDelegate {
         selectedBluetoothView = findViewById(R.id.data_collection_list_bluetooth)
         selectedScreenUsageView = findViewById(R.id.data_collection_list_screen_usage)
         selectedGpsView = findViewById(R.id.data_collection_list_gps)
+        selectedNfcView = findViewById(R.id.data_collection_list_nfc)
 
         if(!isWifiSelected) {
             selectedWifiView.visibility = View.GONE
@@ -114,6 +120,14 @@ class DataCollectionActivity : BaseActivity(), SensorStatusDelegate {
             selectedGpsView.configureSensor(getResIcon(R.drawable.ic_gps_sensor), getString(R.string.sensor_gps))
             selectedGpsView.changeSensorStatus(SettingsManager.isGpsEnabled(this))
         }
+
+        if(!isNfcSelected) {
+            selectedNfcView.visibility = View.GONE
+        } else {
+            selectedNfcView.switchToStatusView()
+            selectedNfcView.configureSensor(getResIcon(R.drawable.ic_nfc_sensor), getString(R.string.sensor_nfc))
+            selectedNfcView.changeSensorStatus(SettingsManager.isNfcEnabled(this))
+        }
     }
 
     private fun startStopButton() {
@@ -125,6 +139,7 @@ class DataCollectionActivity : BaseActivity(), SensorStatusDelegate {
             if(isBluetoothSelected) { DataCollectionManager.startCollectionForSensor(DeviceSensor.ACCESS_BLUETOOTH, this) }
             if(isScreenUsageSelected) {  DataCollectionManager.startCollectionForSensor(DeviceSensor.ACCESS_SCREEN_USAGE, this) }
             if(isGpsSelected) { DataCollectionManager.startCollectionForSensor(DeviceSensor.ACCESS_GPS, this) }
+            if(isNfcSelected) { DataCollectionManager.startCollectionForSensor(DeviceSensor.ACCESS_NFC, this) }
         }
 
         fun stopDataCollection() {
@@ -135,6 +150,7 @@ class DataCollectionActivity : BaseActivity(), SensorStatusDelegate {
             if(isBluetoothSelected){ DataCollectionManager.stopCollectionForSensor(DeviceSensor.ACCESS_BLUETOOTH) }
             if(isScreenUsageSelected){ DataCollectionManager.stopCollectionForSensor(DeviceSensor.ACCESS_SCREEN_USAGE) }
             if(isGpsSelected) { DataCollectionManager.stopCollectionForSensor(DeviceSensor.ACCESS_GPS) }
+            if(isNfcSelected) { DataCollectionManager.stopCollectionForSensor(DeviceSensor.ACCESS_NFC) }
         }
 
         if(!isRunning()) { // Starting
@@ -163,6 +179,10 @@ class DataCollectionActivity : BaseActivity(), SensorStatusDelegate {
     override fun didGpsEnable() = selectedGpsView.changeSensorStatus(true)
 
     override fun didGpsDisable() = selectedGpsView.changeSensorStatus(false)
+
+    override fun didNfcEnable() = selectedNfcView.changeSensorStatus(true)
+
+    override fun didNfcDisable() = selectedNfcView.changeSensorStatus(false)
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val inflater: MenuInflater = menuInflater
