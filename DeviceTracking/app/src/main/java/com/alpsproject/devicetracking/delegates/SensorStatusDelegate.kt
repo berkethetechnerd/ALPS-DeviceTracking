@@ -9,4 +9,6 @@ interface SensorStatusDelegate {
     fun didTurnScreenOff()
     fun didGpsEnable()
     fun didGpsDisable()
+    fun didNfcEnable()
+    fun didNfcDisable()
 }
