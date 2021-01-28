@@ -160,14 +160,10 @@ object Broadcaster {
                 )
                 when (state) {
                     NfcAdapter.STATE_OFF -> {
-                    }
-                    NfcAdapter.STATE_TURNING_OFF -> {
                         Logger.logSensorUpdate(DeviceSensor.ACCESS_NFC, false)
                         broadcastSensorChange(DeviceSensor.ACCESS_NFC, false)
                     }
                     NfcAdapter.STATE_ON -> {
-                    }
-                    NfcAdapter.STATE_TURNING_ON -> {
                         Logger.logSensorUpdate(DeviceSensor.ACCESS_NFC, true)
                         broadcastSensorChange(DeviceSensor.ACCESS_NFC, true)
                     }
