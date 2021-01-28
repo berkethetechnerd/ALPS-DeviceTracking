@@ -26,4 +26,4 @@ _Testing & Documentation._
 
 ### Timeline
 
-![Timeline](https://ibb.co/tHgVQrL)
+![Timeline](https://i.ibb.co/GdyznSH/Timeline.png)
