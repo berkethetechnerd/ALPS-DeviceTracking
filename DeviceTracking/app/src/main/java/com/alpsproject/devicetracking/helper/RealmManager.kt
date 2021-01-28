@@ -1,5 +1,6 @@
 package com.alpsproject.devicetracking.helper
 
+import com.alpsproject.devicetracking.enums.CalendarDays
 import com.alpsproject.devicetracking.enums.DeviceSensor
 import com.alpsproject.devicetracking.model.SensorData
 import io.realm.Realm
@@ -60,20 +61,51 @@ object RealmManager {
 
     // ** QUERY : CALCULATING TOTAL HOURS FOR A SPECIFIC DATE **
 
-    fun queryForDatesInSensor(dates: Array<String>, sensor: DeviceSensor): DoubleArray {
-        val data = DoubleArray(dates.size)
+    fun queryForDatesInSensor(dates: Array<String>, sensor: DeviceSensor, timeFrame: CalendarDays): DoubleArray {
+        if (timeFrame == CalendarDays.LAST_24_HOURS) {
+            val data = DoubleArray(4)
+            val today = dates[0]
 
-        for (i in dates.indices) {
-            data[i] = calcHoursInDate(dates[i], sensor).round(3)
+            CalendarManager.stringToDate(today)?.let {
+                val startDate = CalendarManager.extractStartDate(it)
+                val quarterDates = CalendarManager.extractQuarterDates(it)
+                val endDate = CalendarManager.extractStopDate(it)
+
+                data[0] = calcHoursForToday(startDate, quarterDates[0], sensor)
+                data[1] = calcHoursForToday(quarterDates[0], quarterDates[1], sensor)
+                data[2] = calcHoursForToday(quarterDates[1], quarterDates[2], sensor)
+                data[3] = calcHoursForToday(quarterDates[2], endDate, sensor)
+            }
+
+            return data
+        } else {
+            val data = DoubleArray(dates.size)
+
+            for (i in dates.indices) {
+                data[i] = calcHoursInDate(dates[i], sensor).round(3)
+            }
+
+            return data
         }
-
-        return data
     }
 
     private fun Double.round(decimals: Int): Double {
         var multiplier = 1.0
         repeat(decimals) { multiplier *= 10 }
         return kotlin.math.round(this * multiplier) / multiplier
+    }
+
+    private fun calcHoursForToday(startDate: Date, endDate: Date, sensor: DeviceSensor): Double {
+        val sensorName = ConstantsManager.getSensorName(sensor)
+
+        var seconds = 0.0
+        seconds += secondsForToday2Today(sensorName, startDate, endDate)
+        seconds += secondsForBefore2Today(sensorName, startDate, endDate)
+        seconds += secondsForToday2Later(sensorName, startDate, endDate)
+        seconds += secondsForBefore2Later(sensorName, startDate, endDate)
+        seconds += secondsForToday2NoFinish(sensorName, startDate, endDate)
+        seconds += secondsForBefore2NoFinish(sensorName, startDate)
+        return seconds / 3600.0
     }
 
     private fun calcHoursInDate(stringDate: String, sensor: DeviceSensor): Double {

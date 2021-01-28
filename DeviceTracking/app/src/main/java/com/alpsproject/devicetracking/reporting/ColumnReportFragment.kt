@@ -103,7 +103,7 @@ class ColumnReportFragment : Fragment() {
         reportName?.let {
             val sensorType = getSensorType(it)
             val chartDates = CalendarManager.fetchCalendarDays(timeFrame)
-            val chartData = RealmManager.queryForDatesInSensor(chartDates, sensorType)
+            val chartData = RealmManager.queryForDatesInSensor(chartDates, sensorType, timeFrame)
 
             if (isDataExistForSelectedTimeFrame(chartData)) {
                 tvDescription.text = getString(R.string.report_usage_description, it, numberOfDays, chartData.average())
@@ -123,7 +123,11 @@ class ColumnReportFragment : Fragment() {
             data = ArrayList()
 
             for (index in chartData.indices) {
-                data.add(ValueDataEntry(chartDates[index], chartData[index]))
+                if (timeFrame == CalendarDays.LAST_24_HOURS) {
+                    data.add(ValueDataEntry(CalendarManager.extractHoursOfQuarterDayInString(index), chartData[index]))
+                } else {
+                    data.add(ValueDataEntry(chartDates[index], chartData[index]))
+                }
             }
 
             val column: Column = cartesian.column(data)
@@ -149,7 +153,11 @@ class ColumnReportFragment : Fragment() {
             data.clear()
 
             for (index in chartData.indices) {
-                data.add(ValueDataEntry(chartDates[index], chartData[index]))
+                if (timeFrame == CalendarDays.LAST_24_HOURS) {
+                    data.add(ValueDataEntry(CalendarManager.extractHoursOfQuarterDayInString(index), chartData[index]))
+                } else {
+                    data.add(ValueDataEntry(chartDates[index], chartData[index]))
+                }
             }
 
             cartesian.column(data)
