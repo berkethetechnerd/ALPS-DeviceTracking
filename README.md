@@ -18,7 +18,7 @@ As a contributor to this project, we develop an Android application which collec
 [Project Flyer](https://github.com/berkethetechnerd/ALPS-DeviceTracking/blob/main/IDP%20Documents/IDP%20-%20Project%20Flyer%20by%20Cambridge%20%40%20ALPS.pdf)   
 The flyer explains about the project and our position in contributing to it.
 
-[Project Description Report](https://github.com/berkethetechnerd/ALPS-DeviceTracking/blob/main/IDP%20Documents/IDP%20-%20Project%20Description.docx)
+[Project Description Report](https://github.com/berkethetechnerd/ALPS-DeviceTracking/blob/main/IDP%20Documents/IDP%20-%20Project%20Description.docx)  
 The report includes our reflection into the project and the important details for discussions, implementation, testing and the release.
 
 [Project Requirements](https://github.com/berkethetechnerd/ALPS-DeviceTracking/blob/main/IDP%20Documents/ALPS%20Project%20-%20Requirements.pdf)
