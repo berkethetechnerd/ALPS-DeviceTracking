@@ -9,6 +9,7 @@ import android.location.LocationManager
 import android.net.ConnectivityManager
 import android.net.wifi.WifiManager
 import android.nfc.NfcAdapter
+import com.alpsproject.devicetracking.R
 import com.alpsproject.devicetracking.delegates.SensorStatusDelegate
 import com.alpsproject.devicetracking.enums.DeviceSensor
 
@@ -68,6 +69,13 @@ object Broadcaster {
     private fun registerForNfc(receiver: Context) {
         val nfcFilter = IntentFilter(NfcAdapter.ACTION_ADAPTER_STATE_CHANGED)
         receiver.registerReceiver(nfcReceiver, nfcFilter)
+    }
+
+    fun registerForShutdown(receiver: Context) {
+        val shutdownFilter = IntentFilter()
+        shutdownFilter.addAction(Intent.ACTION_REBOOT)
+        shutdownFilter.addAction(Intent.ACTION_SHUTDOWN)
+        receiver.registerReceiver(shutdownReceiver, shutdownFilter)
     }
 
     private val wifiStateReceiver = object : BroadcastReceiver() {
@@ -169,7 +177,38 @@ object Broadcaster {
                     }
                 }
             }
-        }    }
+        }
+    }
+
+    private val shutdownReceiver = object : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent) {
+            val action = intent.action
+            if (action.equals(Intent.ACTION_SHUTDOWN) || action.equals(Intent.ACTION_REBOOT)) {
+                SharedPreferencesManager.write(ConstantsManager.RUNNING_DATA_COLLECTION, false)
+                Logger.logServiceNotification("Phone is shutting down. Cutting off the data collection!")
+
+                if (SharedPreferencesManager.read(ConstantsManager.RUNNING_SENSOR_WIFI, false)) {
+                    DataCollectionManager.stopCollectionForSensor(DeviceSensor.ACCESS_WIFI)
+                }
+
+                if (SharedPreferencesManager.read(ConstantsManager.RUNNING_SENSOR_BLUETOOTH, false)) {
+                    DataCollectionManager.stopCollectionForSensor(DeviceSensor.ACCESS_BLUETOOTH)
+                }
+
+                if (SharedPreferencesManager.read(ConstantsManager.RUNNING_SENSOR_SCREEN_USAGE, false)) {
+                    DataCollectionManager.stopCollectionForSensor(DeviceSensor.ACCESS_SCREEN_USAGE)
+                }
+
+                if (SharedPreferencesManager.read(ConstantsManager.RUNNING_SENSOR_GPS, false)) {
+                    DataCollectionManager.stopCollectionForSensor(DeviceSensor.ACCESS_GPS)
+                }
+
+                if (SharedPreferencesManager.read(ConstantsManager.RUNNING_SENSOR_NFC, false)) {
+                    DataCollectionManager.stopCollectionForSensor(DeviceSensor.ACCESS_NFC)
+                }
+            }
+        }
+    }
 
     private fun broadcastSensorChange(sensor: DeviceSensor, status: Boolean) {
         DataCollectionManager.updateDataCollection(sensor, status)

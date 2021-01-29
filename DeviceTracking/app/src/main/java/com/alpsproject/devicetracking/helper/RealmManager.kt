@@ -3,6 +3,7 @@ package com.alpsproject.devicetracking.helper
 import com.alpsproject.devicetracking.enums.DeviceSensor
 import com.alpsproject.devicetracking.model.SensorData
 import io.realm.Realm
+import io.realm.Sort
 import java.util.Date
 
 object RealmManager {
@@ -54,7 +55,7 @@ object RealmManager {
     }
 
     fun printAllData() {
-        val results = realm.where(SensorData::class.java).findAll()
+        val results = realm.where(SensorData::class.java).sort(ENTRY_START_DATE, Sort.DESCENDING).findAll()
         results.forEach { Logger.logData(it) }
     }
 

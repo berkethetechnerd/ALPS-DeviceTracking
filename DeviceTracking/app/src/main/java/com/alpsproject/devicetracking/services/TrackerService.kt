@@ -63,6 +63,7 @@ class TrackerService : Service() {
 
         Logger.logServiceNotification("Starting the foreground service task")
         Broadcaster.registerForBroadcasting(this, arrOfSensors)
+        Broadcaster.registerForShutdown(this)
         isServiceStarted = true
 
         // We need this lock so our service gets not affected by Doze Mode
