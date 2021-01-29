@@ -21,7 +21,7 @@ The flyer explains about the project and our position in contributing to it.
 [Project Description Report](https://github.com/berkethetechnerd/ALPS-DeviceTracking/blob/main/IDP%20Documents/IDP%20-%20Project%20Description.docx)  
 The report includes our reflection into the project and the important details for discussions, implementation, testing and the release.
 
-[Project Requirements](https://github.com/berkethetechnerd/ALPS-DeviceTracking/blob/main/IDP%20Documents/ALPS%20Project%20-%20Requirements.pdf)
+[Project Requirements](https://github.com/berkethetechnerd/ALPS-DeviceTracking/blob/main/IDP%20Documents/ALPS%20Project%20-%20Requirements.pdf)   
 List of requirements that needs to be met when the application is released at the end of the project.
 
 ### Milestones
