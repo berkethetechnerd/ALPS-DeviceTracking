@@ -43,11 +43,50 @@ object CalendarManager {
         val calendar = Calendar.getInstance()
         calendar.time = date
         calendar.set(Calendar.HOUR_OF_DAY, 23)
-        calendar.set(Calendar.MINUTE, 23)
+        calendar.set(Calendar.MINUTE, 59)
         calendar.set(Calendar.SECOND, 59)
         calendar.set(Calendar.MILLISECOND, 500)
 
         return calendar.time
+    }
+
+    fun extractQuarterDates(day: Date): Array<Date> {
+        val listOfDates = ArrayList<Date>()
+
+        val calendar = Calendar.getInstance()
+        calendar.time = day
+        calendar.set(Calendar.HOUR_OF_DAY, 6)
+        calendar.set(Calendar.MINUTE, 0)
+        calendar.set(Calendar.SECOND, 0)
+        calendar.set(Calendar.MILLISECOND, 500)
+        listOfDates.add(calendar.time)
+
+        val calendar2 = Calendar.getInstance()
+        calendar2.time = day
+        calendar2.set(Calendar.HOUR_OF_DAY, 12)
+        calendar2.set(Calendar.MINUTE, 0)
+        calendar2.set(Calendar.SECOND, 0)
+        calendar2.set(Calendar.MILLISECOND, 500)
+        listOfDates.add(calendar2.time)
+
+        val calendar3 = Calendar.getInstance()
+        calendar3.time = day
+        calendar3.set(Calendar.HOUR_OF_DAY, 18)
+        calendar3.set(Calendar.MINUTE, 0)
+        calendar3.set(Calendar.SECOND, 0)
+        calendar3.set(Calendar.MILLISECOND, 500)
+        listOfDates.add(calendar3.time)
+
+        return listOfDates.toTypedArray()
+    }
+
+    fun extractHoursOfQuarterDayInString(index: Int): String {
+        return when(index) {
+            0 -> "00h - 06h"
+            1 -> "06h - 12h"
+            2 -> "12h - 18h"
+            else -> "18h - 00h"
+        }
     }
 
     fun stringToDate(dateString: String): Date? = getFormatter().parse(dateString)

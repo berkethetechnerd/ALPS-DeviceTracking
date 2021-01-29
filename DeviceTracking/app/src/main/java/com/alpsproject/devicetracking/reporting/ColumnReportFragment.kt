@@ -37,7 +37,7 @@ class ColumnReportFragment : Fragment() {
     private lateinit var data: MutableList<DataEntry>
 
     private var reportName: String? = null
-    private var timeFrame: CalendarDays = CalendarDays.LAST_7_DAYS
+    private var timeFrame: CalendarDays = CalendarDays.LAST_3_DAYS
 
     private val numberOfDays: Int
         get() {
@@ -76,8 +76,9 @@ class ColumnReportFragment : Fragment() {
         spTimeFrame.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 timeFrame = when (position) {
-                    0 -> CalendarDays.LAST_3_DAYS
-                    1 -> CalendarDays.LAST_7_DAYS
+                    0 -> CalendarDays.LAST_24_HOURS
+                    1 -> CalendarDays.LAST_3_DAYS
+                    2 -> CalendarDays.LAST_7_DAYS
                     else -> CalendarDays.LAST_15_DAYS
                 }
 
@@ -93,7 +94,7 @@ class ColumnReportFragment : Fragment() {
             ArrayAdapter.createFromResource(it, R.array.report_time_frames, android.R.layout.simple_spinner_item).also { adapter ->
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                 spTimeFrame.adapter = adapter
-                spTimeFrame.setSelection(1) // Last 7 days
+                spTimeFrame.setSelection(1) // Last 3 days
             }
         }
     }
@@ -102,7 +103,7 @@ class ColumnReportFragment : Fragment() {
         reportName?.let {
             val sensorType = getSensorType(it)
             val chartDates = CalendarManager.fetchCalendarDays(timeFrame)
-            val chartData = RealmManager.queryForDatesInSensor(chartDates, sensorType)
+            val chartData = RealmManager.queryForDatesInSensor(chartDates, sensorType, timeFrame)
 
             if (isDataExistForSelectedTimeFrame(chartData)) {
                 tvDescription.text = getString(R.string.report_usage_description, it, numberOfDays, chartData.average())
@@ -122,7 +123,11 @@ class ColumnReportFragment : Fragment() {
             data = ArrayList()
 
             for (index in chartData.indices) {
-                data.add(ValueDataEntry(chartDates[index], chartData[index]))
+                if (timeFrame == CalendarDays.LAST_24_HOURS) {
+                    data.add(ValueDataEntry(CalendarManager.extractHoursOfQuarterDayInString(index), chartData[index]))
+                } else {
+                    data.add(ValueDataEntry(chartDates[index], chartData[index]))
+                }
             }
 
             val column: Column = cartesian.column(data)
@@ -148,7 +153,11 @@ class ColumnReportFragment : Fragment() {
             data.clear()
 
             for (index in chartData.indices) {
-                data.add(ValueDataEntry(chartDates[index], chartData[index]))
+                if (timeFrame == CalendarDays.LAST_24_HOURS) {
+                    data.add(ValueDataEntry(CalendarManager.extractHoursOfQuarterDayInString(index), chartData[index]))
+                } else {
+                    data.add(ValueDataEntry(chartDates[index], chartData[index]))
+                }
             }
 
             cartesian.column(data)

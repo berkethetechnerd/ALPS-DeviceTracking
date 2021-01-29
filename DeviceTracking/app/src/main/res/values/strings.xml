@@ -70,6 +70,7 @@
     <string name="report_usage_hours_total">Hours in Total</string>
     <string name="report_selected_time_frame">Selected time frame: </string>
     <string-array name="report_time_frames">
+        <item>Today</item>
         <item>Last 3 Days</item>
         <item>Last 7 Days</item>
         <item>Last 15 Days</item>
