@@ -13,6 +13,17 @@ Most currently, an automated licensing payment system (ALPS) is being developed 
 
 As a contributor to this project, we develop an Android application which collects usage time of some sensors on Android Smart Phones e.g. Bluetooth, Wifi, Screen activation, etc. After that, the application sends this usage data to an already created and ready simulated DLT. This will enable more thorough and realistic testing scenarios.   
 
+### Related Documents
+
+[Project Flyer](https://github.com/berkethetechnerd/ALPS-DeviceTracking/blob/main/IDP%20Documents/IDP%20-%20Project%20Flyer%20by%20Cambridge%20%40%20ALPS.pdf)   
+The flyer explains about the project and our position in contributing to it.
+
+[Project Description Report](https://github.com/berkethetechnerd/ALPS-DeviceTracking/blob/main/IDP%20Documents/IDP%20-%20Project%20Description.docx)
+The report includes our reflection into the project and the important details for discussions, implementation, testing and the release.
+
+[Project Requirements](https://github.com/berkethetechnerd/ALPS-DeviceTracking/blob/main/IDP%20Documents/ALPS%20Project%20-%20Requirements.pdf)
+List of requirements that needs to be met when the application is released at the end of the project.
+
 ### Milestones
 
 Milestone 1: 21.12.2020   
@@ -26,4 +37,4 @@ _Testing & Documentation._
 
 ### Timeline
 
-![Timeline](https://i.ibb.co/GdyznSH/Timeline.png)
+![Timeline](https://github.com/berkethetechnerd/ALPS-DeviceTracking/blob/main/IDP%20Documents/IDP%20-%20Timeline.png)
