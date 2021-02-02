@@ -1,7 +1,9 @@
 package com.alpsproject.devicetracking.api
 
 import com.alpsproject.devicetracking.helper.CalendarManager
+import com.alpsproject.devicetracking.helper.ConstantsManager
 import com.alpsproject.devicetracking.helper.Logger
+import com.alpsproject.devicetracking.helper.SharedPreferencesManager
 import com.alpsproject.devicetracking.model.SensorData
 import com.google.gson.JsonObject
 import okhttp3.OkHttpClient
@@ -11,9 +13,6 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-
-private const val BASE_URL_TEST = "http://192.168.0.3:8080"
-private const val BASE_URL_LIVE = ""
 
 object API {
 
@@ -46,6 +45,11 @@ object API {
 object APIServiceBuilder {
 
     private val retrofit: Retrofit
+    private val address: String
+        get() = SharedPreferencesManager.read(
+                ConstantsManager.DEFAULT_API,
+                ConstantsManager.getDefaultAPIURL()
+        ) ?: ConstantsManager.getDefaultAPIURL()
 
     init {
         val client = OkHttpClient.Builder().build()
@@ -53,7 +57,7 @@ object APIServiceBuilder {
         interceptor.level = HttpLoggingInterceptor.Level.BODY
 
         retrofit = Retrofit.Builder()
-            .baseUrl(BASE_URL_TEST)
+            .baseUrl(address)
             .addConverterFactory(GsonConverterFactory.create())
             .client(client)
             .build()

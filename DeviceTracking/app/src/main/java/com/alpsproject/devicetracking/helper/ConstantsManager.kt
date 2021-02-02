@@ -4,6 +4,9 @@ import com.alpsproject.devicetracking.enums.DeviceSensor
 
 object ConstantsManager {
 
+    const val DEFAULT_API = "DEFAULT_API"
+    private const val DEFAULT_API_URL = "http://192.168.0.3:8080"
+
     const val SENSOR_WIFI = "Wi-Fi"
     const val SENSOR_BLUETOOTH = "Bluetooth"
     const val SENSOR_SCREEN_USAGE = "Screen Usage"
@@ -70,4 +73,6 @@ object ConstantsManager {
             DeviceSensor.ACCESS_NFC -> CONSENT_OF_NFC
         }
     }
+
+    fun getDefaultAPIURL(): String = DEFAULT_API_URL
 }

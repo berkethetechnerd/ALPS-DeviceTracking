@@ -1,7 +1,12 @@
 package com.alpsproject.devicetracking
 
+import android.app.AlertDialog
 import android.content.Intent
+import android.graphics.drawable.Drawable
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.widget.*
 import com.alpsproject.devicetracking.helper.DataCollectionManager
 import com.alpsproject.devicetracking.helper.RealmManager
@@ -39,5 +44,49 @@ class LoginActivity : BaseActivity() {
         } else {
             startActivity(Intent(this, ConsentActivity::class.java))
         }
+    }
+
+    private fun generateDialogForAPICustomization() {
+        val inputTextField = EditText(this)
+        val apiAddress = SharedPreferencesManager.read(C.DEFAULT_API, C.getDefaultAPIURL())
+        inputTextField.setText(apiAddress)
+
+        val dialog = AlertDialog.Builder(this)
+                .setMessage(getString(R.string.dialog_for_api_endpoint_message))
+                .setView(inputTextField)
+                .setCancelable(false)
+                .setPositiveButton(getString(R.string.dialog_for_api_endpoint_save)) { dialogInterface, _ ->
+                    val value = inputTextField.text.toString()
+                    SharedPreferencesManager.write(C.DEFAULT_API, value)
+                    dialogInterface.dismiss()
+                }
+                .setNegativeButton(getString(R.string.dialog_for_api_endpoint_default)) { dialogInterface, _ ->
+                    SharedPreferencesManager.write(C.DEFAULT_API, C.getDefaultAPIURL())
+                    inputTextField.setText(C.getDefaultAPIURL())
+                    dialogInterface.dismiss()
+                }
+                .create()
+        dialog.show()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        val inflater: MenuInflater = menuInflater
+        inflater.inflate(R.menu.menu_settings, menu)
+
+        // Just coloring the icon
+        val iconDrawable: Drawable = menu.findItem(R.id.menu_settings).icon
+        iconDrawable.mutate()
+        iconDrawable.setTint(getColor(R.color.white))
+
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.menu_settings) {
+            generateDialogForAPICustomization()
+            return true
+        }
+
+        return false
     }
 }
