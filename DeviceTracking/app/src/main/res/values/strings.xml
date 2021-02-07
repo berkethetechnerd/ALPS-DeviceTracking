@@ -2,37 +2,34 @@
     <string name="app_name">Device Tracking</string>
 
     <string name="login_title">WELCOME</string>
-    <string name="login_disclaimer">This is an application developed for a research project
-        conducted by ALPS. Using this application, you will be recording your device usage and
-        share the data with us anonymously. This is a valuable contribution for us and we
-        thank you very much for your participation. \n\nTo start the application, please hit the
-        \'Next\' button. </string>
+    <string name="login_disclaimer">This is an application developed for a research project conducted
+        by the Engineering Department, University of Cambridge,  sponsored by Research England’s
+        Connecting Capability Fund award CCF18-7157 - Promoting the Internet of Things via Collaboration
+        between HEIs and Industry (Pitch-In).
+
+        \n\nThis app has been specifically developed as part of the research project “Prototyping an
+        IoT platform for automated IP licensing payments”. Further details are available here:
+        <a>https://pitch-in.ac.uk/projects/ip-licensing-platform/</a>
+
+        \n\nData from all users that choose to participate in this research project will be used to
+        improve a simulation prototype for usage-based licensing models in the digital economy.
+
+        \n\nThis application will be anonymously recording in the background device usage data for
+        the following features of your mobile phone: Bluetooth, Screentime, Wifi, GPS, NFC and Torch.
+        The data will be sent regularly to our UK-based servers, where it is stored unassociated with
+        any personal data.
+
+        \n\nTo start using the application, please hit the \'Next\' button.
+    </string>
 
     <string name="consent_title">Consent of Data Collection</string>
     <string name="consent_title_page">Disclaimer</string>
-    <string name="consent_disclaimer">Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-        Praesent mollis luctus lacus. Nullam eu nulla lacus. Vestibulum elementum tincidunt sagittis.
-        Mauris venenatis ornare mauris, vitae consequat felis mattis in. Integer mi metus, scelerisque
-        sed purus vitae, varius posuere nisi. Pellentesque nunc ante, posuere vitae tortor id,
-        vulputate viverra libero. Aenean leo leo, venenatis sit amet malesuada at, fermentum sit amet
-        leo. Aenean sodales odio eget magna elementum luctus. Duis varius nibh sit amet tincidunt dignissim.
-        Aliquam fringilla volutpat ante nec posuere. Nam pretium maximus tincidunt. Aliquam erat volutpat.
-        Morbi gravida neque ac semper viverra. Nunc nunc nulla, semper at elit a, tristique consectetur sem.
-        Aliquam dictum arcu erat, vitae dictum ex rhoncus rhoncus. Vestibulum volutpat luctus lorem,
-        quis pulvinar metus facilisis viverra.\n\nQuisque dictum augue non mattis facilisis. Integer risus neque,
-        mattis vitae tellus eget, pulvinar semper nunc. In accumsan id enim ac rhoncus. Nullam
-        efficitur laoreet odio eu sollicitudin. Mauris consequat ante et ipsum viverra, quis finibus
-        ligula tristique. Etiam aliquet euismod felis. Vivamus massa sem, lobortis at arcu sed,
-        dictum ullamcorper nisl. Donec pretium tincidunt quam, ullamcorper ornare lacus scelerisque
-        eu. Etiam nec magna orci.\n\nSed nulla turpis, ornare non justo et, bibendum condimentum sapien.
-        Cras ornare venenatis justo,nec aliquam risus tincidunt quis. Pellentesque placerat ex et
-        consectetur eleifend. Donecsit amet lorem sed nunc lacinia efficitur. Aenean nulla arcu,
-        congue eget ligula viverra,condimentum dapibus leo. Maecenas ac tellus felis. Donec auctor
-        pharetra massa aliquamtempus. Nam risus nisl, iaculis quis neque in, maximus laoreet ante.
-        Integer sollicitudinporttitor vulputate. Suspendisse aliquam lacus velit, quis porttitor
-        est consectetur ac.Donec condimentum libero non sem porttitor facilisis. Suspendisse vitae
-        dictum urna, utrutrum libero. Integer sit amet euismod eros. Nullam porttitor ullamcorper
-        est at cursus.Phasellus scelerisque justo et venenatis maximus.</string>
+    <string name="consent_disclaimer">
+        This application will be anonymously recording in the background device usage data for the
+        following features of your mobile phone: Bluetooth, Screentime, Wifi, GPS, NFC and Torch.
+        The data will be sent regularly to our UK-based servers, where it is stored unassociated with
+        any personal data.
+    </string>
     <string name="consent_text">There will be a consent text here.</string>
     <string name="consent_must_agree">You need to give consent before participating.</string>
 
@@ -91,11 +88,13 @@
     <string name="user_message_title_screen_usage">Screen Usage</string>
     <string name="user_message_title_gps">Location</string>
     <string name="user_message_title_nfc">NFC</string>
-    <string name="user_message_message">In order to collect your data on %1$s, we do need your
-        consent. The data collected on this sensor will be stored locally and uploaded to our
-        servers. This data will not be illustrated with your personal identity in any way, and
-        it will solely be used for our research. Do you give your consent for us to collect
-        data on %2$s?</string>
+    <string name="user_message_message">
+        In order to collect your data on %1$s, we need your consent. The data collected on this sensor
+        will be stored locally on your phone in the app and uploaded to our servers. This data will
+        not be associated with your personal identity in any way, and it will solely be used for this
+        particular research project. By participating in this research project by hitting the next
+        button I consent for my %2$s data to be used for this project.
+    </string>
     <string name="user_message_positive">I give my consent</string>
     <string name="user_message_negative">Cancel</string>
     <string name="user_message_sensor_activation_title">Activation of Sensor</string>
