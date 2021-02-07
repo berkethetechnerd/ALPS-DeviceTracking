@@ -5,6 +5,8 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.graphics.Camera
+import android.hardware.camera2.CameraManager
 import android.location.LocationManager
 import android.net.ConnectivityManager
 import android.net.wifi.WifiManager
@@ -17,6 +19,7 @@ import com.alpsproject.devicetracking.enums.DeviceSensor
 object Broadcaster {
 
     private val receivers: ArrayList<SensorStatusDelegate> = ArrayList()
+    public var isTorchEnabled = false
 
     fun registerForBroadcasting(receiver: Context, arrOfSensors: Array<Boolean>) {
         if (arrOfSensors[0]) { registerForWifi(receiver) }
@@ -24,6 +27,7 @@ object Broadcaster {
         if (arrOfSensors[2]) { registerForScreenUsage(receiver) }
         if (arrOfSensors[3]) { registerForGps(receiver) }
         if (arrOfSensors[4]) { registerForNfc(receiver) }
+        if (arrOfSensors[5]) { registerForTorch(receiver) }
 
         (receiver as? SensorStatusDelegate)?.let {
             receivers.add(it)
@@ -36,6 +40,12 @@ object Broadcaster {
         if (arrOfSensors[2]) { receiver.unregisterReceiver(screenUsageReceiver) }
         if (arrOfSensors[3]) { receiver.unregisterReceiver(gpsReceiver) }
         if (arrOfSensors[4]) { receiver.unregisterReceiver(nfcReceiver) }
+        if (arrOfSensors[5]) {
+            val cameraManager = SettingsManager.getCameraManager(receiver)
+            cameraManager?.let {
+                it.unregisterTorchCallback(torchReceiver)
+            }
+        }
 
         (receiver as? SensorStatusDelegate)?.let {
             if (receivers.contains(it)) {
@@ -69,6 +79,11 @@ object Broadcaster {
     private fun registerForNfc(receiver: Context) {
         val nfcFilter = IntentFilter(NfcAdapter.ACTION_ADAPTER_STATE_CHANGED)
         receiver.registerReceiver(nfcReceiver, nfcFilter)
+    }
+
+    private fun registerForTorch(receiver: Context) {
+        val cameraManager = SettingsManager.getCameraManager(receiver) ?: return
+        cameraManager.registerTorchCallback(torchReceiver, null)
     }
 
     fun registerForShutdown(receiver: Context) {
@@ -180,6 +195,21 @@ object Broadcaster {
         }
     }
 
+    private val torchReceiver = object : android.hardware.camera2.CameraManager.TorchCallback() {
+        override fun onTorchModeChanged(cameraId: String, enabled: Boolean) {
+            super.onTorchModeChanged(cameraId, enabled)
+            if(enabled){
+                isTorchEnabled = true
+                Logger.logSensorUpdate(DeviceSensor.ACCESS_TORCH, true)
+                broadcastSensorChange(DeviceSensor.ACCESS_TORCH, true)
+            } else {
+                isTorchEnabled = false
+                Logger.logSensorUpdate(DeviceSensor.ACCESS_TORCH, false)
+                broadcastSensorChange(DeviceSensor.ACCESS_TORCH, false)
+            }
+        }
+    }
+
     private val shutdownReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context, intent: Intent) {
             val action = intent.action
@@ -206,6 +236,10 @@ object Broadcaster {
                 if (SharedPreferencesManager.read(ConstantsManager.RUNNING_SENSOR_NFC, false)) {
                     DataCollectionManager.stopCollectionForSensor(DeviceSensor.ACCESS_NFC)
                 }
+
+                if (SharedPreferencesManager.read(ConstantsManager.RUNNING_SENSOR_TORCH, false)) {
+                    DataCollectionManager.stopCollectionForSensor(DeviceSensor.ACCESS_TORCH)
+                }
             }
         }
     }
@@ -219,6 +253,7 @@ object Broadcaster {
             DeviceSensor.ACCESS_SCREEN_USAGE -> broadcastScreenStateChange(status)
             DeviceSensor.ACCESS_GPS -> broadcastGpsChange(status)
             DeviceSensor.ACCESS_NFC -> broadcastNfcChange(status)
+            DeviceSensor.ACCESS_TORCH -> broadcastTorchChange(status)
         }
     }
 
@@ -259,6 +294,14 @@ object Broadcaster {
             receivers.forEach { it.didNfcEnable() }
         } else {
             receivers.forEach { it.didNfcDisable() }
+        }
+    }
+
+    private fun broadcastTorchChange(status: Boolean) {
+        if (status) {
+            receivers.forEach { it.didTorchEnable() }
+        } else {
+            receivers.forEach { it.didTorchDisable() }
         }
     }
 }

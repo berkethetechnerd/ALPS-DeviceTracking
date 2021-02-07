@@ -11,4 +11,6 @@ interface SensorStatusDelegate {
     fun didGpsDisable()
     fun didNfcEnable()
     fun didNfcDisable()
+    fun didTorchEnable()
+    fun didTorchDisable()
 }

@@ -15,6 +15,7 @@ object DataCollectionManager {
             DeviceSensor.ACCESS_SCREEN_USAGE -> startScreenUsageCollection()
             DeviceSensor.ACCESS_GPS -> startGpsCollection(activity)
             DeviceSensor.ACCESS_NFC -> startNfcCollection(activity)
+            DeviceSensor.ACCESS_TORCH -> startTorchCollection(activity)
         }
 
         SharedPreferencesManager.write(C.getRunningSensorKey(sensor), true)
@@ -75,6 +76,14 @@ object DataCollectionManager {
             createNewSensorEntry(DeviceSensor.ACCESS_NFC)
         } else {
             SettingsManager.askForSensor(activity, DeviceSensor.ACCESS_NFC)
+        }
+    }
+
+    private fun startTorchCollection(activity: Activity) {
+        if (SettingsManager.isTorchEnabled(activity)) {
+            createNewSensorEntry(DeviceSensor.ACCESS_TORCH)
+        } else {
+            SettingsManager.askForSensor(activity, DeviceSensor.ACCESS_TORCH)
         }
     }
 
