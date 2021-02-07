@@ -4,9 +4,9 @@ import android.app.Activity
 import android.bluetooth.BluetoothAdapter
 import android.content.Context
 import android.content.Intent
+import android.hardware.camera2.CameraCharacteristics
+import android.hardware.camera2.CameraManager
 import android.location.LocationManager
-import android.net.ConnectivityManager
-import android.net.NetworkInfo
 import android.net.wifi.WifiManager
 import android.nfc.NfcManager
 import android.os.Build
@@ -14,6 +14,7 @@ import android.os.PowerManager
 import android.provider.Settings
 import com.alpsproject.devicetracking.delegates.ActivationDelegate
 import com.alpsproject.devicetracking.enums.DeviceSensor
+
 
 object SettingsManager: ActivationDelegate {
 
@@ -29,6 +30,7 @@ object SettingsManager: ActivationDelegate {
                 DeviceSensor.ACCESS_SCREEN_USAGE -> isScreenTurnedOn(activity)
                 DeviceSensor.ACCESS_GPS -> isGpsEnabled(activity)
                 DeviceSensor.ACCESS_NFC -> isNfcEnabled(activity)
+                DeviceSensor.ACCESS_TORCH -> isTorchEnabled(activity)
             }
 
             if (!isSensorEnabled) {
@@ -62,6 +64,10 @@ object SettingsManager: ActivationDelegate {
         return nfcManager.defaultAdapter.isEnabled
     }
 
+    fun isTorchEnabled(activity: Activity): Boolean {
+        return Broadcaster.isTorchEnabled
+    }
+
     override fun sensorActivationRequested(activity: Activity, sensor: DeviceSensor) {
         when (sensor) {
             DeviceSensor.ACCESS_WIFI -> activateWifi(activity)
@@ -69,6 +75,7 @@ object SettingsManager: ActivationDelegate {
             DeviceSensor.ACCESS_SCREEN_USAGE -> return // Already on
             DeviceSensor.ACCESS_GPS -> activateGPS(activity)
             DeviceSensor.ACCESS_NFC -> activateNFC(activity)
+            DeviceSensor.ACCESS_TORCH -> activateTorch(activity)
         }
     }
 
@@ -88,6 +95,8 @@ object SettingsManager: ActivationDelegate {
 
     private fun activateNFC(context: Context) = context.startActivity(Intent(Settings.ACTION_NFC_SETTINGS))
 
+    private fun activateTorch(context: Context) = getCameraManager(context)?.setTorchMode("0", true)
+
     private fun getWifiManager(activity: Activity): WifiManager? = activity.applicationContext.getSystemService(Context.WIFI_SERVICE) as? WifiManager?
 
     private fun getBluetoothAdapter(): BluetoothAdapter? = BluetoothAdapter.getDefaultAdapter()
@@ -97,4 +106,6 @@ object SettingsManager: ActivationDelegate {
     fun getLocationManager(context: Context): LocationManager? = context.getSystemService(Context.LOCATION_SERVICE)as? LocationManager?
 
     fun getNfcManager(context: Context): NfcManager? = context.getSystemService(Context.NFC_SERVICE)as? NfcManager?
+
+    fun getCameraManager(context: Context): CameraManager? = context.getSystemService(Context.CAMERA_SERVICE)as? CameraManager?
 }

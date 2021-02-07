@@ -39,6 +39,7 @@
     <string name="sensor_screen_usage">Screen Usage</string>
     <string name="sensor_gps">Location</string>
     <string name="sensor_nfc">NFC</string>
+    <string name="sensor_torch">Torch</string>
 
     <string name="sensor_selection_next">Next</string>
     <string name="sensor_selection_description">Please select at least one sensor from below
@@ -54,6 +55,7 @@
     <string name="data_collection_selected_sensors">Selected Sensors</string>
 
     <string name="report_title">Reports of Usage</string>
+    <string name="report_tab_torch">Torch</string>
     <string name="report_tab_nfc">NFC</string>
     <string name="report_tab_gps">Location</string>
     <string name="report_tab_screen_usage">Screen Usage</string>
@@ -95,6 +97,7 @@
         particular research project. By participating in this research project by hitting the next
         button I consent for my %2$s data to be used for this project.
     </string>
+
     <string name="user_message_positive">I give my consent</string>
     <string name="user_message_negative">Cancel</string>
     <string name="user_message_sensor_activation_title">Activation of Sensor</string>

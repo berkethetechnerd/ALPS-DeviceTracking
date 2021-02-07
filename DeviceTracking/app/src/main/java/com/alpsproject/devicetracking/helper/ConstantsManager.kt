@@ -12,6 +12,7 @@ object ConstantsManager {
     const val SENSOR_SCREEN_USAGE = "Screen Usage"
     const val SENSOR_GPS = "Location"
     const val SENSOR_NFC = "NFC"
+    const val SENSOR_TORCH = "TORCH"
 
     const val CONSENT_OF_USER = "ConsentForDisclaimer"
     private const val CONSENT_OF_WIFI = CONSENT_OF_USER + SENSOR_WIFI
@@ -19,6 +20,7 @@ object ConstantsManager {
     private const val CONSENT_OF_SCREEN_USAGE = CONSENT_OF_USER + SENSOR_SCREEN_USAGE
     private const val CONSENT_OF_GPS= CONSENT_OF_USER + SENSOR_GPS
     private const val CONSENT_OF_NFC= CONSENT_OF_USER + SENSOR_NFC
+    private const val CONSENT_OF_TORCH= CONSENT_OF_USER + SENSOR_TORCH
 
     const val RUNNING_DATA_COLLECTION = "RunningBackground"
     const val RUNNING_SENSOR_WIFI = RUNNING_DATA_COLLECTION + SENSOR_WIFI
@@ -26,6 +28,7 @@ object ConstantsManager {
     const val RUNNING_SENSOR_SCREEN_USAGE = RUNNING_DATA_COLLECTION + SENSOR_SCREEN_USAGE
     const val RUNNING_SENSOR_GPS = RUNNING_DATA_COLLECTION + SENSOR_GPS
     const val RUNNING_SENSOR_NFC = RUNNING_DATA_COLLECTION + SENSOR_NFC
+    const val RUNNING_SENSOR_TORCH = RUNNING_DATA_COLLECTION + SENSOR_TORCH
 
     private const val ID = "ID"
     private const val RUNNING_SENSOR_WIFI_ID = RUNNING_SENSOR_WIFI + ID
@@ -33,6 +36,7 @@ object ConstantsManager {
     private const val RUNNING_SENSOR_SCREEN_USAGE_ID = RUNNING_SENSOR_SCREEN_USAGE + ID
     private const val RUNNING_SENSOR_GPS_ID = RUNNING_SENSOR_GPS + ID
     private const val RUNNING_SENSOR_NFC_ID = RUNNING_SENSOR_NFC + ID
+    private const val RUNNING_SENSOR_TORCH_ID = RUNNING_SENSOR_TORCH + ID
 
     fun getSensorName(forSensor: DeviceSensor): String {
         return when (forSensor) {
@@ -41,6 +45,7 @@ object ConstantsManager {
             DeviceSensor.ACCESS_SCREEN_USAGE -> SENSOR_SCREEN_USAGE
             DeviceSensor.ACCESS_GPS -> SENSOR_GPS
             DeviceSensor.ACCESS_NFC -> SENSOR_NFC
+            DeviceSensor.ACCESS_TORCH -> SENSOR_TORCH
         }
     }
 
@@ -51,6 +56,7 @@ object ConstantsManager {
             DeviceSensor.ACCESS_SCREEN_USAGE -> RUNNING_SENSOR_SCREEN_USAGE_ID
             DeviceSensor.ACCESS_GPS -> RUNNING_SENSOR_GPS_ID
             DeviceSensor.ACCESS_NFC -> RUNNING_SENSOR_NFC_ID
+            DeviceSensor.ACCESS_TORCH -> RUNNING_SENSOR_TORCH_ID
         }
     }
 
@@ -61,6 +67,7 @@ object ConstantsManager {
             DeviceSensor.ACCESS_SCREEN_USAGE -> RUNNING_SENSOR_SCREEN_USAGE
             DeviceSensor.ACCESS_GPS -> RUNNING_SENSOR_GPS
             DeviceSensor.ACCESS_NFC -> RUNNING_SENSOR_NFC
+            DeviceSensor.ACCESS_TORCH -> RUNNING_SENSOR_TORCH
         }
     }
 
@@ -71,6 +78,7 @@ object ConstantsManager {
             DeviceSensor.ACCESS_SCREEN_USAGE -> CONSENT_OF_SCREEN_USAGE
             DeviceSensor.ACCESS_GPS -> CONSENT_OF_GPS
             DeviceSensor.ACCESS_NFC -> CONSENT_OF_NFC
+            DeviceSensor.ACCESS_TORCH -> CONSENT_OF_TORCH
         }
     }
 
