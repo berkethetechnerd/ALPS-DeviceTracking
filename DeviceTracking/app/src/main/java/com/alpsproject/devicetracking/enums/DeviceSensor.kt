@@ -5,5 +5,6 @@ enum class DeviceSensor {
     ACCESS_BLUETOOTH,
     ACCESS_SCREEN_USAGE,
     ACCESS_GPS,
-    ACCESS_NFC
+    ACCESS_NFC,
+    ACCESS_TORCH
 }
