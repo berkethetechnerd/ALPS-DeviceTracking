@@ -23,6 +23,7 @@ class DataCollectionActivity : BaseActivity(), SensorStatusDelegate {
     private lateinit var selectedScreenUsageView: SensorView
     private lateinit var selectedGpsView: SensorView
     private lateinit var selectedNfcView: SensorView
+    private lateinit var selectedTorchView: SensorView
 
     private val isWifiSelected: Boolean
         get() = intent.getBooleanExtra(C.SENSOR_WIFI, false)
@@ -39,6 +40,10 @@ class DataCollectionActivity : BaseActivity(), SensorStatusDelegate {
     private val isNfcSelected: Boolean
         get() = intent.getBooleanExtra(C.SENSOR_NFC, false)
                 || SharedPreferencesManager.read(C.RUNNING_SENSOR_NFC, false)
+    private val isTorchSelected: Boolean
+        get() = intent.getBooleanExtra(C.SENSOR_TORCH, false)
+                || SharedPreferencesManager.read(C.RUNNING_SENSOR_TORCH, false)
+
 
     private val arrOfSelectedSensors: Array<Boolean>
         get() = arrayOf(
@@ -46,7 +51,8 @@ class DataCollectionActivity : BaseActivity(), SensorStatusDelegate {
                 isBluetoothSelected,
                 isScreenUsageSelected,
                 isGpsSelected,
-                isNfcSelected
+                isNfcSelected,
+                isTorchSelected
         )
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -88,6 +94,7 @@ class DataCollectionActivity : BaseActivity(), SensorStatusDelegate {
         selectedScreenUsageView = findViewById(R.id.data_collection_list_screen_usage)
         selectedGpsView = findViewById(R.id.data_collection_list_gps)
         selectedNfcView = findViewById(R.id.data_collection_list_nfc)
+        selectedTorchView = findViewById(R.id.data_collection_list_torch)
 
         if(!isWifiSelected) {
             selectedWifiView.visibility = View.GONE
@@ -128,6 +135,13 @@ class DataCollectionActivity : BaseActivity(), SensorStatusDelegate {
             selectedNfcView.configureSensor(getResIcon(R.drawable.ic_nfc_sensor), getString(R.string.sensor_nfc))
             selectedNfcView.changeSensorStatus(SettingsManager.isNfcEnabled(this))
         }
+
+        if(!isTorchSelected) {
+            selectedTorchView.visibility = View.GONE
+        } else {
+            selectedTorchView.switchToStatusView()
+            selectedTorchView.configureSensor(getResIcon(R.drawable.ic_light_sensor), getString(R.string.sensor_torch))
+        }
     }
 
     private fun startStopButton() {
@@ -140,6 +154,7 @@ class DataCollectionActivity : BaseActivity(), SensorStatusDelegate {
             if(isScreenUsageSelected) {  DataCollectionManager.startCollectionForSensor(DeviceSensor.ACCESS_SCREEN_USAGE, this) }
             if(isGpsSelected) { DataCollectionManager.startCollectionForSensor(DeviceSensor.ACCESS_GPS, this) }
             if(isNfcSelected) { DataCollectionManager.startCollectionForSensor(DeviceSensor.ACCESS_NFC, this) }
+            if(isTorchSelected) { DataCollectionManager.startCollectionForSensor(DeviceSensor.ACCESS_TORCH, this) }
         }
 
         fun stopDataCollection() {
@@ -151,6 +166,7 @@ class DataCollectionActivity : BaseActivity(), SensorStatusDelegate {
             if(isScreenUsageSelected){ DataCollectionManager.stopCollectionForSensor(DeviceSensor.ACCESS_SCREEN_USAGE) }
             if(isGpsSelected) { DataCollectionManager.stopCollectionForSensor(DeviceSensor.ACCESS_GPS) }
             if(isNfcSelected) { DataCollectionManager.stopCollectionForSensor(DeviceSensor.ACCESS_NFC) }
+            if(isTorchSelected) { DataCollectionManager.stopCollectionForSensor(DeviceSensor.ACCESS_TORCH) }
         }
 
         if(!isRunning()) { // Starting
@@ -183,6 +199,10 @@ class DataCollectionActivity : BaseActivity(), SensorStatusDelegate {
     override fun didNfcEnable() = selectedNfcView.changeSensorStatus(true)
 
     override fun didNfcDisable() = selectedNfcView.changeSensorStatus(false)
+
+    override fun didTorchEnable() = selectedTorchView.changeSensorStatus(true)
+
+    override fun didTorchDisable() = selectedTorchView.changeSensorStatus(false)
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val inflater: MenuInflater = menuInflater

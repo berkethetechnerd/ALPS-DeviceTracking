@@ -11,7 +11,8 @@ private val TAB_TITLES = arrayOf(
         R.string.report_tab_bluetooth,
         R.string.report_tab_screen_usage,
         R.string.report_tab_gps,
-        R.string.report_tab_nfc
+        R.string.report_tab_nfc,
+        R.string.report_tab_torch
 )
 
 class SectionsPagerAdapter(private val context: Context, fm: FragmentManager) : FragmentPagerAdapter(fm, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {

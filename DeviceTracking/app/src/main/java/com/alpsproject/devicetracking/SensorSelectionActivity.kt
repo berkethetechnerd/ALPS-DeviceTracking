@@ -20,6 +20,7 @@ class SensorSelectionActivity : BaseActivity(), PermissionDelegate {
     private lateinit var sensorScreenUsageView: SensorView
     private lateinit var sensorGpsView: SensorView
     private lateinit var sensorNfcView: SensorView
+    private lateinit var sensorTorchView: SensorView
     private lateinit var btnNext: Button
 
     private var grantedSensors: Int = 0
@@ -32,6 +33,7 @@ class SensorSelectionActivity : BaseActivity(), PermissionDelegate {
             if (sensorScreenUsageView.isSensorSelected()) numberOfSensors++
             if (sensorGpsView.isSensorSelected()) numberOfSensors++
             if (sensorNfcView.isSensorSelected()) numberOfSensors++
+            if (sensorTorchView.isSensorSelected()) numberOfSensors++
             return numberOfSensors
         }
 
@@ -56,6 +58,7 @@ class SensorSelectionActivity : BaseActivity(), PermissionDelegate {
         sensorScreenUsageView.deselectSensor()
         sensorGpsView.deselectSensor()
         sensorNfcView.deselectSensor()
+        sensorTorchView.deselectSensor()
     }
 
     private fun checkIfAlreadyRunning() {
@@ -80,6 +83,9 @@ class SensorSelectionActivity : BaseActivity(), PermissionDelegate {
         sensorNfcView = findViewById(R.id.sensor_view_nfc)
         sensorNfcView.configureSensor(getResIcon(R.drawable.ic_nfc_sensor), getString(R.string.sensor_nfc))
 
+        sensorTorchView = findViewById(R.id.sensor_view_torch)
+        sensorTorchView.configureSensor(getResIcon(R.drawable.ic_light_sensor), getString(R.string.sensor_torch))
+
         btnNext = findViewById(R.id.btn_next_data_collection)
         btnNext.setOnClickListener { requestPermissions() }
     }
@@ -87,6 +93,14 @@ class SensorSelectionActivity : BaseActivity(), PermissionDelegate {
     private fun requestPermissions() {
         grantedSensors = 0
         rejectedSensors = 0
+
+        if (sensorTorchView.isSensorSelected()) {
+            if (!PermissionManager.checkPermission(DeviceSensor.ACCESS_TORCH)) {
+                PermissionManager.askPermission(this, DeviceSensor.ACCESS_TORCH)
+            } else {
+                grantedSensors++
+            }
+        }
 
         if (sensorNfcView.isSensorSelected()) {
             if (!PermissionManager.checkPermission(DeviceSensor.ACCESS_NFC)) {
@@ -157,6 +171,7 @@ class SensorSelectionActivity : BaseActivity(), PermissionDelegate {
                 dataCollection.putExtra(C.SENSOR_SCREEN_USAGE, sensorScreenUsageView.isSensorSelected())
                 dataCollection.putExtra(C.SENSOR_GPS, sensorGpsView.isSensorSelected())
                 dataCollection.putExtra(C.SENSOR_NFC, sensorNfcView.isSensorSelected())
+                dataCollection.putExtra(C.SENSOR_TORCH, sensorTorchView.isSensorSelected())
                 startActivity(dataCollection)
             }
         }
