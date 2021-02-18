@@ -81,6 +81,14 @@
                 app:cornerRadius="@dimen/btn_start_stop_radius"
                 app:backgroundTint="@color/orange_light"/>
 
+            <TextView
+                android:id="@+id/tv_report_screen_hint"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_medium"
+                android:gravity="center_horizontal"
+                android:textSize="@dimen/small_text_size"/>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
