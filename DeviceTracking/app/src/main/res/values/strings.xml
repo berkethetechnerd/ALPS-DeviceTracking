@@ -52,7 +52,9 @@
     <string name="data_collection_title">Data Collection</string>
     <string name="data_collection_start">START</string>
     <string name="data_collection_stop">STOP</string>
-    <string name="data_collection_selected_sensors">Selected Sensors</string>
+    <string name="data_collection_selected_sensors">Selected Sensors you want to monitor</string>
+    <string name="report_screen_hint_text">* You can see the reports of collected data from the graph
+        button up right corner of the screen.</string>
 
     <string name="report_title">Reports of Usage</string>
     <string name="report_tab_torch">Torch</string>
