@@ -80,7 +80,7 @@ object DataCollectionManager {
     }
 
     private fun startTorchCollection(activity: Activity) {
-        if (SettingsManager.isTorchEnabled(activity)) {
+        if (SettingsManager.isTorchEnabled()) {
             createNewSensorEntry(DeviceSensor.ACCESS_TORCH)
         } else {
             SettingsManager.askForSensor(activity, DeviceSensor.ACCESS_TORCH)
