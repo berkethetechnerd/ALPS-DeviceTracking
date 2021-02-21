@@ -63,12 +63,18 @@
             android:id="@+id/btn_start_stop"
             android:layout_width="@dimen/btn_start_stop_size"
             android:layout_height="@dimen/btn_start_stop_size"
-            android:layout_marginVertical="@dimen/margin_large"
+            android:layout_marginVertical="@dimen/margin_medium"
             android:layout_gravity="center"
             android:textSize="@dimen/btn_start_stop_text_size"
             android:textStyle="bold"
             app:cornerRadius="@dimen/btn_start_stop_radius"
             app:backgroundTint="@color/orange_light"/>
+
+        <!-- Filler for the blank space -->
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="10" />
 
         <TextView
             android:id="@+id/tv_report_screen_hint"
@@ -78,12 +84,6 @@
             android:layout_marginBottom="@dimen/margin_material"
             android:gravity="center_horizontal"
             android:textSize="@dimen/small_text_size"/>
-
-        <!-- Filler for the blank space -->
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="10" />
 
         <LinearLayout
             android:layout_width="match_parent"
