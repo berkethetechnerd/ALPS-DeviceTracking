@@ -7,42 +7,43 @@ import com.alpsproject.devicetracking.helper.SharedPreferencesManager
 import com.alpsproject.devicetracking.model.SensorData
 import com.google.gson.JsonObject
 import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.http.Body
+import retrofit2.http.Headers
+import retrofit2.http.POST
 
-object API {
+object SensorMetricsAPI {
 
     fun sendSensorEntry(sensorData: SensorData, onResult: (SensorData?) -> Unit) {
         val retrofit = APIServiceBuilder.buildService(APIServices::class.java)
-        retrofit.postSensorEntry(getJsonObject(sensorData)).enqueue(
+        val jsonSensorData = getJsonObject(sensorData)
+
+        retrofit.postSensorEntry(jsonSensorData).enqueue(
             object : Callback<JsonObject> {
                 override fun onFailure(call: Call<JsonObject>, t: Throwable) {
-                    onResult(null)
+                    onResult(null) // On failure, returns null
                 }
 
                 override fun onResponse(call: Call<JsonObject>, response: Response<JsonObject>) {
                     Logger.logAPINotification()
-                    onResult(sensorData)
+                    onResult(sensorData) // On success, returns the same object
                 }
             }
         )
     }
 
-    private fun getJsonObject(sensorData: SensorData): JsonObject {
-        val jsonObject = JsonObject()
-        jsonObject.addProperty("sensor_name", sensorData.sensorName)
-        jsonObject.addProperty("start_time", CalendarManager.convertDateForBackend(sensorData.startTime))
-        jsonObject.addProperty("end_time", CalendarManager.convertDateForBackend(sensorData.endTime))
-
-        return jsonObject
+    private fun getJsonObject(sensorData: SensorData) = JsonObject().apply {
+        addProperty("sensor_name", sensorData.sensorName)
+        addProperty("start_time", CalendarManager.dateToBackendString(sensorData.startTime))
+        addProperty("end_time", CalendarManager.dateToBackendString(sensorData.endTime))
     }
 }
 
-object APIServiceBuilder {
+private object APIServiceBuilder {
 
     private val retrofit: Retrofit
     private val address: String
@@ -53,8 +54,6 @@ object APIServiceBuilder {
 
     init {
         val client = OkHttpClient.Builder().build()
-        val interceptor = HttpLoggingInterceptor()
-        interceptor.level = HttpLoggingInterceptor.Level.BODY
 
         retrofit = Retrofit.Builder()
             .baseUrl(address)
@@ -66,4 +65,12 @@ object APIServiceBuilder {
     fun <T> buildService(service: Class<T>): T {
         return retrofit.create(service)
     }
+}
+
+private interface APIServices {
+
+    @Headers("Content-Type: application/json")
+    @POST("/data")
+    fun postSensorEntry(@Body sensorEntry: JsonObject): Call<JsonObject>
+
 }
