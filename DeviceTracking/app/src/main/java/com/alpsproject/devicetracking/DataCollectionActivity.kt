@@ -76,9 +76,6 @@ class DataCollectionActivity : BaseActivity(), SensorStatusDelegate {
     }
 
     private fun initUI() {
-        tvTitle = findViewById(R.id.tv_data_collection_title)
-        tvTitle.text = getString(R.string.data_collection_title)
-
         btnStartStop = findViewById(R.id.btn_start_stop)
         btnStartStop.setOnClickListener { startStopButton() }
 
