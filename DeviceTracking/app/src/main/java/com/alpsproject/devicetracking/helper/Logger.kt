@@ -6,7 +6,7 @@ import com.alpsproject.devicetracking.model.SensorData
 
 object Logger {
 
-    private const val SERVICE_NOTIFICATION = "DTServiceNotification"
+    private const val SERVICE_NOTIFICATION = "SMServiceNotification"
     private const val SENSOR_STATUS_CHANGE = "SensorStatusChange"
     private const val SENSOR_DATA_ENTRY = "SensorDataEntry"
     private const val SYNC_DATA_ENTRY = "DataSentToAPI"

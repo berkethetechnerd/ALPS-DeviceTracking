@@ -4,7 +4,6 @@ import android.app.Activity
 import android.bluetooth.BluetoothAdapter
 import android.content.Context
 import android.content.Intent
-import android.hardware.camera2.CameraCharacteristics
 import android.hardware.camera2.CameraManager
 import android.location.LocationManager
 import android.net.wifi.WifiManager
@@ -15,8 +14,9 @@ import android.provider.Settings
 import com.alpsproject.devicetracking.delegates.ActivationDelegate
 import com.alpsproject.devicetracking.enums.DeviceSensor
 
-
 object SettingsManager: ActivationDelegate {
+
+    private var isTorchEnabled = false
 
     init {
         UserMessageGenerator.activationDelegate = this
@@ -30,7 +30,7 @@ object SettingsManager: ActivationDelegate {
                 DeviceSensor.ACCESS_SCREEN_USAGE -> isScreenTurnedOn(activity)
                 DeviceSensor.ACCESS_GPS -> isGpsEnabled(activity)
                 DeviceSensor.ACCESS_NFC -> isNfcEnabled(activity)
-                DeviceSensor.ACCESS_TORCH -> isTorchEnabled(activity)
+                DeviceSensor.ACCESS_TORCH -> isTorchEnabled()
             }
 
             if (!isSensorEnabled) {
@@ -55,17 +55,21 @@ object SettingsManager: ActivationDelegate {
     }
 
     fun isGpsEnabled(activity: Activity): Boolean {
-        val locationManager = getLocationManager(activity) ?: return false
+        val locationManager = getLocationManager(activity) ?: return false // Provider not found
         return locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)
     }
 
     fun isNfcEnabled(activity: Activity): Boolean {
-        val nfcManager = getNfcManager(activity) ?: return false
+        val nfcManager = getNfcManager(activity) ?: return false // Adapter not found
         return nfcManager.defaultAdapter.isEnabled
     }
 
-    fun isTorchEnabled(activity: Activity): Boolean {
-        return Broadcaster.isTorchEnabled
+    fun isTorchEnabled(): Boolean {
+        return this.isTorchEnabled
+    }
+
+    fun setTorchStatus(enabled: Boolean) {
+        this.isTorchEnabled = enabled
     }
 
     override fun sensorActivationRequested(activity: Activity, sensor: DeviceSensor) {
@@ -105,7 +109,7 @@ object SettingsManager: ActivationDelegate {
 
     fun getLocationManager(context: Context): LocationManager? = context.getSystemService(Context.LOCATION_SERVICE)as? LocationManager?
 
-    fun getNfcManager(context: Context): NfcManager? = context.getSystemService(Context.NFC_SERVICE)as? NfcManager?
+    private fun getNfcManager(context: Context): NfcManager? = context.getSystemService(Context.NFC_SERVICE)as? NfcManager?
 
     fun getCameraManager(context: Context): CameraManager? = context.getSystemService(Context.CAMERA_SERVICE)as? CameraManager?
 }

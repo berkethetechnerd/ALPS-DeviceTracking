@@ -5,21 +5,15 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.graphics.Camera
-import android.hardware.camera2.CameraManager
 import android.location.LocationManager
-import android.net.ConnectivityManager
 import android.net.wifi.WifiManager
 import android.nfc.NfcAdapter
-import com.alpsproject.devicetracking.R
 import com.alpsproject.devicetracking.delegates.SensorStatusDelegate
 import com.alpsproject.devicetracking.enums.DeviceSensor
-
 
 object Broadcaster {
 
     private val receivers: ArrayList<SensorStatusDelegate> = ArrayList()
-    public var isTorchEnabled = false
 
     fun registerForBroadcasting(receiver: Context, arrOfSensors: Array<Boolean>) {
         if (arrOfSensors[0]) { registerForWifi(receiver) }
@@ -40,12 +34,7 @@ object Broadcaster {
         if (arrOfSensors[2]) { receiver.unregisterReceiver(screenUsageReceiver) }
         if (arrOfSensors[3]) { receiver.unregisterReceiver(gpsReceiver) }
         if (arrOfSensors[4]) { receiver.unregisterReceiver(nfcReceiver) }
-        if (arrOfSensors[5]) {
-            val cameraManager = SettingsManager.getCameraManager(receiver)
-            cameraManager?.let {
-                it.unregisterTorchCallback(torchReceiver)
-            }
-        }
+        if (arrOfSensors[5]) { SettingsManager.getCameraManager(receiver)?.unregisterTorchCallback(torchReceiver) }
 
         (receiver as? SensorStatusDelegate)?.let {
             if (receivers.contains(it)) {
@@ -82,8 +71,7 @@ object Broadcaster {
     }
 
     private fun registerForTorch(receiver: Context) {
-        val cameraManager = SettingsManager.getCameraManager(receiver) ?: return
-        cameraManager.registerTorchCallback(torchReceiver, null)
+        SettingsManager.getCameraManager(receiver)?.registerTorchCallback(torchReceiver, null)
     }
 
     fun registerForShutdown(receiver: Context) {
@@ -174,21 +162,20 @@ object Broadcaster {
     }
 
     private val nfcReceiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context?, intent: Intent) {
-            val action = intent.action
-            if (action == NfcAdapter.ACTION_ADAPTER_STATE_CHANGED) {
-                val state = intent.getIntExtra(
-                    NfcAdapter.EXTRA_ADAPTER_STATE,
-                    NfcAdapter.STATE_OFF
-                )
-                when (state) {
-                    NfcAdapter.STATE_OFF -> {
-                        Logger.logSensorUpdate(DeviceSensor.ACCESS_NFC, false)
-                        broadcastSensorChange(DeviceSensor.ACCESS_NFC, false)
-                    }
-                    NfcAdapter.STATE_ON -> {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            intent?.let {
+                if (it.action.equals(NfcAdapter.ACTION_ADAPTER_STATE_CHANGED)) {
+                    val state = intent.getIntExtra(
+                            NfcAdapter.EXTRA_ADAPTER_STATE,
+                            NfcAdapter.STATE_OFF
+                    )
+
+                    if (state == NfcAdapter.STATE_ON) {
                         Logger.logSensorUpdate(DeviceSensor.ACCESS_NFC, true)
                         broadcastSensorChange(DeviceSensor.ACCESS_NFC, true)
+                    } else if (state == NfcAdapter.STATE_OFF) {
+                        Logger.logSensorUpdate(DeviceSensor.ACCESS_NFC, false)
+                        broadcastSensorChange(DeviceSensor.ACCESS_NFC, false)
                     }
                 }
             }
@@ -197,13 +184,12 @@ object Broadcaster {
 
     private val torchReceiver = object : android.hardware.camera2.CameraManager.TorchCallback() {
         override fun onTorchModeChanged(cameraId: String, enabled: Boolean) {
-            super.onTorchModeChanged(cameraId, enabled)
-            if(enabled){
-                isTorchEnabled = true
+            SettingsManager.setTorchStatus(enabled)
+
+            if (enabled) {
                 Logger.logSensorUpdate(DeviceSensor.ACCESS_TORCH, true)
                 broadcastSensorChange(DeviceSensor.ACCESS_TORCH, true)
             } else {
-                isTorchEnabled = false
                 Logger.logSensorUpdate(DeviceSensor.ACCESS_TORCH, false)
                 broadcastSensorChange(DeviceSensor.ACCESS_TORCH, false)
             }
@@ -211,34 +197,49 @@ object Broadcaster {
     }
 
     private val shutdownReceiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context, intent: Intent) {
-            val action = intent.action
-            if (action.equals(Intent.ACTION_SHUTDOWN) || action.equals(Intent.ACTION_REBOOT)) {
-                SharedPreferencesManager.write(ConstantsManager.RUNNING_DATA_COLLECTION, false)
-                Logger.logServiceNotification("Phone is shutting down. Cutting off the data collection!")
+        override fun onReceive(context: Context?, intent: Intent?) {
+            intent?.let {
+                val action = it.action
 
-                if (SharedPreferencesManager.read(ConstantsManager.RUNNING_SENSOR_WIFI, false)) {
-                    DataCollectionManager.stopCollectionForSensor(DeviceSensor.ACCESS_WIFI)
-                }
+                if (action.equals(Intent.ACTION_SHUTDOWN) || action.equals(Intent.ACTION_REBOOT)) {
+                    Logger.logServiceNotification("Phone is shutting down. Cutting off the data collection!")
+                    SharedPreferencesManager.write(ConstantsManager.RUNNING_DATA_COLLECTION, false)
 
-                if (SharedPreferencesManager.read(ConstantsManager.RUNNING_SENSOR_BLUETOOTH, false)) {
-                    DataCollectionManager.stopCollectionForSensor(DeviceSensor.ACCESS_BLUETOOTH)
-                }
+                    val arrOfSensors: Array<Boolean> = Array(6) { false }
 
-                if (SharedPreferencesManager.read(ConstantsManager.RUNNING_SENSOR_SCREEN_USAGE, false)) {
-                    DataCollectionManager.stopCollectionForSensor(DeviceSensor.ACCESS_SCREEN_USAGE)
-                }
+                    if (SharedPreferencesManager.read(ConstantsManager.getRunningSensorKey(DeviceSensor.ACCESS_WIFI), false)) {
+                        DataCollectionManager.stopCollectionForSensor(DeviceSensor.ACCESS_WIFI)
+                        arrOfSensors[0] = true
+                    }
 
-                if (SharedPreferencesManager.read(ConstantsManager.RUNNING_SENSOR_GPS, false)) {
-                    DataCollectionManager.stopCollectionForSensor(DeviceSensor.ACCESS_GPS)
-                }
+                    if (SharedPreferencesManager.read(ConstantsManager.getRunningSensorKey(DeviceSensor.ACCESS_BLUETOOTH), false)) {
+                        DataCollectionManager.stopCollectionForSensor(DeviceSensor.ACCESS_BLUETOOTH)
+                        arrOfSensors[1] = true
+                    }
 
-                if (SharedPreferencesManager.read(ConstantsManager.RUNNING_SENSOR_NFC, false)) {
-                    DataCollectionManager.stopCollectionForSensor(DeviceSensor.ACCESS_NFC)
-                }
+                    if (SharedPreferencesManager.read(ConstantsManager.getRunningSensorKey(DeviceSensor.ACCESS_SCREEN_USAGE), false)) {
+                        DataCollectionManager.stopCollectionForSensor(DeviceSensor.ACCESS_SCREEN_USAGE)
+                        arrOfSensors[2] = true
+                    }
 
-                if (SharedPreferencesManager.read(ConstantsManager.RUNNING_SENSOR_TORCH, false)) {
-                    DataCollectionManager.stopCollectionForSensor(DeviceSensor.ACCESS_TORCH)
+                    if (SharedPreferencesManager.read(ConstantsManager.getRunningSensorKey(DeviceSensor.ACCESS_GPS), false)) {
+                        DataCollectionManager.stopCollectionForSensor(DeviceSensor.ACCESS_GPS)
+                        arrOfSensors[3] = true
+                    }
+
+                    if (SharedPreferencesManager.read(ConstantsManager.getRunningSensorKey(DeviceSensor.ACCESS_NFC), false)) {
+                        DataCollectionManager.stopCollectionForSensor(DeviceSensor.ACCESS_NFC)
+                        arrOfSensors[4] = true
+                    }
+
+                    if (SharedPreferencesManager.read(ConstantsManager.getRunningSensorKey(DeviceSensor.ACCESS_TORCH), false)) {
+                        DataCollectionManager.stopCollectionForSensor(DeviceSensor.ACCESS_TORCH)
+                        arrOfSensors[5] = true
+                    }
+
+                    context?.let {
+                        unregisterForBroadcasting(context, arrOfSensors)
+                    }
                 }
             }
         }
