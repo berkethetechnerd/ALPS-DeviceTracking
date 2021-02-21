@@ -28,22 +28,22 @@ class DataCollectionActivity : BaseActivity(), SensorStatusDelegate {
 
     private val isWifiSelected: Boolean
         get() = intent.getBooleanExtra(C.SENSOR_WIFI, false)
-                || SharedPreferencesManager.read(C.RUNNING_SENSOR_WIFI, false)
+                || SharedPreferencesManager.read(C.getRunningSensorKey(DeviceSensor.ACCESS_WIFI), false)
     private val isBluetoothSelected: Boolean
         get() = intent.getBooleanExtra(C.SENSOR_BLUETOOTH, false)
-                || SharedPreferencesManager.read(C.RUNNING_SENSOR_BLUETOOTH, false)
+                || SharedPreferencesManager.read(C.getRunningSensorKey(DeviceSensor.ACCESS_BLUETOOTH), false)
     private val isScreenUsageSelected: Boolean
         get() = intent.getBooleanExtra(C.SENSOR_SCREEN_USAGE, false)
-                || SharedPreferencesManager.read(C.RUNNING_SENSOR_SCREEN_USAGE, false)
+                || SharedPreferencesManager.read(C.getRunningSensorKey(DeviceSensor.ACCESS_SCREEN_USAGE), false)
     private val isGpsSelected: Boolean
         get() = intent.getBooleanExtra(C.SENSOR_GPS, false)
-                || SharedPreferencesManager.read(C.RUNNING_SENSOR_GPS, false)
+                || SharedPreferencesManager.read(C.getRunningSensorKey(DeviceSensor.ACCESS_GPS), false)
     private val isNfcSelected: Boolean
         get() = intent.getBooleanExtra(C.SENSOR_NFC, false)
-                || SharedPreferencesManager.read(C.RUNNING_SENSOR_NFC, false)
+                || SharedPreferencesManager.read(C.getRunningSensorKey(DeviceSensor.ACCESS_NFC), false)
     private val isTorchSelected: Boolean
         get() = intent.getBooleanExtra(C.SENSOR_TORCH, false)
-                || SharedPreferencesManager.read(C.RUNNING_SENSOR_TORCH, false)
+                || SharedPreferencesManager.read(C.getRunningSensorKey(DeviceSensor.ACCESS_TORCH), false)
 
 
     private val arrOfSelectedSensors: Array<Boolean>
@@ -76,9 +76,6 @@ class DataCollectionActivity : BaseActivity(), SensorStatusDelegate {
     }
 
     private fun initUI() {
-        tvTitle = findViewById(R.id.tv_data_collection_title)
-        tvTitle.text = getString(R.string.data_collection_title)
-
         btnStartStop = findViewById(R.id.btn_start_stop)
         btnStartStop.setOnClickListener { startStopButton() }
 

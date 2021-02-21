@@ -8,6 +8,7 @@ import android.os.IBinder
 import android.os.PowerManager
 import com.alpsproject.devicetracking.DataCollectionActivity
 import com.alpsproject.devicetracking.R
+import com.alpsproject.devicetracking.enums.DeviceSensor
 import com.alpsproject.devicetracking.enums.ServiceState
 import com.alpsproject.devicetracking.helper.Broadcaster
 import com.alpsproject.devicetracking.helper.Logger
@@ -21,12 +22,12 @@ class TrackerService : Service() {
 
     private val arrOfSensors: Array<Boolean>
         get() = arrayOf(
-                SharedPreferencesManager.read(C.RUNNING_SENSOR_WIFI, false),
-                SharedPreferencesManager.read(C.RUNNING_SENSOR_BLUETOOTH, false),
-                SharedPreferencesManager.read(C.RUNNING_SENSOR_SCREEN_USAGE, false),
-                SharedPreferencesManager.read(C.RUNNING_SENSOR_GPS, false),
-                SharedPreferencesManager.read(C.RUNNING_SENSOR_NFC, false),
-                SharedPreferencesManager.read(C.RUNNING_SENSOR_TORCH, false)
+                SharedPreferencesManager.read(C.getRunningSensorKey(DeviceSensor.ACCESS_WIFI), false),
+                SharedPreferencesManager.read(C.getRunningSensorKey(DeviceSensor.ACCESS_BLUETOOTH), false),
+                SharedPreferencesManager.read(C.getRunningSensorKey(DeviceSensor.ACCESS_SCREEN_USAGE), false),
+                SharedPreferencesManager.read(C.getRunningSensorKey(DeviceSensor.ACCESS_GPS), false),
+                SharedPreferencesManager.read(C.getRunningSensorKey(DeviceSensor.ACCESS_NFC), false),
+                SharedPreferencesManager.read(C.getRunningSensorKey(DeviceSensor.ACCESS_TORCH), false)
         )
 
     override fun onBind(intent: Intent?): IBinder? {
@@ -70,7 +71,7 @@ class TrackerService : Service() {
         // We need this lock so our service gets not affected by Doze Mode
         wakeLock = (getSystemService(Context.POWER_SERVICE) as PowerManager).run {
                 newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "TrackerService::lock").apply {
-                    acquire()
+                    acquire(10*60*1000L /*10 minutes*/)
                 }
             }
     }
@@ -93,7 +94,7 @@ class TrackerService : Service() {
     }
 
     private fun createNotification(): Notification {
-        val notificationChannelId = "DEVICE TRACKER SERVICE CHANNEL"
+        val notificationChannelId = "SENSOR METRICS SERVICE CHANNEL"
 
         // depending on the Android API that we're dealing with we will have
         // to use a specific method to create the notification
@@ -101,10 +102,10 @@ class TrackerService : Service() {
             val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             val channel = NotificationChannel(
                 notificationChannelId,
-                "Device Tracker Service notifications channel",
+                "Sensor Metrics Service notifications channel",
                 NotificationManager.IMPORTANCE_HIGH
             ).let {
-                it.description = "Device Tracker Service channel"
+                it.description = "Sensor Metrics Service channel"
                 it
             }
             notificationManager.createNotificationChannel(channel)

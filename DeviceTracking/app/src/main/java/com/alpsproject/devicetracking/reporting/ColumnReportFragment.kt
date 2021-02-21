@@ -109,6 +109,7 @@ class ColumnReportFragment : Fragment() {
                 tvDescription.text = getString(R.string.report_usage_description, it, numberOfDays, chartData.average())
                 APIlib.getInstance().setActiveAnyChartView(usageChart)
                 drawChart(chartDates, chartData, isUpdate)
+                showChart()
                 return
             }
         }
@@ -141,10 +142,11 @@ class ColumnReportFragment : Fragment() {
 
             cartesian.animation(true)
             cartesian.yScale().minimum(0.0)
-            cartesian.yAxis(0).labels().format("{%Value}{groupsSeparator: }")
+            cartesian.yScale().maximum(24.0)
             cartesian.tooltip().positionMode(TooltipPositionMode.POINT)
             cartesian.interactivity().hoverMode(HoverMode.BY_X)
             cartesian.xAxis(0).title(getString(R.string.report_usage_dates))
+            cartesian.yAxis(0).labels().format("{%Value}{groupsSeparator: }")
             cartesian.yAxis(0).title(getString(R.string.report_usage_hours_total))
 
             usageChart.setChart(cartesian)
@@ -160,7 +162,30 @@ class ColumnReportFragment : Fragment() {
                 }
             }
 
-            cartesian.column(data)
+            if (timeFrame == CalendarDays.LAST_24_HOURS) {
+                var maxValue = chartData.maxOrNull() ?: 0.0
+                if (maxValue > 4.0) {
+                    maxValue = 6.0
+                }
+
+                cartesian.yScale().maximum(maxValue)
+            } else {
+                var maxValue = chartData.maxOrNull() ?: 0.0
+                if (maxValue > 20.0) {
+                    maxValue = 24.0
+                }
+
+                cartesian.yScale().maximum(maxValue)
+            }
+
+            val column: Column = cartesian.column(data)
+            column.tooltip()
+                .titleFormat("{%X}")
+                .position(Position.CENTER_BOTTOM)
+                .anchor(Anchor.CENTER_BOTTOM)
+                .offsetX(0.0)
+                .offsetY(5.0)
+                .format("{%Value}{groupsSeparator: } Hours")
         }
     }
 
@@ -168,6 +193,12 @@ class ColumnReportFragment : Fragment() {
         usageChart.visibility = View.GONE
         progressBar.visibility = View.GONE
         noDataLayout.visibility = View.VISIBLE
+    }
+
+    private fun showChart() {
+        usageChart.visibility = View.VISIBLE
+        progressBar.visibility = View.VISIBLE
+        noDataLayout.visibility = View.GONE
     }
 
     private fun isDataExistForSelectedTimeFrame(chartData: DoubleArray): Boolean {

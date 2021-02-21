@@ -90,6 +90,23 @@ object RealmManager {
         }
     }
 
+    fun queryForSpecificDayInSensor(day: String, sensor: DeviceSensor): DoubleArray {
+        val data = DoubleArray(4)
+
+        CalendarManager.stringToDate(day)?.let {
+            val startDate = CalendarManager.extractStartDate(it)
+            val quarterDates = CalendarManager.extractQuarterDates(it)
+            val endDate = CalendarManager.extractStopDate(it)
+
+            data[0] = calcHoursForToday(startDate, quarterDates[0], sensor).round(3)
+            data[1] = calcHoursForToday(quarterDates[0], quarterDates[1], sensor).round(3)
+            data[2] = calcHoursForToday(quarterDates[1], quarterDates[2], sensor).round(3)
+            data[3] = calcHoursForToday(quarterDates[2], endDate, sensor).round(3)
+        }
+
+        return data
+    }
+
     private fun Double.round(decimals: Int): Double {
         var multiplier = 1.0
         repeat(decimals) { multiplier *= 10 }
@@ -119,7 +136,7 @@ object RealmManager {
         seconds += secondsForToday2Today(sensorName, startDate, endDate)
         seconds += secondsForBefore2Today(sensorName, startDate, endDate)
         seconds += secondsForToday2Later(sensorName, startDate, endDate)
-        seconds += secondsForBefore2Later(sensorName, startDate, endDate)
+        seconds += secondsForBefore2LaterForTodayView(sensorName, startDate, endDate)
         seconds += secondsForToday2NoFinish(sensorName, startDate, endDate)
         seconds += secondsForBefore2NoFinish(sensorName, startDate)
         return seconds / 3600.0
@@ -151,6 +168,14 @@ object RealmManager {
         val results = realmQuery.lessThan(ENTRY_START_DATE, startDate)
                 .greaterThan(ENTRY_END_DATE, endDate).findAll()
         return if (results.isEmpty()) { 0.0 } else { 24.0 * 3600 }
+    }
+
+    // Specifically for today(24h) view
+    private fun secondsForBefore2LaterForTodayView(sensor: String, startDate: Date, endDate: Date): Double {
+        val realmQuery = realm.where(SensorData::class.java).equalTo(ENTRY_SENSOR_NAME, sensor)
+        val results = realmQuery.lessThan(ENTRY_START_DATE, startDate)
+            .greaterThan(ENTRY_END_DATE, endDate).findAll()
+        return if (results.isEmpty()) { 0.0 } else { 6.0 * 3600 }
     }
 
     private fun secondsForToday2NoFinish(sensor: String, startDate: Date, endDate: Date): Double {

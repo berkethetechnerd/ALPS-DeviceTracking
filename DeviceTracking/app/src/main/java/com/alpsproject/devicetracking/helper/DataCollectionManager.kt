@@ -1,7 +1,7 @@
 package com.alpsproject.devicetracking.helper
 
 import android.app.Activity
-import com.alpsproject.devicetracking.api.API
+import com.alpsproject.devicetracking.api.SensorMetricsAPI
 import com.alpsproject.devicetracking.enums.DeviceSensor
 import com.alpsproject.devicetracking.model.SensorData
 import com.alpsproject.devicetracking.helper.ConstantsManager as C
@@ -37,7 +37,7 @@ object DataCollectionManager {
     fun syncDataWithCloud() {
         val asyncData = RealmManager.queryForNotSynchronizedData()
         for (data in asyncData) {
-            API.sendSensorEntry(data) { sensorData ->
+            SensorMetricsAPI.sendSensorEntry(data) { sensorData ->
                 sensorData?.id?.let { id ->
                     RealmManager.updateDataAfterSynchronization(id)
                 }
@@ -80,7 +80,7 @@ object DataCollectionManager {
     }
 
     private fun startTorchCollection(activity: Activity) {
-        if (SettingsManager.isTorchEnabled(activity)) {
+        if (SettingsManager.isTorchEnabled()) {
             createNewSensorEntry(DeviceSensor.ACCESS_TORCH)
         } else {
             SettingsManager.askForSensor(activity, DeviceSensor.ACCESS_TORCH)
@@ -104,6 +104,7 @@ object DataCollectionManager {
         val id = C.getRunningSensorID(sensor)
         SharedPreferencesManager.read(id, "")?.let { entryId ->
             RealmManager.updateData(entryId)
+            SharedPreferencesManager.write(id, "")
         }
     }
     
