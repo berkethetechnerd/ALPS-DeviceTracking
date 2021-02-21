@@ -7,6 +7,7 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.widget.Button
+import android.widget.TextView
 import com.alpsproject.devicetracking.delegates.PermissionDelegate
 import com.alpsproject.devicetracking.enums.DeviceSensor
 import com.alpsproject.devicetracking.helper.PermissionManager
@@ -22,6 +23,7 @@ class SensorSelectionActivity : BaseActivity(), PermissionDelegate {
     private lateinit var sensorNfcView: SensorView
     private lateinit var sensorTorchView: SensorView
     private lateinit var btnNext: Button
+    private lateinit var tvReportScreenHint: TextView
 
     private var grantedSensors: Int = 0
     private var rejectedSensors: Int = 0
@@ -88,6 +90,10 @@ class SensorSelectionActivity : BaseActivity(), PermissionDelegate {
 
         btnNext = findViewById(R.id.btn_next_data_collection)
         btnNext.setOnClickListener { requestPermissions() }
+
+        tvReportScreenHint = findViewById(R.id.tv_report_screen_hint)
+        tvReportScreenHint.text = getString(R.string.report_screen_hint_text)
+
     }
 
     private fun requestPermissions() {

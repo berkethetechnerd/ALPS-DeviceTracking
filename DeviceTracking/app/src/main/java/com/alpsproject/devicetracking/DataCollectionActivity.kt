@@ -18,6 +18,7 @@ class DataCollectionActivity : BaseActivity(), SensorStatusDelegate {
 
     private lateinit var tvTitle: TextView
     private lateinit var btnStartStop: Button
+    private lateinit var tvReportScreenHint: TextView
     private lateinit var selectedWifiView: SensorView
     private lateinit var selectedBluetoothView: SensorView
     private lateinit var selectedScreenUsageView: SensorView
@@ -86,6 +87,9 @@ class DataCollectionActivity : BaseActivity(), SensorStatusDelegate {
         } else {
             btnStartStop.text = getString(R.string.data_collection_start)
         }
+
+        tvReportScreenHint = findViewById(R.id.tv_report_screen_hint)
+        tvReportScreenHint.text = getString(R.string.report_screen_hint_text)
     }
 
     private fun initSensors(){
