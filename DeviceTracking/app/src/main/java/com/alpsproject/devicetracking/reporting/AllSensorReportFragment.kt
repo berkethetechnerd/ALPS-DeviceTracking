@@ -184,14 +184,15 @@ class AllSensorReportFragment : Fragment() {
             cartesian.animation(true)
             cartesian.yScale().minimum(0.0)
             cartesian.yScale().maximum(6.0)
-            cartesian.yAxis(0).labels().format("{%Value}{groupsSeparator: }")
             cartesian.tooltip().positionMode(TooltipPositionMode.POINT)
             cartesian.interactivity().hoverMode(HoverMode.BY_X)
             cartesian.xAxis(0).title(getString(R.string.report_usage_dates))
             cartesian.yAxis(0).title(getString(R.string.report_usage_hours_total))
+            cartesian.yAxis(0).labels().format("{%Value}{groupsSeparator: }")
 
             val legend = cartesian.legend()
             legend.enabled(true)
+            legend.margin(0, 0, 30, 0)
 
             usageChart.setChart(cartesian)
         } else {
