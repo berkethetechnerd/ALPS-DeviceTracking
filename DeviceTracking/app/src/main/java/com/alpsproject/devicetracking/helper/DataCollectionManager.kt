@@ -104,6 +104,7 @@ object DataCollectionManager {
         val id = C.getRunningSensorID(sensor)
         SharedPreferencesManager.read(id, "")?.let { entryId ->
             RealmManager.updateData(entryId)
+            SharedPreferencesManager.write(id, "")
         }
     }
     
