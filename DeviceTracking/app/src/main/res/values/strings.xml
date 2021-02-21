@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Device Tracking</string>
+    <string name="app_name">Sensor Metrics</string>
 
     <string name="login_title">WELCOME</string>
     <string name="login_disclaimer">This is an application developed for a research project conducted
