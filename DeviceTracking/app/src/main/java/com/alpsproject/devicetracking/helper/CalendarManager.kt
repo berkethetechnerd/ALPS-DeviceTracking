@@ -50,32 +50,32 @@ object CalendarManager {
         return calendar.time
     }
 
-    fun extractQuarterDates(day: Date): Array<Date> {
+    fun extractQuarterDates(date: Date): Array<Date> {
         val listOfDates = ArrayList<Date>()
 
-        val calendar = Calendar.getInstance()
-        calendar.time = day
-        calendar.set(Calendar.HOUR_OF_DAY, 6)
-        calendar.set(Calendar.MINUTE, 0)
-        calendar.set(Calendar.SECOND, 0)
-        calendar.set(Calendar.MILLISECOND, 500)
-        listOfDates.add(calendar.time)
+        val calendarQ1 = Calendar.getInstance()
+        calendarQ1.time = date
+        calendarQ1.set(Calendar.HOUR_OF_DAY, 6)
+        calendarQ1.set(Calendar.MINUTE, 0)
+        calendarQ1.set(Calendar.SECOND, 0)
+        calendarQ1.set(Calendar.MILLISECOND, 500)
+        listOfDates.add(calendarQ1.time)
 
-        val calendar2 = Calendar.getInstance()
-        calendar2.time = day
-        calendar2.set(Calendar.HOUR_OF_DAY, 12)
-        calendar2.set(Calendar.MINUTE, 0)
-        calendar2.set(Calendar.SECOND, 0)
-        calendar2.set(Calendar.MILLISECOND, 500)
-        listOfDates.add(calendar2.time)
+        val calendarQ2 = Calendar.getInstance()
+        calendarQ2.time = date
+        calendarQ2.set(Calendar.HOUR_OF_DAY, 12)
+        calendarQ2.set(Calendar.MINUTE, 0)
+        calendarQ2.set(Calendar.SECOND, 0)
+        calendarQ2.set(Calendar.MILLISECOND, 500)
+        listOfDates.add(calendarQ2.time)
 
-        val calendar3 = Calendar.getInstance()
-        calendar3.time = day
-        calendar3.set(Calendar.HOUR_OF_DAY, 18)
-        calendar3.set(Calendar.MINUTE, 0)
-        calendar3.set(Calendar.SECOND, 0)
-        calendar3.set(Calendar.MILLISECOND, 500)
-        listOfDates.add(calendar3.time)
+        val calendarQ3 = Calendar.getInstance()
+        calendarQ3.time = date
+        calendarQ3.set(Calendar.HOUR_OF_DAY, 18)
+        calendarQ3.set(Calendar.MINUTE, 0)
+        calendarQ3.set(Calendar.SECOND, 0)
+        calendarQ3.set(Calendar.MILLISECOND, 500)
+        listOfDates.add(calendarQ3.time)
 
         return listOfDates.toTypedArray()
     }
@@ -89,18 +89,14 @@ object CalendarManager {
         }
     }
 
-    fun stringToDate(dateString: String): Date? = getFormatter().parse(dateString)
-
     private fun calendarToString(date: Calendar): String = getFormatter().format(date.time)
 
-    fun convertDateForBackend(date: Date?): String? {
-        date?.let {
-            return getBackendFormatter().format(date.time)
-        }
-
+    fun dateToBackendString(date: Date?): String? {
+        date?.let { return getBackendFormatter().format(date.time) }
         return null
     }
 
+    fun stringToDate(dateString: String): Date? = getFormatter().parse(dateString)
 
     private fun getFormatter(): SimpleDateFormat = SimpleDateFormat(DAY_FORMAT, Locale.getDefault())
 
