@@ -162,6 +162,12 @@ class ColumnReportFragment : Fragment() {
                 }
             }
 
+            if (timeFrame == CalendarDays.LAST_24_HOURS) {
+                cartesian.yScale().maximum(6.0)
+            } else {
+                cartesian.yScale().maximum(24.0)
+            }
+
             cartesian.column(data)
         }
     }
