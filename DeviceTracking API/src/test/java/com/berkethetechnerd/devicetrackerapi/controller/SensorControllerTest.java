@@ -75,7 +75,7 @@ public class SensorControllerTest {
         String testSensorName = "Bluetooth";
         Date testStartTime = new Date();
         Date testEndTime = new Date();
-        SensorData testData = new SensorData(testId, testSensorName, testStartTime, testEndTime);
+        SensorData testData = new SensorData(testId, "Test-id", testSensorName, testStartTime, testEndTime);
 
         // Setup
         when(deviceTrackerService.addNewData(testData)).thenReturn(testData);

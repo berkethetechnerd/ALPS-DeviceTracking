@@ -11,6 +11,8 @@ public class SensorData {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
 
+    private String device_id;
+
     @Column(length = 128)
     private String sensor_name;
 
@@ -24,8 +26,9 @@ public class SensorData {
         // Hibernate requires a no-arg constructor
     }
 
-    public SensorData(Integer id, String sensor_name, Date start_time, Date end_time) {
+    public SensorData(Integer id, String device_id, String sensor_name, Date start_time, Date end_time) {
         this.id = id;
+        this.device_id = device_id;
         this.sensor_name = sensor_name;
         this.start_time = start_time;
         this.end_time = end_time;
@@ -38,6 +41,14 @@ public class SensorData {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getDevice_id() {
+        return device_id;
+    }
+
+    public void setDevice_id(String device_id) {
+        this.device_id = device_id;
     }
 
     public String getSensor_name() {

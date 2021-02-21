@@ -163,7 +163,7 @@ class AllSensorReportFragment : Fragment() {
                 .offsetY(5.0)
                 .format("{%Value}{groupsSeparator: } Hours")
 
-            val column5: Column = cartesian.column(dataForNFC).name("NFC")
+            val column5: Column = cartesian.column(dataForNFC).name("NFC").fill("pink")
             column5.tooltip()
                 .titleFormat("NFC usage")
                 .position(Position.CENTER_BOTTOM)
@@ -172,7 +172,7 @@ class AllSensorReportFragment : Fragment() {
                 .offsetY(5.0)
                 .format("{%Value}{groupsSeparator: } Hours")
 
-            val column6: Column = cartesian.column(dataForTorch).name("Torch")
+            val column6: Column = cartesian.column(dataForTorch).name("Torch").fill("purple")
             column6.tooltip()
                 .titleFormat("Torch usage")
                 .position(Position.CENTER_BOTTOM)
@@ -185,7 +185,6 @@ class AllSensorReportFragment : Fragment() {
             cartesian.yScale().minimum(0.0)
             cartesian.yScale().maximum(6.0)
             cartesian.tooltip().positionMode(TooltipPositionMode.POINT)
-            cartesian.interactivity().hoverMode(HoverMode.BY_X)
             cartesian.xAxis(0).title(getString(R.string.report_usage_dates))
             cartesian.yAxis(0).title(getString(R.string.report_usage_hours_total))
             cartesian.yAxis(0).labels().format("{%Value}{groupsSeparator: }")
@@ -252,7 +251,7 @@ class AllSensorReportFragment : Fragment() {
                 .offsetY(5.0)
                 .format("{%Value}{groupsSeparator: } Hours")
 
-            val column5: Column = cartesian.column(dataForNFC).name("NFC")
+            val column5: Column = cartesian.column(dataForNFC).name("NFC").fill("pink")
             column5.tooltip()
                 .titleFormat("NFC usage")
                 .position(Position.CENTER_BOTTOM)
@@ -261,7 +260,7 @@ class AllSensorReportFragment : Fragment() {
                 .offsetY(5.0)
                 .format("{%Value}{groupsSeparator: } Hours")
 
-            val column6: Column = cartesian.column(dataForTorch).name("Torch")
+            val column6: Column = cartesian.column(dataForTorch).name("Torch").fill("purple")
             column6.tooltip()
                 .titleFormat("Torch usage")
                 .position(Position.CENTER_BOTTOM)

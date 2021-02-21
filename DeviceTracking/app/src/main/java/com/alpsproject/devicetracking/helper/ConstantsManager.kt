@@ -38,6 +38,9 @@ object ConstantsManager {
     const val DEFAULT_API = "DEFAULT_API"
     private const val DEFAULT_API_URL = "http://192.168.0.3:8080"
 
+    const val DEVICE_IDENTIFIER = "DEVICE_ID"
+    const val DEVICE_IDENTIFIER_DEFAULT = "CORRUPTED_ID"
+
     fun getSensorName(forSensor: DeviceSensor): String {
         return when (forSensor) {
             DeviceSensor.ACCESS_WIFI -> SENSOR_WIFI

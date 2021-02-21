@@ -10,6 +10,7 @@ object Logger {
     private const val SENSOR_STATUS_CHANGE = "SensorStatusChange"
     private const val SENSOR_DATA_ENTRY = "SensorDataEntry"
     private const val SYNC_DATA_ENTRY = "DataSentToAPI"
+    private const val IDENTIFIER = "SMDeviceIdentifier"
 
     fun logServiceNotification(message: String) {
         Log.d(SERVICE_NOTIFICATION, message)
@@ -21,6 +22,14 @@ object Logger {
 
     fun logSensorUpdate(sensor: DeviceSensor, status: Boolean) {
         Log.d(SENSOR_STATUS_CHANGE, "$sensor -> $status")
+    }
+
+    fun logUniqueIdentifier(id: String, isNew: Boolean) {
+        if (isNew) {
+            Log.d(IDENTIFIER, "A new device id has been assigned: $id")
+        } else {
+            Log.d(IDENTIFIER, "Your device id was assigned as $id")
+        }
     }
 
     fun logData(data: SensorData) {

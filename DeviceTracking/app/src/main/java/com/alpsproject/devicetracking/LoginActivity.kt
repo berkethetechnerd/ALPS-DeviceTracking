@@ -9,8 +9,10 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.widget.*
 import com.alpsproject.devicetracking.helper.DataCollectionManager
+import com.alpsproject.devicetracking.helper.Logger
 import com.alpsproject.devicetracking.helper.RealmManager
 import com.alpsproject.devicetracking.helper.SharedPreferencesManager
+import java.util.*
 
 class LoginActivity : BaseActivity() {
 
@@ -23,6 +25,8 @@ class LoginActivity : BaseActivity() {
         setContentView(R.layout.activity_login)
 
         initUI()
+        initDeviceUniqueIdentifier()
+
         RealmManager.printAllData()
         DataCollectionManager.syncDataWithCloud()
     }
@@ -36,6 +40,18 @@ class LoginActivity : BaseActivity() {
 
         btnNext = findViewById(R.id.btn_next)
         btnNext.setOnClickListener { proceedToApp() }
+    }
+
+    private fun initDeviceUniqueIdentifier() {
+        val oldIdentifier = SharedPreferencesManager.read(C.DEVICE_IDENTIFIER, "")
+        if (oldIdentifier.isNullOrEmpty()) {
+            val newIdentifier = UUID.randomUUID().toString()
+            Logger.logUniqueIdentifier(newIdentifier, true)
+            SharedPreferencesManager.write(C.DEVICE_IDENTIFIER, newIdentifier)
+            return
+        }
+
+        Logger.logUniqueIdentifier(oldIdentifier, false)
     }
 
     private fun proceedToApp() {
