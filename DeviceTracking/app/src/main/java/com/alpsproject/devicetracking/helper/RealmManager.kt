@@ -119,7 +119,7 @@ object RealmManager {
         seconds += secondsForToday2Today(sensorName, startDate, endDate)
         seconds += secondsForBefore2Today(sensorName, startDate, endDate)
         seconds += secondsForToday2Later(sensorName, startDate, endDate)
-        seconds += secondsForBefore2Later(sensorName, startDate, endDate)
+        seconds += secondsForBefore2LaterForTodayView(sensorName, startDate, endDate)
         seconds += secondsForToday2NoFinish(sensorName, startDate, endDate)
         seconds += secondsForBefore2NoFinish(sensorName, startDate)
         return seconds / 3600.0
@@ -151,6 +151,14 @@ object RealmManager {
         val results = realmQuery.lessThan(ENTRY_START_DATE, startDate)
                 .greaterThan(ENTRY_END_DATE, endDate).findAll()
         return if (results.isEmpty()) { 0.0 } else { 24.0 * 3600 }
+    }
+
+    // Specifically for today(24h) view
+    private fun secondsForBefore2LaterForTodayView(sensor: String, startDate: Date, endDate: Date): Double {
+        val realmQuery = realm.where(SensorData::class.java).equalTo(ENTRY_SENSOR_NAME, sensor)
+        val results = realmQuery.lessThan(ENTRY_START_DATE, startDate)
+            .greaterThan(ENTRY_END_DATE, endDate).findAll()
+        return if (results.isEmpty()) { 0.0 } else { 6.0 * 3600 }
     }
 
     private fun secondsForToday2NoFinish(sensor: String, startDate: Date, endDate: Date): Double {
