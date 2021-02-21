@@ -8,8 +8,8 @@ object ConstantsManager {
     const val SENSOR_BLUETOOTH = "Bluetooth"
     const val SENSOR_SCREEN_USAGE = "Screen Usage"
     const val SENSOR_GPS = "Location"
-    const val SENSOR_NFC = "NFC"
-    const val SENSOR_TORCH = "TORCH"
+    const val SENSOR_NFC = "Nfc"
+    const val SENSOR_TORCH = "Torch"
 
     const val CONSENT_OF_USER = "ConsentForDisclaimer"
     private const val CONSENT_OF_WIFI = CONSENT_OF_USER + SENSOR_WIFI
