@@ -80,8 +80,8 @@
     <string name="menu_item_report">Report</string>
     <string name="menu_item_settings">Settings</string>
 
-    <string name="dialog_for_api_endpoint_message">Please write down your data host address. This
-        could be given to you by the app provider and if not given, please refrain changing it.</string>
+    <string name="dialog_for_api_endpoint_message">Please write down your data host address in below box.
+        This address could be given to you by the app provider or if not given, please avoid changing it.</string>
     <string name="dialog_for_api_endpoint_save">SAVE</string>
     <string name="dialog_for_api_endpoint_default">APPLY DEFAULT</string>
 
