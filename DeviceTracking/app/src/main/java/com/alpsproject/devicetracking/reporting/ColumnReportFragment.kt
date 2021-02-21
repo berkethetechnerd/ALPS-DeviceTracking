@@ -178,7 +178,14 @@ class ColumnReportFragment : Fragment() {
                 cartesian.yScale().maximum(maxValue)
             }
 
-            cartesian.column(data)
+            val column: Column = cartesian.column(data)
+            column.tooltip()
+                .titleFormat("{%X}")
+                .position(Position.CENTER_BOTTOM)
+                .anchor(Anchor.CENTER_BOTTOM)
+                .offsetX(0.0)
+                .offsetY(5.0)
+                .format("{%Value}{groupsSeparator: } Hours")
         }
     }
 
