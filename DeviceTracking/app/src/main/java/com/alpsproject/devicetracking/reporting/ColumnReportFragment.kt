@@ -163,9 +163,19 @@ class ColumnReportFragment : Fragment() {
             }
 
             if (timeFrame == CalendarDays.LAST_24_HOURS) {
-                cartesian.yScale().maximum(6.0)
+                var maxValue = chartData.maxOrNull() ?: 0.0
+                if (maxValue > 4.0) {
+                    maxValue = 6.0
+                }
+
+                cartesian.yScale().maximum(maxValue)
             } else {
-                cartesian.yScale().maximum(24.0)
+                var maxValue = chartData.maxOrNull() ?: 0.0
+                if (maxValue > 20.0) {
+                    maxValue = 24.0
+                }
+
+                cartesian.yScale().maximum(maxValue)
             }
 
             cartesian.column(data)

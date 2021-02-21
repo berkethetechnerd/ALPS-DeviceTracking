@@ -209,12 +209,31 @@ class AllSensorReportFragment : Fragment() {
                 dataForTorch.add(ValueDataEntry(CalendarManager.extractHoursOfQuarterDayInString(index), torchData[index]))
             }
 
+            val maxValue = findBestVisibleMaxValue(wifiData, blData, screenData, gpsData, nfcData, torchData)
+            cartesian.yScale().maximum(maxValue)
+
             cartesian.column(dataForWifi)
             cartesian.column(dataForBluetooth)
             cartesian.column(dataForScreenUsage)
             cartesian.column(dataForGPS)
             cartesian.column(dataForNFC)
             cartesian.column(dataForTorch)
+        }
+    }
+
+    private fun findBestVisibleMaxValue(wifiData: DoubleArray, blData: DoubleArray, screenData: DoubleArray, gpsData: DoubleArray, nfcData: DoubleArray, torchData: DoubleArray): Double {
+        val maxValueWifi = wifiData.maxOrNull() ?: 0.0
+        val maxValueBL = blData.maxOrNull() ?: 0.0
+        val maxValueScreen = screenData.maxOrNull() ?: 0.0
+        val maxValueGPS = gpsData.maxOrNull() ?: 0.0
+        val maxValueNFC = nfcData.maxOrNull() ?: 0.0
+        val maxValueTorch = torchData.maxOrNull() ?: 0.0
+
+        val maxValue = doubleArrayOf(maxValueWifi, maxValueBL, maxValueScreen, maxValueGPS, maxValueNFC, maxValueTorch).maxOrNull() ?: 0.0
+        return if (maxValue > 4.0) {
+            6.0
+        } else {
+            maxValue
         }
     }
 
