@@ -127,7 +127,7 @@ class AllSensorReportFragment : Fragment() {
                 dataForTorch.add(ValueDataEntry(CalendarManager.extractHoursOfQuarterDayInString(index), torchData[index]))
             }
 
-            val column: Column = cartesian.column(dataForWifi)
+            val column: Column = cartesian.column(dataForWifi).name("Wifi")
             column.tooltip()
                 .titleFormat("Wi-Fi usage")
                 .position(Position.CENTER_BOTTOM)
@@ -136,7 +136,7 @@ class AllSensorReportFragment : Fragment() {
                 .offsetY(5.0)
                 .format("{%Value}{groupsSeparator: } Hours")
 
-            val column2: Column = cartesian.column(dataForBluetooth)
+            val column2: Column = cartesian.column(dataForBluetooth).name("Bluetooth")
             column2.tooltip()
                 .titleFormat("Bluetooth usage")
                 .position(Position.CENTER_BOTTOM)
@@ -145,7 +145,7 @@ class AllSensorReportFragment : Fragment() {
                 .offsetY(5.0)
                 .format("{%Value}{groupsSeparator: } Hours")
 
-            val column3: Column = cartesian.column(dataForScreenUsage)
+            val column3: Column = cartesian.column(dataForScreenUsage).name("Screen Usage")
             column3.tooltip()
                 .titleFormat("Screen usage")
                 .position(Position.CENTER_BOTTOM)
@@ -154,7 +154,7 @@ class AllSensorReportFragment : Fragment() {
                 .offsetY(5.0)
                 .format("{%Value}{groupsSeparator: } Hours")
 
-            val column4: Column = cartesian.column(dataForGPS)
+            val column4: Column = cartesian.column(dataForGPS).name("GPS")
             column4.tooltip()
                 .titleFormat("GPS usage")
                 .position(Position.CENTER_BOTTOM)
@@ -163,7 +163,7 @@ class AllSensorReportFragment : Fragment() {
                 .offsetY(5.0)
                 .format("{%Value}{groupsSeparator: } Hours")
 
-            val column5: Column = cartesian.column(dataForNFC)
+            val column5: Column = cartesian.column(dataForNFC).name("NFC")
             column5.tooltip()
                 .titleFormat("NFC usage")
                 .position(Position.CENTER_BOTTOM)
@@ -172,7 +172,7 @@ class AllSensorReportFragment : Fragment() {
                 .offsetY(5.0)
                 .format("{%Value}{groupsSeparator: } Hours")
 
-            val column6: Column = cartesian.column(dataForTorch)
+            val column6: Column = cartesian.column(dataForTorch).name("Torch")
             column6.tooltip()
                 .titleFormat("Torch usage")
                 .position(Position.CENTER_BOTTOM)
@@ -189,6 +189,9 @@ class AllSensorReportFragment : Fragment() {
             cartesian.interactivity().hoverMode(HoverMode.BY_X)
             cartesian.xAxis(0).title(getString(R.string.report_usage_dates))
             cartesian.yAxis(0).title(getString(R.string.report_usage_hours_total))
+
+            val legend = cartesian.legend()
+            legend.enabled(true)
 
             usageChart.setChart(cartesian)
         } else {
@@ -212,7 +215,7 @@ class AllSensorReportFragment : Fragment() {
             val maxValue = findBestVisibleMaxValue(wifiData, blData, screenData, gpsData, nfcData, torchData)
             cartesian.yScale().maximum(maxValue)
 
-            val column: Column = cartesian.column(dataForWifi)
+            val column: Column = cartesian.column(dataForWifi).name("Wifi")
             column.tooltip()
                 .titleFormat("Wi-Fi usage")
                 .position(Position.CENTER_BOTTOM)
@@ -221,7 +224,7 @@ class AllSensorReportFragment : Fragment() {
                 .offsetY(5.0)
                 .format("{%Value}{groupsSeparator: } Hours")
 
-            val column2: Column = cartesian.column(dataForBluetooth)
+            val column2: Column = cartesian.column(dataForBluetooth).name("Bluetooth")
             column2.tooltip()
                 .titleFormat("Bluetooth usage")
                 .position(Position.CENTER_BOTTOM)
@@ -230,7 +233,7 @@ class AllSensorReportFragment : Fragment() {
                 .offsetY(5.0)
                 .format("{%Value}{groupsSeparator: } Hours")
 
-            val column3: Column = cartesian.column(dataForScreenUsage)
+            val column3: Column = cartesian.column(dataForScreenUsage).name("Screen Usage")
             column3.tooltip()
                 .titleFormat("Screen usage")
                 .position(Position.CENTER_BOTTOM)
@@ -239,7 +242,7 @@ class AllSensorReportFragment : Fragment() {
                 .offsetY(5.0)
                 .format("{%Value}{groupsSeparator: } Hours")
 
-            val column4: Column = cartesian.column(dataForGPS)
+            val column4: Column = cartesian.column(dataForGPS).name("GPS")
             column4.tooltip()
                 .titleFormat("GPS usage")
                 .position(Position.CENTER_BOTTOM)
@@ -248,7 +251,7 @@ class AllSensorReportFragment : Fragment() {
                 .offsetY(5.0)
                 .format("{%Value}{groupsSeparator: } Hours")
 
-            val column5: Column = cartesian.column(dataForNFC)
+            val column5: Column = cartesian.column(dataForNFC).name("NFC")
             column5.tooltip()
                 .titleFormat("NFC usage")
                 .position(Position.CENTER_BOTTOM)
@@ -257,7 +260,7 @@ class AllSensorReportFragment : Fragment() {
                 .offsetY(5.0)
                 .format("{%Value}{groupsSeparator: } Hours")
 
-            val column6: Column = cartesian.column(dataForTorch)
+            val column6: Column = cartesian.column(dataForTorch).name("Torch")
             column6.tooltip()
                 .titleFormat("Torch usage")
                 .position(Position.CENTER_BOTTOM)
