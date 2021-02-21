@@ -15,7 +15,7 @@
         improve a simulation prototype for usage-based licensing models in the digital economy.
 
         \n\nThis application will be anonymously recording in the background device usage data for
-        the following features of your mobile phone: Bluetooth, Screentime, Wifi, GPS, NFC and Torch.
+        the following features of your mobile phone: Bluetooth, Screen Time, Wifi, GPS, NFC and Torch.
         The data will be sent regularly to our UK-based servers, where it is stored unassociated with
         any personal data.
 
@@ -30,7 +30,9 @@
         The data will be sent regularly to our UK-based servers, where it is stored unassociated with
         any personal data.
     </string>
-    <string name="consent_text">There will be a consent text here.</string>
+    <string name="consent_text">I was informed in great detail and fully understood what kind of
+        device data would be processed. I hereby consent to the collection and processing of sensor
+        data on my device. </string>
     <string name="consent_must_agree">You need to give consent before participating.</string>
 
     <string name="sensor_selection_title">Sensor Selection</string>
