@@ -65,13 +65,17 @@
     <string name="report_tab_screen_usage">Screen Usage</string>
     <string name="report_tab_bluetooth">Bluetooth</string>
     <string name="report_tab_wifi">Wi-Fi</string>
+    <string name="report_tab_all">All Sensors</string>
     <string name="report_usage_description">In this screen, you can see your \'%1$s\' sensor data
         for the last %2$d days. Over this period of time, your average use of this sensor was
         %3$.3f hours/day.</string>
+    <string name="report_usage_all_description">In this screen, you can see all of your device sensor
+        usage statistics at one place. Please change date from above selector to view a specific day.</string>
     <string name="report_no_data_found">(ø_ø)\n\nNo data found</string>
     <string name="report_usage_dates">Dates</string>
     <string name="report_usage_hours_total">Hours in Total</string>
     <string name="report_selected_time_frame">Selected time frame: </string>
+    <string name="report_selected_time_date">Selected date for statistics: </string>
     <string-array name="report_time_frames">
         <item>Today</item>
         <item>Last 3 Days</item>
@@ -110,7 +114,7 @@
     <string name="user_message_sensor_own_activation_message">Due to security measures taken by
         Google, we are not allowed to turn on %1$s on your behalf. Please turn on the sensor if
         you would like to collect data.</string>
-    
+
     <string name="user_message_sensor_activation_confirm">Yes, please</string>
     <string name="user_message_sensor_activation_reject">No, thanks</string>
     <string name="user_message_sensor_activation_ok">Go to Settings</string>
@@ -123,4 +127,6 @@
     <string name="content_description_app_logo">ALPS Software Ltd</string>
     <string name="content_description_ifm_logo">Innovation and IP Management LAB</string>
     <string name="content_description_icon_sensor">Sensor element</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

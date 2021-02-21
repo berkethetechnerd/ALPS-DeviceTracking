@@ -141,10 +141,11 @@ class ColumnReportFragment : Fragment() {
 
             cartesian.animation(true)
             cartesian.yScale().minimum(0.0)
-            cartesian.yAxis(0).labels().format("{%Value}{groupsSeparator: }")
+            cartesian.yScale().maximum(24.0)
             cartesian.tooltip().positionMode(TooltipPositionMode.POINT)
             cartesian.interactivity().hoverMode(HoverMode.BY_X)
             cartesian.xAxis(0).title(getString(R.string.report_usage_dates))
+            cartesian.yAxis(0).labels().format("{%Value}{groupsSeparator: }")
             cartesian.yAxis(0).title(getString(R.string.report_usage_hours_total))
 
             usageChart.setChart(cartesian)
