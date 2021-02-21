@@ -21,7 +21,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/margin_small"
+            android:layout_marginBottom="@dimen/margin_material"
             android:gravity="center_horizontal"
             android:textSize="@dimen/header_text_size"
             android:textStyle="bold"
