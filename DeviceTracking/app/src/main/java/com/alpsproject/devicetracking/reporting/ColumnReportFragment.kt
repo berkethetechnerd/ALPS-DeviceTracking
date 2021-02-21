@@ -109,6 +109,7 @@ class ColumnReportFragment : Fragment() {
                 tvDescription.text = getString(R.string.report_usage_description, it, numberOfDays, chartData.average())
                 APIlib.getInstance().setActiveAnyChartView(usageChart)
                 drawChart(chartDates, chartData, isUpdate)
+                showChart()
                 return
             }
         }
@@ -169,6 +170,12 @@ class ColumnReportFragment : Fragment() {
         usageChart.visibility = View.GONE
         progressBar.visibility = View.GONE
         noDataLayout.visibility = View.VISIBLE
+    }
+
+    private fun showChart() {
+        usageChart.visibility = View.VISIBLE
+        progressBar.visibility = View.VISIBLE
+        noDataLayout.visibility = View.GONE
     }
 
     private fun isDataExistForSelectedTimeFrame(chartData: DoubleArray): Boolean {

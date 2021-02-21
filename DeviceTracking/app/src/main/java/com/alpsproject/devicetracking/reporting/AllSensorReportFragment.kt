@@ -39,6 +39,9 @@ class AllSensorReportFragment : Fragment() {
     private lateinit var dataForNFC: MutableList<DataEntry>
     private lateinit var dataForTorch: MutableList<DataEntry>
 
+    private var selectedDay = CalendarManager.fetchCalendarDays(CalendarDays.LAST_24_HOURS)[0]
+    private val dayArray = CalendarManager.fetchCalendarDays(CalendarDays.LAST_7_DAYS).reversedArray()
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_all_sensor_report, container, false)
         initUI(view)
@@ -58,7 +61,13 @@ class AllSensorReportFragment : Fragment() {
         spTimeFrame = view.findViewById(R.id.sp_all_data_day_frame)
         spTimeFrame.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                // initChart(isUpdate = true)
+                selectedDay = if (dayArray[position] == "Today") {
+                    CalendarManager.fetchCalendarDays(CalendarDays.LAST_24_HOURS)[0]
+                } else {
+                    dayArray[position]
+                }
+
+                initChart(isUpdate = true)
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) { }
@@ -67,22 +76,22 @@ class AllSensorReportFragment : Fragment() {
 
     private fun initSpinner() {
         context?.let {
-            ArrayAdapter.createFromResource(it, R.array.report_time_frames, android.R.layout.simple_spinner_item).also { adapter ->
+            dayArray[0] = "Today"
+            ArrayAdapter(it, android.R.layout.simple_spinner_item, dayArray).also { adapter ->
                 adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                 spTimeFrame.adapter = adapter
-                spTimeFrame.setSelection(1) // Last 3 days
+                spTimeFrame.setSelection(0) // Today
             }
         }
     }
 
     private fun initChart(isUpdate: Boolean) {
-        val chartDates = CalendarManager.fetchCalendarDays(CalendarDays.LAST_24_HOURS)
-        val chartDataForWifi = RealmManager.queryForDatesInSensor(chartDates, DeviceSensor.ACCESS_WIFI, CalendarDays.LAST_24_HOURS)
-        val chartDataForBluetooth = RealmManager.queryForDatesInSensor(chartDates, DeviceSensor.ACCESS_BLUETOOTH, CalendarDays.LAST_24_HOURS)
-        val chartDataForScreenUsage = RealmManager.queryForDatesInSensor(chartDates, DeviceSensor.ACCESS_SCREEN_USAGE, CalendarDays.LAST_24_HOURS)
-        val chartDataForGPS = RealmManager.queryForDatesInSensor(chartDates, DeviceSensor.ACCESS_GPS, CalendarDays.LAST_24_HOURS)
-        val chartDataForNFC = RealmManager.queryForDatesInSensor(chartDates, DeviceSensor.ACCESS_NFC, CalendarDays.LAST_24_HOURS)
-        val chartDataForTorch = RealmManager.queryForDatesInSensor(chartDates, DeviceSensor.ACCESS_TORCH, CalendarDays.LAST_24_HOURS)
+        val chartDataForWifi = RealmManager.queryForSpecificDayInSensor(selectedDay, DeviceSensor.ACCESS_WIFI)
+        val chartDataForBluetooth = RealmManager.queryForSpecificDayInSensor(selectedDay, DeviceSensor.ACCESS_BLUETOOTH)
+        val chartDataForScreenUsage = RealmManager.queryForSpecificDayInSensor(selectedDay, DeviceSensor.ACCESS_SCREEN_USAGE)
+        val chartDataForGPS = RealmManager.queryForSpecificDayInSensor(selectedDay, DeviceSensor.ACCESS_GPS)
+        val chartDataForNFC = RealmManager.queryForSpecificDayInSensor(selectedDay, DeviceSensor.ACCESS_NFC)
+        val chartDataForTorch = RealmManager.queryForSpecificDayInSensor(selectedDay, DeviceSensor.ACCESS_TORCH)
 
         if (isDataExistForSelectedTimeFrame(chartDataForWifi)
                 || isDataExistForSelectedTimeFrame(chartDataForBluetooth)
@@ -92,6 +101,7 @@ class AllSensorReportFragment : Fragment() {
                 || isDataExistForSelectedTimeFrame(chartDataForTorch)) {
             APIlib.getInstance().setActiveAnyChartView(usageChart)
             drawChart(chartDataForWifi, chartDataForBluetooth, chartDataForScreenUsage, chartDataForGPS, chartDataForNFC, chartDataForTorch, isUpdate)
+            showChart()
             return
         }
 
@@ -212,6 +222,12 @@ class AllSensorReportFragment : Fragment() {
         usageChart.visibility = View.GONE
         progressBar.visibility = View.GONE
         noDataLayout.visibility = View.VISIBLE
+    }
+
+    private fun showChart() {
+        usageChart.visibility = View.VISIBLE
+        progressBar.visibility = View.VISIBLE
+        noDataLayout.visibility = View.GONE
     }
 
     private fun isDataExistForSelectedTimeFrame(chartData: DoubleArray): Boolean {
