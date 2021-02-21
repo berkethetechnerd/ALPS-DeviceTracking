@@ -37,6 +37,7 @@ object SensorMetricsAPI {
     }
 
     private fun getJsonObject(sensorData: SensorData) = JsonObject().apply {
+        addProperty("device_id", SharedPreferencesManager.read(ConstantsManager.DEVICE_IDENTIFIER, ConstantsManager.DEVICE_IDENTIFIER_DEFAULT))
         addProperty("sensor_name", sensorData.sensorName)
         addProperty("start_time", CalendarManager.dateToBackendString(sensorData.startTime))
         addProperty("end_time", CalendarManager.dateToBackendString(sensorData.endTime))
