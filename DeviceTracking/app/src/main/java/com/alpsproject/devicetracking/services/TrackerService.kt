@@ -112,6 +112,7 @@ class TrackerService : Service() {
         }
 
         val pendingIntent: PendingIntent = Intent(this, DataCollectionActivity::class.java).let { notificationIntent ->
+            notificationIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             PendingIntent.getActivity(this, 0, notificationIntent, 0)
         }
 

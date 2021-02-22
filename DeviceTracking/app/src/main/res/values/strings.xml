@@ -122,7 +122,8 @@
     <string name="sensor_item_enabled">ON</string>
     <string name="sensor_item_disabled">OFF</string>
 
-    <string name="service_description">The service is enabled and currently collecting data.</string>
+    <string name="service_description">The service is enabled and currently collection data.
+        Due to security measures taken byAndroid, we are bound to show this notification to you.</string>
 
     <string name="content_description_app_logo">ALPS Software Ltd</string>
     <string name="content_description_ifm_logo">Innovation and IP Management LAB</string>
