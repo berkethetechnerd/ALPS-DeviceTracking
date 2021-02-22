@@ -191,7 +191,7 @@ object RealmManager {
         seconds += secondsForToday2Later(sensorName, startDate, endDate)
         seconds += secondsForBefore2Later(sensorName, startDate, endDate)
         seconds += secondsForToday2NoFinish(sensorName, startDate, endDate)
-        seconds += secondsForBefore2NoFinish(sensorName, startDate)
+        seconds += secondsForBefore2NoFinish(sensorName, startDate, endDate)
         return seconds / 3600.0
     }
 
@@ -227,14 +227,24 @@ object RealmManager {
         val realmQuery = realm.where(SensorData::class.java).equalTo(ENTRY_SENSOR_NAME, sensor)
         val preliminaryResults = realmQuery.greaterThan(ENTRY_START_DATE, startDate).lessThan(ENTRY_START_DATE, endDate).findAll()
         val results = preliminaryResults.filter { it.endTime == null }
-        return getTotalHours(results)
+
+        val currentInstance = Date()
+        val qualifiedEndTime = if (endDate.after(currentInstance)) currentInstance else endDate
+
+        return if (results.isEmpty()) { 0.0 } else { getTotalHoursWithEnd(results[0]!!, qualifiedEndTime) }
     }
 
-    private fun secondsForBefore2NoFinish(sensor: String, startDate: Date): Double {
+    private fun secondsForBefore2NoFinish(sensor: String, startDate: Date, endDate: Date): Double {
         val realmQuery = realm.where(SensorData::class.java).equalTo(ENTRY_SENSOR_NAME, sensor)
         val preliminaryResults = realmQuery.lessThan(ENTRY_START_DATE, startDate).findAll()
         val results = preliminaryResults.filter { it.endTime == null }
-        return if (results.isEmpty()) { 0.0 } else { getTotalHoursWithStart(results[0]!!, startDate) }
+
+        val currentInstance = Date()
+        return when {
+            results.isEmpty() -> { 0.0 }
+            endDate.after(currentInstance) -> { getTotalHoursWithStart(results[0]!!, startDate) }
+            else -> { 24.0 * 3600 }
+        }
     }
 
     private fun getTotalHours(results: List<SensorData>): Double {
