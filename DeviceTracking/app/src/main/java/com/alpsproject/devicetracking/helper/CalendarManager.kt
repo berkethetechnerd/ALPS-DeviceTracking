@@ -6,6 +6,8 @@ import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 import kotlin.collections.ArrayList
+import kotlin.math.floor
+import kotlin.math.roundToInt
 
 object CalendarManager {
 
@@ -86,6 +88,17 @@ object CalendarManager {
             1 -> "06h - 12h"
             2 -> "12h - 18h"
             else -> "18h - 00h"
+        }
+    }
+
+    fun covertRawTimeToFriendlyTime(time: Double): String {
+        val hours = floor(time).toInt()
+        val minutes = floor(60 * (time - hours)).toInt()
+
+        return when {
+            hours == 0 -> { "$minutes minutes." }
+            minutes == 0 -> { "$hours hours." }
+            else -> { "$hours hours $minutes minutes." }
         }
     }
 

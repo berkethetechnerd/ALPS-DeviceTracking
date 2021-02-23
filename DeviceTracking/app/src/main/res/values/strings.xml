@@ -75,7 +75,7 @@
     <string name="report_tab_all">All Sensors</string>
     <string name="report_usage_description">In this screen, you can see your \'%1$s\' sensor data
         for the last %2$d days. Over this period of time, your average use of this sensor was
-        %3$.3f hours/day.</string>
+        %3$s</string>
     <string name="report_usage_all_description">In this screen, you can see all of your device sensor
         usage statistics at one place. Please change date from above selector to view a specific day.</string>
     <string name="report_no_data_found">(ø_ø)\n\nNo data found</string>
@@ -129,8 +129,7 @@
     <string name="sensor_item_enabled">ON</string>
     <string name="sensor_item_disabled">OFF</string>
 
-    <string name="service_description">The service is enabled and currently collection data.
-        Due to security measures taken byAndroid, we are bound to show this notification to you.</string>
+    <string name="service_description">Sensor Metrics is enabled and currently collection data.</string>
 
     <string name="content_description_app_logo">ALPS Software Ltd</string>
     <string name="content_description_ifm_logo">Innovation and IP Management LAB</string>
