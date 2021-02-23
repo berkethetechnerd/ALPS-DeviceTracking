@@ -107,7 +107,7 @@ class ColumnReportFragment : Fragment() {
             val chartData = RealmManager.queryForDatesInSensor(chartDates, sensorType, timeFrame)
 
             if (isDataExistForSelectedTimeFrame(chartData)) {
-                tvDescription.text = getString(R.string.report_usage_description, it, numberOfDays, chartData.average())
+                tvDescription.text = getString(R.string.report_usage_description, it, numberOfDays, CalendarManager.covertRawTimeToFriendlyTime(chartData.average()))
                 APIlib.getInstance().setActiveAnyChartView(usageChart)
                 drawChart(chartDates, chartData, isUpdate, sensorColor)
                 showChart()
@@ -115,7 +115,7 @@ class ColumnReportFragment : Fragment() {
             }
         }
 
-        tvDescription.text = getString(R.string.report_usage_description, reportName, numberOfDays, 0.0)
+        tvDescription.text = getString(R.string.report_usage_description, reportName, numberOfDays, CalendarManager.covertRawTimeToFriendlyTime(0.0))
         hideChart()
     }
 
@@ -186,7 +186,13 @@ class ColumnReportFragment : Fragment() {
                 .anchor(Anchor.CENTER_BOTTOM)
                 .offsetX(0.0)
                 .offsetY(5.0)
-                .format("{%Value}{groupsSeparator: } Hours")
+                    .format("function() {\n" +
+                            "  hours = parseInt(Math.floor(this.value), 10)\n" +
+                            "  minutes = parseInt(Math.floor(60 * (this.value - hours)), 10)\n" +
+                            "  if (hours === 0) { return minutes + \" minutes\" }\n" +
+                            "  else if (minutes === 0) { return hours + \" hours\" }\n" +
+                            "  else { return hours + \" hours \" + minutes + \" minutes\" }\n" +
+                            "}")
         }
     }
 

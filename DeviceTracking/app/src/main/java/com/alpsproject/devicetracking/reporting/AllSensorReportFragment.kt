@@ -134,7 +134,13 @@ class AllSensorReportFragment : Fragment() {
                 .anchor(Anchor.CENTER_BOTTOM)
                 .offsetX(0.0)
                 .offsetY(5.0)
-                .format("{%Value}{groupsSeparator: } Hours")
+                    .format("function() {\n" +
+                            "  hours = parseInt(Math.floor(this.value), 10)\n" +
+                            "  minutes = parseInt(Math.floor(60 * (this.value - hours)), 10)\n" +
+                            "  if (hours === 0) { return minutes + \" minutes\" }\n" +
+                            "  else if (minutes === 0) { return hours + \" hours\" }\n" +
+                            "  else { return hours + \" hours \" + minutes + \" minutes\" }\n" +
+                            "}")
 
             val column2: Column = cartesian.column(dataForBluetooth).name("Bluetooth").fill(getString(R.string.sensor_color_screen_usage)).stroke(getString(R.string.sensor_color_screen_usage))
             column2.tooltip()
@@ -143,7 +149,13 @@ class AllSensorReportFragment : Fragment() {
                 .anchor(Anchor.CENTER_BOTTOM)
                 .offsetX(0.0)
                 .offsetY(5.0)
-                .format("{%Value}{groupsSeparator: } Hours")
+                    .format("function() {\n" +
+                            "  hours = parseInt(Math.floor(this.value), 10)\n" +
+                            "  minutes = parseInt(Math.floor(60 * (this.value - hours)), 10)\n" +
+                            "  if (hours === 0) { return minutes + \" minutes\" }\n" +
+                            "  else if (minutes === 0) { return hours + \" hours\" }\n" +
+                            "  else { return hours + \" hours \" + minutes + \" minutes\" }\n" +
+                            "}")
 
             val column3: Column = cartesian.column(dataForScreenUsage).name("Screen Usage").fill(getString(R.string.sensor_color_bluetooth)).stroke(getString(R.string.sensor_color_bluetooth))
             column3.tooltip()
@@ -152,7 +164,13 @@ class AllSensorReportFragment : Fragment() {
                 .anchor(Anchor.CENTER_BOTTOM)
                 .offsetX(0.0)
                 .offsetY(5.0)
-                .format("{%Value}{groupsSeparator: } Hours")
+                    .format("function() {\n" +
+                            "  hours = parseInt(Math.floor(this.value), 10)\n" +
+                            "  minutes = parseInt(Math.floor(60 * (this.value - hours)), 10)\n" +
+                            "  if (hours === 0) { return minutes + \" minutes\" }\n" +
+                            "  else if (minutes === 0) { return hours + \" hours\" }\n" +
+                            "  else { return hours + \" hours \" + minutes + \" minutes\" }\n" +
+                            "}")
 
             val column4: Column = cartesian.column(dataForGPS).name("GPS").fill(getString(R.string.sensor_color_gps)).stroke(getString(R.string.sensor_color_gps))
             column4.tooltip()
@@ -161,7 +179,13 @@ class AllSensorReportFragment : Fragment() {
                 .anchor(Anchor.CENTER_BOTTOM)
                 .offsetX(0.0)
                 .offsetY(5.0)
-                .format("{%Value}{groupsSeparator: } Hours")
+                    .format("function() {\n" +
+                            "  hours = parseInt(Math.floor(this.value), 10)\n" +
+                            "  minutes = parseInt(Math.floor(60 * (this.value - hours)), 10)\n" +
+                            "  if (hours === 0) { return minutes + \" minutes\" }\n" +
+                            "  else if (minutes === 0) { return hours + \" hours\" }\n" +
+                            "  else { return hours + \" hours \" + minutes + \" minutes\" }\n" +
+                            "}")
 
             val column5: Column = cartesian.column(dataForNFC).name("NFC").fill(getString(R.string.sensor_color_nfc)).stroke(getString(R.string.sensor_color_nfc))
             column5.tooltip()
@@ -170,7 +194,13 @@ class AllSensorReportFragment : Fragment() {
                 .anchor(Anchor.CENTER_BOTTOM)
                 .offsetX(0.0)
                 .offsetY(5.0)
-                .format("{%Value}{groupsSeparator: } Hours")
+                    .format("function() {\n" +
+                            "  hours = parseInt(Math.floor(this.value), 10)\n" +
+                            "  minutes = parseInt(Math.floor(60 * (this.value - hours)), 10)\n" +
+                            "  if (hours === 0) { return minutes + \" minutes\" }\n" +
+                            "  else if (minutes === 0) { return hours + \" hours\" }\n" +
+                            "  else { return hours + \" hours \" + minutes + \" minutes\" }\n" +
+                            "}")
 
             val column6: Column = cartesian.column(dataForTorch).name("Torch").fill(getString(R.string.sensor_color_torch)).stroke(getString(R.string.sensor_color_torch))
             column6.tooltip()
@@ -179,7 +209,13 @@ class AllSensorReportFragment : Fragment() {
                 .anchor(Anchor.CENTER_BOTTOM)
                 .offsetX(0.0)
                 .offsetY(5.0)
-                .format("{%Value}{groupsSeparator: } Hours")
+                    .format("function() {\n" +
+                            "  hours = parseInt(Math.floor(this.value), 10)\n" +
+                            "  minutes = parseInt(Math.floor(60 * (this.value - hours)), 10)\n" +
+                            "  if (hours === 0) { return minutes + \" minutes\" }\n" +
+                            "  else if (minutes === 0) { return hours + \" hours\" }\n" +
+                            "  else { return hours + \" hours \" + minutes + \" minutes\" }\n" +
+                            "}")
 
             cartesian.animation(true)
             cartesian.yScale().minimum(0.0)
@@ -222,7 +258,13 @@ class AllSensorReportFragment : Fragment() {
                 .anchor(Anchor.CENTER_BOTTOM)
                 .offsetX(0.0)
                 .offsetY(5.0)
-                .format("{%Value}{groupsSeparator: } Hours")
+                    .format("function() {\n" +
+                            "  hours = parseInt(Math.floor(this.value), 10)\n" +
+                            "  minutes = parseInt(Math.floor(60 * (this.value - hours)), 10)\n" +
+                            "  if (hours === 0) { return minutes + \" minutes\" }\n" +
+                            "  else if (minutes === 0) { return hours + \" hours\" }\n" +
+                            "  else { return hours + \" hours \" + minutes + \" minutes\" }\n" +
+                            "}")
 
             val column2: Column = cartesian.column(dataForBluetooth).name("Bluetooth").fill(getString(R.string.sensor_color_screen_usage)).stroke(getString(R.string.sensor_color_screen_usage))
             column2.tooltip()
@@ -231,7 +273,13 @@ class AllSensorReportFragment : Fragment() {
                 .anchor(Anchor.CENTER_BOTTOM)
                 .offsetX(0.0)
                 .offsetY(5.0)
-                .format("{%Value}{groupsSeparator: } Hours")
+                    .format("function() {\n" +
+                            "  hours = parseInt(Math.floor(this.value), 10)\n" +
+                            "  minutes = parseInt(Math.floor(60 * (this.value - hours)), 10)\n" +
+                            "  if (hours === 0) { return minutes + \" minutes\" }\n" +
+                            "  else if (minutes === 0) { return hours + \" hours\" }\n" +
+                            "  else { return hours + \" hours \" + minutes + \" minutes\" }\n" +
+                            "}")
 
             val column3: Column = cartesian.column(dataForScreenUsage).name("Screen Usage").fill(getString(R.string.sensor_color_bluetooth)).stroke(getString(R.string.sensor_color_bluetooth))
             column3.tooltip()
@@ -240,7 +288,13 @@ class AllSensorReportFragment : Fragment() {
                 .anchor(Anchor.CENTER_BOTTOM)
                 .offsetX(0.0)
                 .offsetY(5.0)
-                .format("{%Value}{groupsSeparator: } Hours")
+                    .format("function() {\n" +
+                            "  hours = parseInt(Math.floor(this.value), 10)\n" +
+                            "  minutes = parseInt(Math.floor(60 * (this.value - hours)), 10)\n" +
+                            "  if (hours === 0) { return minutes + \" minutes\" }\n" +
+                            "  else if (minutes === 0) { return hours + \" hours\" }\n" +
+                            "  else { return hours + \" hours \" + minutes + \" minutes\" }\n" +
+                            "}")
 
             val column4: Column = cartesian.column(dataForGPS).name("GPS").fill(getString(R.string.sensor_color_gps)).stroke(getString(R.string.sensor_color_gps))
             column4.tooltip()
@@ -249,7 +303,13 @@ class AllSensorReportFragment : Fragment() {
                 .anchor(Anchor.CENTER_BOTTOM)
                 .offsetX(0.0)
                 .offsetY(5.0)
-                .format("{%Value}{groupsSeparator: } Hours")
+                    .format("function() {\n" +
+                            "  hours = parseInt(Math.floor(this.value), 10)\n" +
+                            "  minutes = parseInt(Math.floor(60 * (this.value - hours)), 10)\n" +
+                            "  if (hours === 0) { return minutes + \" minutes\" }\n" +
+                            "  else if (minutes === 0) { return hours + \" hours\" }\n" +
+                            "  else { return hours + \" hours \" + minutes + \" minutes\" }\n" +
+                            "}")
 
             val column5: Column = cartesian.column(dataForNFC).name("NFC").fill(getString(R.string.sensor_color_nfc)).stroke(getString(R.string.sensor_color_nfc))
             column5.tooltip()
@@ -258,7 +318,13 @@ class AllSensorReportFragment : Fragment() {
                 .anchor(Anchor.CENTER_BOTTOM)
                 .offsetX(0.0)
                 .offsetY(5.0)
-                .format("{%Value}{groupsSeparator: } Hours")
+                    .format("function() {\n" +
+                            "  hours = parseInt(Math.floor(this.value), 10)\n" +
+                            "  minutes = parseInt(Math.floor(60 * (this.value - hours)), 10)\n" +
+                            "  if (hours === 0) { return minutes + \" minutes\" }\n" +
+                            "  else if (minutes === 0) { return hours + \" hours\" }\n" +
+                            "  else { return hours + \" hours \" + minutes + \" minutes\" }\n" +
+                            "}")
 
             val column6: Column = cartesian.column(dataForTorch).name("Torch").fill(getString(R.string.sensor_color_torch)).stroke(getString(R.string.sensor_color_torch))
             column6.tooltip()
@@ -267,7 +333,13 @@ class AllSensorReportFragment : Fragment() {
                 .anchor(Anchor.CENTER_BOTTOM)
                 .offsetX(0.0)
                 .offsetY(5.0)
-                .format("{%Value}{groupsSeparator: } Hours")
+                    .format("function() {\n" +
+                            "  hours = parseInt(Math.floor(this.value), 10)\n" +
+                            "  minutes = parseInt(Math.floor(60 * (this.value - hours)), 10)\n" +
+                            "  if (hours === 0) { return minutes + \" minutes\" }\n" +
+                            "  else if (minutes === 0) { return hours + \" hours\" }\n" +
+                            "  else { return hours + \" hours \" + minutes + \" minutes\" }\n" +
+                            "}")
         }
     }
 
