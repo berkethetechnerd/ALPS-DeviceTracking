@@ -102,13 +102,14 @@ class ColumnReportFragment : Fragment() {
     private fun initChart(isUpdate: Boolean) {
         reportName?.let {
             val sensorType = getSensorType(it)
+            val sensorColor = getSensorColor(it)
             val chartDates = CalendarManager.fetchCalendarDays(timeFrame)
             val chartData = RealmManager.queryForDatesInSensor(chartDates, sensorType, timeFrame)
 
             if (isDataExistForSelectedTimeFrame(chartData)) {
                 tvDescription.text = getString(R.string.report_usage_description, it, numberOfDays, chartData.average())
                 APIlib.getInstance().setActiveAnyChartView(usageChart)
-                drawChart(chartDates, chartData, isUpdate)
+                drawChart(chartDates, chartData, isUpdate, sensorColor)
                 showChart()
                 return
             }
@@ -118,7 +119,7 @@ class ColumnReportFragment : Fragment() {
         hideChart()
     }
 
-    private fun drawChart(chartDates: Array<String>, chartData: DoubleArray, isUpdate: Boolean) {
+    private fun drawChart(chartDates: Array<String>, chartData: DoubleArray, isUpdate: Boolean, sensorColor: String) {
         if (!isUpdate) {
             cartesian = AnyChart.column()
             data = ArrayList()
@@ -131,7 +132,7 @@ class ColumnReportFragment : Fragment() {
                 }
             }
 
-            val column: Column = cartesian.column(data)
+            val column: Column = cartesian.column(data).fill(sensorColor).stroke(sensorColor)
             column.tooltip()
                     .titleFormat("{%X}")
                     .position(Position.CENTER_BOTTOM)
@@ -178,7 +179,7 @@ class ColumnReportFragment : Fragment() {
                 cartesian.yScale().maximum(maxValue)
             }
 
-            val column: Column = cartesian.column(data)
+            val column: Column = cartesian.column(data).fill(sensorColor).stroke(sensorColor)
             column.tooltip()
                 .titleFormat("{%X}")
                 .position(Position.CENTER_BOTTOM)
@@ -220,6 +221,18 @@ class ColumnReportFragment : Fragment() {
             getString(R.string.report_tab_nfc) -> DeviceSensor.ACCESS_NFC
             getString(R.string.report_tab_torch) -> DeviceSensor.ACCESS_TORCH
             else -> DeviceSensor.ACCESS_SCREEN_USAGE
+        }
+    }
+
+    private fun getSensorColor(reportName: String): String {
+        return when(reportName) {
+            getString(R.string.report_tab_wifi) -> getString(R.string.sensor_color_wifi)
+            getString(R.string.report_tab_bluetooth) -> getString(R.string.sensor_color_bluetooth)
+            getString(R.string.report_tab_screen_usage) -> getString(R.string.sensor_color_screen_usage)
+            getString(R.string.report_tab_gps) -> getString(R.string.sensor_color_gps)
+            getString(R.string.report_tab_nfc) -> getString(R.string.sensor_color_nfc)
+            getString(R.string.report_tab_torch) -> getString(R.string.sensor_color_torch)
+            else -> getString(R.string.sensor_color_screen_usage)
         }
     }
 
