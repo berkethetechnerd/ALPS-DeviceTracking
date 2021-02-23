@@ -43,6 +43,13 @@
     <string name="sensor_nfc">NFC</string>
     <string name="sensor_torch">Torch</string>
 
+    <string name="sensor_color_wifi">#A9C47F</string>
+    <string name="sensor_color_bluetooth">#4F868E</string>
+    <string name="sensor_color_screen_usage">#A192B2</string>
+    <string name="sensor_color_gps">#B04A5A</string>
+    <string name="sensor_color_nfc">#F2C75C</string>
+    <string name="sensor_color_torch">#7DA1C4</string>
+
     <string name="sensor_selection_next">Next</string>
     <string name="sensor_selection_description">Please select at least one sensor from below
         available sensor list. \n\nYou will be then asked to give permission for us to observe the
