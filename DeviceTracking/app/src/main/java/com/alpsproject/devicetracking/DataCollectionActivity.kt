@@ -16,7 +16,6 @@ import com.alpsproject.devicetracking.views.SensorView
 
 class DataCollectionActivity : BaseActivity(), SensorStatusDelegate {
 
-    private lateinit var tvTitle: TextView
     private lateinit var btnStartStop: Button
     private lateinit var tvReportScreenHint: TextView
     private lateinit var selectedWifiView: SensorView
@@ -45,7 +44,6 @@ class DataCollectionActivity : BaseActivity(), SensorStatusDelegate {
         get() = intent.getBooleanExtra(C.SENSOR_TORCH, false)
                 || SharedPreferencesManager.read(C.getRunningSensorKey(DeviceSensor.ACCESS_TORCH), false)
 
-
     private val arrOfSelectedSensors: Array<Boolean>
         get() = arrayOf(
                 isWifiSelected,
@@ -68,11 +66,6 @@ class DataCollectionActivity : BaseActivity(), SensorStatusDelegate {
     override fun onStart() {
         super.onStart()
         Broadcaster.registerForBroadcasting(this, arrOfSelectedSensors)
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        Broadcaster.unregisterForBroadcasting(this, arrOfSelectedSensors)
     }
 
     private fun initUI() {
