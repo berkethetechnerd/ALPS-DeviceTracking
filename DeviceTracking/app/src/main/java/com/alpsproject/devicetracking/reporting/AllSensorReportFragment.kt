@@ -225,9 +225,14 @@ class AllSensorReportFragment : Fragment() {
             cartesian.yAxis(0).title(getString(R.string.report_usage_hours_total))
             cartesian.yAxis(0).labels().format("{%Value}{groupsSeparator: }")
 
-            val legend = cartesian.legend()
-            legend.enabled(true)
-            legend.margin(0, 0, 30, 0)
+            cartesian.legend()
+                .enabled(true)
+                .align("center")
+                .itemsLayout("horizontalExpandable")
+                .maxHeight(300)
+                .margin(0, 0, 30, 0)
+                .paginator()
+                    .enabled(false)
 
             usageChart.setChart(cartesian)
         } else {
