@@ -100,6 +100,14 @@ class ColumnReportFragment : Fragment() {
     }
 
     private fun initChart(isUpdate: Boolean) {
+        fun calcDataAvg(data: DoubleArray): Double {
+            return if (timeFrame == CalendarDays.LAST_24_HOURS) {
+                data.sum()
+            } else {
+                data.average()
+            }
+        }
+
         reportName?.let {
             val sensorType = getSensorType(it)
             val sensorColor = getSensorColor(it)
@@ -107,7 +115,7 @@ class ColumnReportFragment : Fragment() {
             val chartData = RealmManager.queryForDatesInSensor(chartDates, sensorType, timeFrame)
 
             if (isDataExistForSelectedTimeFrame(chartData)) {
-                tvDescription.text = getString(R.string.report_usage_description, it, numberOfDays, CalendarManager.covertRawTimeToFriendlyTime(chartData.average()))
+                tvDescription.text = getString(R.string.report_usage_description, it, numberOfDays, CalendarManager.convertRawTimeToFriendlyTime(calcDataAvg(chartData)))
                 APIlib.getInstance().setActiveAnyChartView(usageChart)
                 drawChart(chartDates, chartData, isUpdate, sensorColor)
                 showChart()
@@ -115,7 +123,7 @@ class ColumnReportFragment : Fragment() {
             }
         }
 
-        tvDescription.text = getString(R.string.report_usage_description, reportName, numberOfDays, CalendarManager.covertRawTimeToFriendlyTime(0.0))
+        tvDescription.text = getString(R.string.report_usage_description, reportName, numberOfDays, CalendarManager.convertRawTimeToFriendlyTime(0.0))
         hideChart()
     }
 

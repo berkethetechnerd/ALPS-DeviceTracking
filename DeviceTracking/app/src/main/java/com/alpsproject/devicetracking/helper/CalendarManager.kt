@@ -91,7 +91,7 @@ object CalendarManager {
         }
     }
 
-    fun covertRawTimeToFriendlyTime(time: Double): String {
+    fun convertRawTimeToFriendlyTime(time: Double): String {
         val hours = floor(time).toInt()
         val minutes = floor(60 * (time - hours)).toInt()
 
