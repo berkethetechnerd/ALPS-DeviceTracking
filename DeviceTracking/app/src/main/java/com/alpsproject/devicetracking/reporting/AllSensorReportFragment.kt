@@ -236,6 +236,10 @@ class AllSensorReportFragment : Fragment() {
 
             usageChart.setChart(cartesian)
         } else {
+            if (!this::cartesian.isInitialized) {
+                drawChart(wifiData, blData, screenData, gpsData, nfcData, torchData, false)
+            }
+
             cartesian.removeAllSeries()
             dataForWifi.clear()
             dataForBluetooth.clear()

@@ -160,6 +160,10 @@ class ColumnReportFragment : Fragment() {
 
             usageChart.setChart(cartesian)
         } else {
+            if (!this::cartesian.isInitialized) {
+                drawChart(chartDates, chartData, false, sensorColor)
+            }
+
             cartesian.removeAllSeries()
             data.clear()
 
