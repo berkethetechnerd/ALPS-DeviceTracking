@@ -30,7 +30,7 @@
         The data will be sent regularly to our UK-based servers, where it is stored unassociated with
         any personal data.
     </string>
-    <string name="consent_text">I was informed in great detail and fully understood what kind of
+    <string name="consent_text">I was informed in detail and fully understood what kind of
         device data would be processed. I hereby consent to the collection and processing of sensor
         data on my device. </string>
     <string name="consent_must_agree">You need to give consent before participating.</string>

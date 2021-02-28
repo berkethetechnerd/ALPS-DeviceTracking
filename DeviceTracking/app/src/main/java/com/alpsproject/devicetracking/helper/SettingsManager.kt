@@ -34,7 +34,9 @@ object SettingsManager: ActivationDelegate {
             }
 
             if (!isSensorEnabled) {
-                UserMessageGenerator.generateDialogForActivation(activity, sensor)
+                // Disabled feature by request
+                // UserMessageGenerator.generateDialogForActivation(activity, sensor)
+                return
             }
         }
     }
