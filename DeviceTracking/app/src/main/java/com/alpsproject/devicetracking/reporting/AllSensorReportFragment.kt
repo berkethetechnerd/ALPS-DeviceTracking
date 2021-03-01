@@ -142,7 +142,7 @@ class AllSensorReportFragment : Fragment() {
                             "  else { return hours + \" hours \" + minutes + \" minutes\" }\n" +
                             "}")
 
-            val column2: Column = cartesian.column(dataForBluetooth).name("Bluetooth").fill(getString(R.string.sensor_color_screen_usage)).stroke(getString(R.string.sensor_color_screen_usage))
+            val column2: Column = cartesian.column(dataForBluetooth).name("Bluetooth").fill(getString(R.string.sensor_color_bluetooth)).stroke(getString(R.string.sensor_color_bluetooth))
             column2.tooltip()
                 .titleFormat("Bluetooth usage")
                 .position(Position.CENTER_BOTTOM)
@@ -157,7 +157,7 @@ class AllSensorReportFragment : Fragment() {
                             "  else { return hours + \" hours \" + minutes + \" minutes\" }\n" +
                             "}")
 
-            val column3: Column = cartesian.column(dataForScreenUsage).name("Screen Usage").fill(getString(R.string.sensor_color_bluetooth)).stroke(getString(R.string.sensor_color_bluetooth))
+            val column3: Column = cartesian.column(dataForScreenUsage).name("Screen Usage").fill(getString(R.string.sensor_color_screen_usage)).stroke(getString(R.string.sensor_color_screen_usage))
             column3.tooltip()
                 .titleFormat("Screen usage")
                 .position(Position.CENTER_BOTTOM)
@@ -275,7 +275,7 @@ class AllSensorReportFragment : Fragment() {
                             "  else { return hours + \" hours \" + minutes + \" minutes\" }\n" +
                             "}")
 
-            val column2: Column = cartesian.column(dataForBluetooth).name("Bluetooth").fill(getString(R.string.sensor_color_screen_usage)).stroke(getString(R.string.sensor_color_screen_usage))
+            val column2: Column = cartesian.column(dataForBluetooth).name("Bluetooth").fill(getString(R.string.sensor_color_bluetooth)).stroke(getString(R.string.sensor_color_bluetooth))
             column2.tooltip()
                 .titleFormat("Bluetooth usage")
                 .position(Position.CENTER_BOTTOM)
@@ -290,7 +290,7 @@ class AllSensorReportFragment : Fragment() {
                             "  else { return hours + \" hours \" + minutes + \" minutes\" }\n" +
                             "}")
 
-            val column3: Column = cartesian.column(dataForScreenUsage).name("Screen Usage").fill(getString(R.string.sensor_color_bluetooth)).stroke(getString(R.string.sensor_color_bluetooth))
+            val column3: Column = cartesian.column(dataForScreenUsage).name("Screen Usage").fill(getString(R.string.sensor_color_screen_usage)).stroke(getString(R.string.sensor_color_screen_usage))
             column3.tooltip()
                 .titleFormat("Screen usage")
                 .position(Position.CENTER_BOTTOM)
