@@ -17,7 +17,7 @@ import com.anychart.AnyChartView
 import com.anychart.chart.common.dataentry.DataEntry
 import com.anychart.chart.common.dataentry.ValueDataEntry
 import com.anychart.charts.Cartesian
-import com.anychart.core.cartesian.series.Column
+import com.anychart.core.cartesian.series.Line
 import com.anychart.enums.Anchor
 import com.anychart.enums.HoverMode
 import com.anychart.enums.Position
@@ -129,7 +129,7 @@ class ColumnReportFragment : Fragment() {
 
     private fun drawChart(chartDates: Array<String>, chartData: DoubleArray, isUpdate: Boolean, sensorColor: String) {
         if (!isUpdate) {
-            cartesian = AnyChart.column()
+            cartesian = AnyChart.line()
             data = ArrayList()
 
             for (index in chartData.indices) {
@@ -140,7 +140,7 @@ class ColumnReportFragment : Fragment() {
                 }
             }
 
-            val column: Column = cartesian.column(data).fill(sensorColor).stroke(sensorColor)
+            val column: Line = cartesian.line(data).color(sensorColor) as Line
             column.tooltip()
                     .titleFormat("{%X}")
                     .position(Position.CENTER_BOTTOM)
@@ -191,7 +191,7 @@ class ColumnReportFragment : Fragment() {
                 cartesian.yScale().maximum(maxValue)
             }
 
-            val column: Column = cartesian.column(data).fill(sensorColor).stroke(sensorColor)
+            val column: Line = cartesian.line(data).color(sensorColor) as Line
             column.tooltip()
                 .titleFormat("{%X}")
                 .position(Position.CENTER_BOTTOM)

@@ -17,9 +17,8 @@ import com.anychart.AnyChartView
 import com.anychart.chart.common.dataentry.DataEntry
 import com.anychart.chart.common.dataentry.ValueDataEntry
 import com.anychart.charts.Cartesian
-import com.anychart.core.cartesian.series.Column
+import com.anychart.core.cartesian.series.Line
 import com.anychart.enums.Anchor
-import com.anychart.enums.HoverMode
 import com.anychart.enums.Position
 import com.anychart.enums.TooltipPositionMode
 
@@ -110,7 +109,7 @@ class AllSensorReportFragment : Fragment() {
 
     private fun drawChart(wifiData: DoubleArray, blData: DoubleArray, screenData: DoubleArray, gpsData: DoubleArray, nfcData: DoubleArray, torchData: DoubleArray, isUpdate: Boolean) {
         if (!isUpdate) {
-            cartesian = AnyChart.column()
+            cartesian = AnyChart.line()
             dataForWifi = ArrayList()
             dataForBluetooth = ArrayList()
             dataForScreenUsage = ArrayList()
@@ -127,7 +126,7 @@ class AllSensorReportFragment : Fragment() {
                 dataForTorch.add(ValueDataEntry(CalendarManager.extractHoursOfQuarterDayInString(index), torchData[index]))
             }
 
-            val column: Column = cartesian.column(dataForWifi).name("Wifi").fill(getString(R.string.sensor_color_wifi)).stroke(getString(R.string.sensor_color_wifi))
+            val column: Line = cartesian.line(dataForWifi).name("Wifi").color(getString(R.string.sensor_color_wifi)) as Line
             column.tooltip()
                 .titleFormat("Wi-Fi usage")
                 .position(Position.CENTER_BOTTOM)
@@ -142,7 +141,7 @@ class AllSensorReportFragment : Fragment() {
                             "  else { return hours + \" hours \" + minutes + \" minutes\" }\n" +
                             "}")
 
-            val column2: Column = cartesian.column(dataForBluetooth).name("Bluetooth").fill(getString(R.string.sensor_color_bluetooth)).stroke(getString(R.string.sensor_color_bluetooth))
+            val column2: Line = cartesian.line(dataForBluetooth).name("Bluetooth").color(getString(R.string.sensor_color_bluetooth)) as Line
             column2.tooltip()
                 .titleFormat("Bluetooth usage")
                 .position(Position.CENTER_BOTTOM)
@@ -157,7 +156,7 @@ class AllSensorReportFragment : Fragment() {
                             "  else { return hours + \" hours \" + minutes + \" minutes\" }\n" +
                             "}")
 
-            val column3: Column = cartesian.column(dataForScreenUsage).name("Screen Usage").fill(getString(R.string.sensor_color_screen_usage)).stroke(getString(R.string.sensor_color_screen_usage))
+            val column3: Line = cartesian.line(dataForScreenUsage).name("Screen Usage").color(getString(R.string.sensor_color_screen_usage)) as Line
             column3.tooltip()
                 .titleFormat("Screen usage")
                 .position(Position.CENTER_BOTTOM)
@@ -172,7 +171,7 @@ class AllSensorReportFragment : Fragment() {
                             "  else { return hours + \" hours \" + minutes + \" minutes\" }\n" +
                             "}")
 
-            val column4: Column = cartesian.column(dataForGPS).name("GPS").fill(getString(R.string.sensor_color_gps)).stroke(getString(R.string.sensor_color_gps))
+            val column4: Line = cartesian.line(dataForGPS).name("GPS").color(getString(R.string.sensor_color_gps)) as Line
             column4.tooltip()
                 .titleFormat("GPS usage")
                 .position(Position.CENTER_BOTTOM)
@@ -187,7 +186,7 @@ class AllSensorReportFragment : Fragment() {
                             "  else { return hours + \" hours \" + minutes + \" minutes\" }\n" +
                             "}")
 
-            val column5: Column = cartesian.column(dataForNFC).name("NFC").fill(getString(R.string.sensor_color_nfc)).stroke(getString(R.string.sensor_color_nfc))
+            val column5: Line = cartesian.line(dataForNFC).name("NFC").color(getString(R.string.sensor_color_nfc)) as Line
             column5.tooltip()
                 .titleFormat("NFC usage")
                 .position(Position.CENTER_BOTTOM)
@@ -202,7 +201,7 @@ class AllSensorReportFragment : Fragment() {
                             "  else { return hours + \" hours \" + minutes + \" minutes\" }\n" +
                             "}")
 
-            val column6: Column = cartesian.column(dataForTorch).name("Torch").fill(getString(R.string.sensor_color_torch)).stroke(getString(R.string.sensor_color_torch))
+            val column6: Line = cartesian.line(dataForTorch).name("Torch").color(getString(R.string.sensor_color_torch)) as Line
             column6.tooltip()
                 .titleFormat("Torch usage")
                 .position(Position.CENTER_BOTTOM)
@@ -260,7 +259,7 @@ class AllSensorReportFragment : Fragment() {
             val maxValue = findBestVisibleMaxValue(wifiData, blData, screenData, gpsData, nfcData, torchData)
             cartesian.yScale().maximum(maxValue)
 
-            val column: Column = cartesian.column(dataForWifi).name("Wifi").fill(getString(R.string.sensor_color_wifi)).stroke(getString(R.string.sensor_color_wifi))
+            val column: Line = cartesian.line(dataForWifi).name("Wifi").color(getString(R.string.sensor_color_wifi)) as Line
             column.tooltip()
                 .titleFormat("Wi-Fi usage")
                 .position(Position.CENTER_BOTTOM)
@@ -275,7 +274,7 @@ class AllSensorReportFragment : Fragment() {
                             "  else { return hours + \" hours \" + minutes + \" minutes\" }\n" +
                             "}")
 
-            val column2: Column = cartesian.column(dataForBluetooth).name("Bluetooth").fill(getString(R.string.sensor_color_bluetooth)).stroke(getString(R.string.sensor_color_bluetooth))
+            val column2: Line = cartesian.line(dataForBluetooth).name("Bluetooth").color(getString(R.string.sensor_color_bluetooth)) as Line
             column2.tooltip()
                 .titleFormat("Bluetooth usage")
                 .position(Position.CENTER_BOTTOM)
@@ -290,7 +289,7 @@ class AllSensorReportFragment : Fragment() {
                             "  else { return hours + \" hours \" + minutes + \" minutes\" }\n" +
                             "}")
 
-            val column3: Column = cartesian.column(dataForScreenUsage).name("Screen Usage").fill(getString(R.string.sensor_color_screen_usage)).stroke(getString(R.string.sensor_color_screen_usage))
+            val column3: Line = cartesian.line(dataForScreenUsage).name("Screen Usage").color(getString(R.string.sensor_color_screen_usage)) as Line
             column3.tooltip()
                 .titleFormat("Screen usage")
                 .position(Position.CENTER_BOTTOM)
@@ -305,7 +304,7 @@ class AllSensorReportFragment : Fragment() {
                             "  else { return hours + \" hours \" + minutes + \" minutes\" }\n" +
                             "}")
 
-            val column4: Column = cartesian.column(dataForGPS).name("GPS").fill(getString(R.string.sensor_color_gps)).stroke(getString(R.string.sensor_color_gps))
+            val column4: Line = cartesian.line(dataForGPS).name("GPS").color(getString(R.string.sensor_color_gps)) as Line
             column4.tooltip()
                 .titleFormat("GPS usage")
                 .position(Position.CENTER_BOTTOM)
@@ -320,7 +319,7 @@ class AllSensorReportFragment : Fragment() {
                             "  else { return hours + \" hours \" + minutes + \" minutes\" }\n" +
                             "}")
 
-            val column5: Column = cartesian.column(dataForNFC).name("NFC").fill(getString(R.string.sensor_color_nfc)).stroke(getString(R.string.sensor_color_nfc))
+            val column5: Line = cartesian.line(dataForNFC).name("NFC").color(getString(R.string.sensor_color_nfc)) as Line
             column5.tooltip()
                 .titleFormat("NFC usage")
                 .position(Position.CENTER_BOTTOM)
@@ -335,7 +334,7 @@ class AllSensorReportFragment : Fragment() {
                             "  else { return hours + \" hours \" + minutes + \" minutes\" }\n" +
                             "}")
 
-            val column6: Column = cartesian.column(dataForTorch).name("Torch").fill(getString(R.string.sensor_color_torch)).stroke(getString(R.string.sensor_color_torch))
+            val column6: Line = cartesian.line(dataForTorch).name("Torch").color(getString(R.string.sensor_color_torch)) as Line
             column6.tooltip()
                 .titleFormat("Torch usage")
                 .position(Position.CENTER_BOTTOM)
