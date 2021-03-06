@@ -157,6 +157,7 @@ class ColumnReportFragment : Fragment() {
             cartesian.xAxis(0).title(getString(R.string.report_usage_dates))
             cartesian.yAxis(0).labels().format("{%Value}{groupsSeparator: }")
             cartesian.yAxis(0).title(getString(R.string.report_usage_hours_total))
+            cartesian.interactivity().selectionMode("none")
 
             usageChart.setChart(cartesian)
         } else {

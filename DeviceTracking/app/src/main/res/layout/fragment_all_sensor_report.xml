@@ -21,11 +21,6 @@
             android:textSize="@dimen/body_text_size"
             android:text="@string/report_selected_time_date"/>
 
-        <Spinner
-            android:id="@+id/sp_all_data_day_frame"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
     </LinearLayout>
 
     <TextView

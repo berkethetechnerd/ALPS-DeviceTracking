@@ -76,13 +76,13 @@
     <string name="report_usage_description">In this screen, you can see your \'%1$s\' sensor data
         for the last %2$d days. Over this period of time, your average use of this sensor was
         %3$s</string>
-    <string name="report_usage_all_description">In this screen, you can see all of your device sensor
-        usage statistics at one place. Please change date from above selector to view a specific day.</string>
+    <string name="report_usage_all_description">It includes Wifi, Bluetooth, Screen, GPS, NFC and Torch usages.</string>
     <string name="report_no_data_found">(ø_ø)\n\nNo data found</string>
     <string name="report_usage_dates">Dates</string>
     <string name="report_usage_hours_total">Hours in Total</string>
     <string name="report_selected_time_frame">Selected time frame: </string>
-    <string name="report_selected_time_date">Selected date for statistics: </string>
+    <string name="report_selected_time_date">In this screen, you can see all of your device sensor
+        usage statistics at one place. The graph shows the usage for the last seven days. </string>
     <string-array name="report_time_frames">
         <item>Today</item>
         <item>Last 3 Days</item>
