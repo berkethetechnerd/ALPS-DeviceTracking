@@ -136,9 +136,10 @@ class AllSensorReportFragment : Fragment() {
                     .format("function() {\n" +
                             "  hours = parseInt(Math.floor(this.value), 10)\n" +
                             "  minutes = parseInt(Math.floor(60 * (this.value - hours)), 10)\n" +
-                            "  if (hours === 0) { return minutes + \" minutes\" }\n" +
-                            "  else if (minutes === 0) { return hours + \" hours\" }\n" +
-                            "  else { return hours + \" hours \" + minutes + \" minutes\" }\n" +
+                            "  text = \"Wifi: \"\n" +
+                            "  if (hours === 0) { return text + minutes + \" minutes\" }\n" +
+                            "  else if (minutes === 0) { return text + hours + \" hours\" }\n" +
+                            "  else { return text + hours + \" hours \" + minutes + \" minutes\" }\n" +
                             "}")
 
             val column2: Line = cartesian.line(dataForBluetooth).name("Bluetooth").color(getString(R.string.sensor_color_bluetooth)) as Line
@@ -151,9 +152,10 @@ class AllSensorReportFragment : Fragment() {
                     .format("function() {\n" +
                             "  hours = parseInt(Math.floor(this.value), 10)\n" +
                             "  minutes = parseInt(Math.floor(60 * (this.value - hours)), 10)\n" +
-                            "  if (hours === 0) { return minutes + \" minutes\" }\n" +
-                            "  else if (minutes === 0) { return hours + \" hours\" }\n" +
-                            "  else { return hours + \" hours \" + minutes + \" minutes\" }\n" +
+                            "  text = \"Bluetooth: \"\n" +
+                            "  if (hours === 0) { return text + minutes + \" minutes\" }\n" +
+                            "  else if (minutes === 0) { return text + hours + \" hours\" }\n" +
+                            "  else { return text + hours + \" hours \" + minutes + \" minutes\" }\n" +
                             "}")
 
             val column3: Line = cartesian.line(dataForScreenUsage).name("Screen Usage").color(getString(R.string.sensor_color_screen_usage)) as Line
@@ -166,9 +168,10 @@ class AllSensorReportFragment : Fragment() {
                     .format("function() {\n" +
                             "  hours = parseInt(Math.floor(this.value), 10)\n" +
                             "  minutes = parseInt(Math.floor(60 * (this.value - hours)), 10)\n" +
-                            "  if (hours === 0) { return minutes + \" minutes\" }\n" +
-                            "  else if (minutes === 0) { return hours + \" hours\" }\n" +
-                            "  else { return hours + \" hours \" + minutes + \" minutes\" }\n" +
+                            "  text = \"Screen Usage: \"\n" +
+                            "  if (hours === 0) { return text + minutes + \" minutes\" }\n" +
+                            "  else if (minutes === 0) { return text + hours + \" hours\" }\n" +
+                            "  else { return text + hours + \" hours \" + minutes + \" minutes\" }\n" +
                             "}")
 
             val column4: Line = cartesian.line(dataForGPS).name("GPS").color(getString(R.string.sensor_color_gps)) as Line
@@ -181,9 +184,10 @@ class AllSensorReportFragment : Fragment() {
                     .format("function() {\n" +
                             "  hours = parseInt(Math.floor(this.value), 10)\n" +
                             "  minutes = parseInt(Math.floor(60 * (this.value - hours)), 10)\n" +
-                            "  if (hours === 0) { return minutes + \" minutes\" }\n" +
-                            "  else if (minutes === 0) { return hours + \" hours\" }\n" +
-                            "  else { return hours + \" hours \" + minutes + \" minutes\" }\n" +
+                            "  text = \"GPS: \"\n" +
+                            "  if (hours === 0) { return text + minutes + \" minutes\" }\n" +
+                            "  else if (minutes === 0) { return text + hours + \" hours\" }\n" +
+                            "  else { return text + hours + \" hours \" + minutes + \" minutes\" }\n" +
                             "}")
 
             val column5: Line = cartesian.line(dataForNFC).name("NFC").color(getString(R.string.sensor_color_nfc)) as Line
@@ -196,9 +200,10 @@ class AllSensorReportFragment : Fragment() {
                     .format("function() {\n" +
                             "  hours = parseInt(Math.floor(this.value), 10)\n" +
                             "  minutes = parseInt(Math.floor(60 * (this.value - hours)), 10)\n" +
-                            "  if (hours === 0) { return minutes + \" minutes\" }\n" +
-                            "  else if (minutes === 0) { return hours + \" hours\" }\n" +
-                            "  else { return hours + \" hours \" + minutes + \" minutes\" }\n" +
+                            "  text = \"NFC: \"\n" +
+                            "  if (hours === 0) { return text + minutes + \" minutes\" }\n" +
+                            "  else if (minutes === 0) { return text + hours + \" hours\" }\n" +
+                            "  else { return text + hours + \" hours \" + minutes + \" minutes\" }\n" +
                             "}")
 
             val column6: Line = cartesian.line(dataForTorch).name("Torch").color(getString(R.string.sensor_color_torch)) as Line
@@ -211,9 +216,10 @@ class AllSensorReportFragment : Fragment() {
                     .format("function() {\n" +
                             "  hours = parseInt(Math.floor(this.value), 10)\n" +
                             "  minutes = parseInt(Math.floor(60 * (this.value - hours)), 10)\n" +
-                            "  if (hours === 0) { return minutes + \" minutes\" }\n" +
-                            "  else if (minutes === 0) { return hours + \" hours\" }\n" +
-                            "  else { return hours + \" hours \" + minutes + \" minutes\" }\n" +
+                            "  text = \"Torch: \"\n" +
+                            "  if (hours === 0) { return text + minutes + \" minutes\" }\n" +
+                            "  else if (minutes === 0) { return text + hours + \" hours\" }\n" +
+                            "  else { return text + hours + \" hours \" + minutes + \" minutes\" }\n" +
                             "}")
 
             cartesian.animation(true)
@@ -269,9 +275,10 @@ class AllSensorReportFragment : Fragment() {
                     .format("function() {\n" +
                             "  hours = parseInt(Math.floor(this.value), 10)\n" +
                             "  minutes = parseInt(Math.floor(60 * (this.value - hours)), 10)\n" +
-                            "  if (hours === 0) { return minutes + \" minutes\" }\n" +
-                            "  else if (minutes === 0) { return hours + \" hours\" }\n" +
-                            "  else { return hours + \" hours \" + minutes + \" minutes\" }\n" +
+                            "  text = \"Wifi: \"\n" +
+                            "  if (hours === 0) { return text + minutes + \" minutes\" }\n" +
+                            "  else if (minutes === 0) { return text + hours + \" hours\" }\n" +
+                            "  else { return text + hours + \" hours \" + minutes + \" minutes\" }\n" +
                             "}")
 
             val column2: Line = cartesian.line(dataForBluetooth).name("Bluetooth").color(getString(R.string.sensor_color_bluetooth)) as Line
@@ -284,9 +291,10 @@ class AllSensorReportFragment : Fragment() {
                     .format("function() {\n" +
                             "  hours = parseInt(Math.floor(this.value), 10)\n" +
                             "  minutes = parseInt(Math.floor(60 * (this.value - hours)), 10)\n" +
-                            "  if (hours === 0) { return minutes + \" minutes\" }\n" +
-                            "  else if (minutes === 0) { return hours + \" hours\" }\n" +
-                            "  else { return hours + \" hours \" + minutes + \" minutes\" }\n" +
+                            "  text = \"Bluetooth: \"\n" +
+                            "  if (hours === 0) { return text + minutes + \" minutes\" }\n" +
+                            "  else if (minutes === 0) { return text + hours + \" hours\" }\n" +
+                            "  else { return text + hours + \" hours \" + minutes + \" minutes\" }\n" +
                             "}")
 
             val column3: Line = cartesian.line(dataForScreenUsage).name("Screen Usage").color(getString(R.string.sensor_color_screen_usage)) as Line
@@ -299,9 +307,10 @@ class AllSensorReportFragment : Fragment() {
                     .format("function() {\n" +
                             "  hours = parseInt(Math.floor(this.value), 10)\n" +
                             "  minutes = parseInt(Math.floor(60 * (this.value - hours)), 10)\n" +
-                            "  if (hours === 0) { return minutes + \" minutes\" }\n" +
-                            "  else if (minutes === 0) { return hours + \" hours\" }\n" +
-                            "  else { return hours + \" hours \" + minutes + \" minutes\" }\n" +
+                            "  text = \"Screen Usage: \"\n" +
+                            "  if (hours === 0) { return text + minutes + \" minutes\" }\n" +
+                            "  else if (minutes === 0) { return text + hours + \" hours\" }\n" +
+                            "  else { return text + hours + \" hours \" + minutes + \" minutes\" }\n" +
                             "}")
 
             val column4: Line = cartesian.line(dataForGPS).name("GPS").color(getString(R.string.sensor_color_gps)) as Line
@@ -314,9 +323,10 @@ class AllSensorReportFragment : Fragment() {
                     .format("function() {\n" +
                             "  hours = parseInt(Math.floor(this.value), 10)\n" +
                             "  minutes = parseInt(Math.floor(60 * (this.value - hours)), 10)\n" +
-                            "  if (hours === 0) { return minutes + \" minutes\" }\n" +
-                            "  else if (minutes === 0) { return hours + \" hours\" }\n" +
-                            "  else { return hours + \" hours \" + minutes + \" minutes\" }\n" +
+                            "  text = \"GPS: \"\n" +
+                            "  if (hours === 0) { return text + minutes + \" minutes\" }\n" +
+                            "  else if (minutes === 0) { return text + hours + \" hours\" }\n" +
+                            "  else { return text + hours + \" hours \" + minutes + \" minutes\" }\n" +
                             "}")
 
             val column5: Line = cartesian.line(dataForNFC).name("NFC").color(getString(R.string.sensor_color_nfc)) as Line
@@ -329,9 +339,10 @@ class AllSensorReportFragment : Fragment() {
                     .format("function() {\n" +
                             "  hours = parseInt(Math.floor(this.value), 10)\n" +
                             "  minutes = parseInt(Math.floor(60 * (this.value - hours)), 10)\n" +
-                            "  if (hours === 0) { return minutes + \" minutes\" }\n" +
-                            "  else if (minutes === 0) { return hours + \" hours\" }\n" +
-                            "  else { return hours + \" hours \" + minutes + \" minutes\" }\n" +
+                            "  text = \"NFC: \"\n" +
+                            "  if (hours === 0) { return text + minutes + \" minutes\" }\n" +
+                            "  else if (minutes === 0) { return text + hours + \" hours\" }\n" +
+                            "  else { return text + hours + \" hours \" + minutes + \" minutes\" }\n" +
                             "}")
 
             val column6: Line = cartesian.line(dataForTorch).name("Torch").color(getString(R.string.sensor_color_torch)) as Line
@@ -344,9 +355,10 @@ class AllSensorReportFragment : Fragment() {
                     .format("function() {\n" +
                             "  hours = parseInt(Math.floor(this.value), 10)\n" +
                             "  minutes = parseInt(Math.floor(60 * (this.value - hours)), 10)\n" +
-                            "  if (hours === 0) { return minutes + \" minutes\" }\n" +
-                            "  else if (minutes === 0) { return hours + \" hours\" }\n" +
-                            "  else { return hours + \" hours \" + minutes + \" minutes\" }\n" +
+                            "  text = \"Torch: \"\n" +
+                            "  if (hours === 0) { return text + minutes + \" minutes\" }\n" +
+                            "  else if (minutes === 0) { return text + hours + \" hours\" }\n" +
+                            "  else { return text + hours + \" hours \" + minutes + \" minutes\" }\n" +
                             "}")
         }
     }
