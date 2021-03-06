@@ -17,9 +17,8 @@ import com.anychart.AnyChartView
 import com.anychart.chart.common.dataentry.DataEntry
 import com.anychart.chart.common.dataentry.ValueDataEntry
 import com.anychart.charts.Cartesian
-import com.anychart.core.cartesian.series.Column
+import com.anychart.core.cartesian.series.Line
 import com.anychart.enums.Anchor
-import com.anychart.enums.HoverMode
 import com.anychart.enums.Position
 import com.anychart.enums.TooltipPositionMode
 
@@ -29,7 +28,6 @@ class AllSensorReportFragment : Fragment() {
     private lateinit var progressBar: ProgressBar
     private lateinit var noDataLayout: RelativeLayout
     private lateinit var tvDescription: TextView
-    private lateinit var spTimeFrame: Spinner
 
     private lateinit var cartesian: Cartesian
     private lateinit var dataForWifi: MutableList<DataEntry>
@@ -39,13 +37,11 @@ class AllSensorReportFragment : Fragment() {
     private lateinit var dataForNFC: MutableList<DataEntry>
     private lateinit var dataForTorch: MutableList<DataEntry>
 
-    private var selectedDay = CalendarManager.fetchCalendarDays(CalendarDays.LAST_24_HOURS)[0]
-    private val dayArray = CalendarManager.fetchCalendarDays(CalendarDays.LAST_7_DAYS).reversedArray()
+    private val dayArray = CalendarManager.fetchCalendarDays(CalendarDays.LAST_7_DAYS)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_all_sensor_report, container, false)
         initUI(view)
-        initSpinner()
         initChart(isUpdate = false)
         return view
     }
@@ -57,41 +53,15 @@ class AllSensorReportFragment : Fragment() {
 
         usageChart = view.findViewById(R.id.all_sensor_usage_chart)
         usageChart.setProgressBar(progressBar)
-
-        spTimeFrame = view.findViewById(R.id.sp_all_data_day_frame)
-        spTimeFrame.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                selectedDay = if (dayArray[position] == "Today") {
-                    CalendarManager.fetchCalendarDays(CalendarDays.LAST_24_HOURS)[0]
-                } else {
-                    dayArray[position]
-                }
-
-                initChart(isUpdate = true)
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) { }
-        }
-    }
-
-    private fun initSpinner() {
-        context?.let {
-            dayArray[0] = "Today"
-            ArrayAdapter(it, android.R.layout.simple_spinner_item, dayArray).also { adapter ->
-                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-                spTimeFrame.adapter = adapter
-                spTimeFrame.setSelection(0) // Today
-            }
-        }
     }
 
     private fun initChart(isUpdate: Boolean) {
-        val chartDataForWifi = RealmManager.queryForSpecificDayInSensor(selectedDay, DeviceSensor.ACCESS_WIFI)
-        val chartDataForBluetooth = RealmManager.queryForSpecificDayInSensor(selectedDay, DeviceSensor.ACCESS_BLUETOOTH)
-        val chartDataForScreenUsage = RealmManager.queryForSpecificDayInSensor(selectedDay, DeviceSensor.ACCESS_SCREEN_USAGE)
-        val chartDataForGPS = RealmManager.queryForSpecificDayInSensor(selectedDay, DeviceSensor.ACCESS_GPS)
-        val chartDataForNFC = RealmManager.queryForSpecificDayInSensor(selectedDay, DeviceSensor.ACCESS_NFC)
-        val chartDataForTorch = RealmManager.queryForSpecificDayInSensor(selectedDay, DeviceSensor.ACCESS_TORCH)
+        val chartDataForWifi = RealmManager.queryForDatesInSensor(dayArray, DeviceSensor.ACCESS_WIFI, CalendarDays.LAST_7_DAYS)
+        val chartDataForBluetooth = RealmManager.queryForDatesInSensor(dayArray, DeviceSensor.ACCESS_BLUETOOTH, CalendarDays.LAST_7_DAYS)
+        val chartDataForScreenUsage = RealmManager.queryForDatesInSensor(dayArray, DeviceSensor.ACCESS_SCREEN_USAGE, CalendarDays.LAST_7_DAYS)
+        val chartDataForGPS = RealmManager.queryForDatesInSensor(dayArray, DeviceSensor.ACCESS_GPS, CalendarDays.LAST_7_DAYS)
+        val chartDataForNFC = RealmManager.queryForDatesInSensor(dayArray, DeviceSensor.ACCESS_NFC, CalendarDays.LAST_7_DAYS)
+        val chartDataForTorch = RealmManager.queryForDatesInSensor(dayArray, DeviceSensor.ACCESS_TORCH, CalendarDays.LAST_7_DAYS)
 
         if (isDataExistForSelectedTimeFrame(chartDataForWifi)
                 || isDataExistForSelectedTimeFrame(chartDataForBluetooth)
@@ -110,7 +80,7 @@ class AllSensorReportFragment : Fragment() {
 
     private fun drawChart(wifiData: DoubleArray, blData: DoubleArray, screenData: DoubleArray, gpsData: DoubleArray, nfcData: DoubleArray, torchData: DoubleArray, isUpdate: Boolean) {
         if (!isUpdate) {
-            cartesian = AnyChart.column()
+            cartesian = AnyChart.line()
             dataForWifi = ArrayList()
             dataForBluetooth = ArrayList()
             dataForScreenUsage = ArrayList()
@@ -119,15 +89,18 @@ class AllSensorReportFragment : Fragment() {
             dataForTorch = ArrayList()
 
             for (index in wifiData.indices) {
-                dataForWifi.add(ValueDataEntry(CalendarManager.extractHoursOfQuarterDayInString(index), wifiData[index]))
-                dataForBluetooth.add(ValueDataEntry(CalendarManager.extractHoursOfQuarterDayInString(index), blData[index]))
-                dataForScreenUsage.add(ValueDataEntry(CalendarManager.extractHoursOfQuarterDayInString(index), screenData[index]))
-                dataForGPS.add(ValueDataEntry(CalendarManager.extractHoursOfQuarterDayInString(index), gpsData[index]))
-                dataForNFC.add(ValueDataEntry(CalendarManager.extractHoursOfQuarterDayInString(index), nfcData[index]))
-                dataForTorch.add(ValueDataEntry(CalendarManager.extractHoursOfQuarterDayInString(index), torchData[index]))
+                dataForWifi.add(ValueDataEntry(dayArray[index], wifiData[index]))
+                dataForBluetooth.add(ValueDataEntry(dayArray[index], blData[index]))
+                dataForScreenUsage.add(ValueDataEntry(dayArray[index], screenData[index]))
+                dataForGPS.add(ValueDataEntry(dayArray[index], gpsData[index]))
+                dataForNFC.add(ValueDataEntry(dayArray[index], nfcData[index]))
+                dataForTorch.add(ValueDataEntry(dayArray[index], torchData[index]))
             }
 
-            val column: Column = cartesian.column(dataForWifi).name("Wifi").fill(getString(R.string.sensor_color_wifi)).stroke(getString(R.string.sensor_color_wifi))
+            val maxValue = findBestVisibleMaxValue(wifiData, blData, screenData, gpsData, nfcData, torchData)
+            cartesian.yScale().maximum(30)
+
+            val column: Line = cartesian.line(dataForWifi).name("Wifi").color(getString(R.string.sensor_color_wifi)) as Line
             column.tooltip()
                 .titleFormat("Wi-Fi usage")
                 .position(Position.CENTER_BOTTOM)
@@ -137,12 +110,13 @@ class AllSensorReportFragment : Fragment() {
                     .format("function() {\n" +
                             "  hours = parseInt(Math.floor(this.value), 10)\n" +
                             "  minutes = parseInt(Math.floor(60 * (this.value - hours)), 10)\n" +
-                            "  if (hours === 0) { return minutes + \" minutes\" }\n" +
-                            "  else if (minutes === 0) { return hours + \" hours\" }\n" +
-                            "  else { return hours + \" hours \" + minutes + \" minutes\" }\n" +
+                            "  text = \"Wifi: \"\n" +
+                            "  if (hours === 0) { return text + minutes + \" minutes\" }\n" +
+                            "  else if (minutes === 0) { return text + hours + \" hours\" }\n" +
+                            "  else { return text + hours + \" hours \" + minutes + \" minutes\" }\n" +
                             "}")
 
-            val column2: Column = cartesian.column(dataForBluetooth).name("Bluetooth").fill(getString(R.string.sensor_color_bluetooth)).stroke(getString(R.string.sensor_color_bluetooth))
+            val column2: Line = cartesian.line(dataForBluetooth).name("Bluetooth").color(getString(R.string.sensor_color_bluetooth)) as Line
             column2.tooltip()
                 .titleFormat("Bluetooth usage")
                 .position(Position.CENTER_BOTTOM)
@@ -152,12 +126,13 @@ class AllSensorReportFragment : Fragment() {
                     .format("function() {\n" +
                             "  hours = parseInt(Math.floor(this.value), 10)\n" +
                             "  minutes = parseInt(Math.floor(60 * (this.value - hours)), 10)\n" +
-                            "  if (hours === 0) { return minutes + \" minutes\" }\n" +
-                            "  else if (minutes === 0) { return hours + \" hours\" }\n" +
-                            "  else { return hours + \" hours \" + minutes + \" minutes\" }\n" +
+                            "  text = \"Bluetooth: \"\n" +
+                            "  if (hours === 0) { return text + minutes + \" minutes\" }\n" +
+                            "  else if (minutes === 0) { return text + hours + \" hours\" }\n" +
+                            "  else { return text + hours + \" hours \" + minutes + \" minutes\" }\n" +
                             "}")
 
-            val column3: Column = cartesian.column(dataForScreenUsage).name("Screen Usage").fill(getString(R.string.sensor_color_screen_usage)).stroke(getString(R.string.sensor_color_screen_usage))
+            val column3: Line = cartesian.line(dataForScreenUsage).name("Screen Usage").color(getString(R.string.sensor_color_screen_usage)) as Line
             column3.tooltip()
                 .titleFormat("Screen usage")
                 .position(Position.CENTER_BOTTOM)
@@ -167,12 +142,13 @@ class AllSensorReportFragment : Fragment() {
                     .format("function() {\n" +
                             "  hours = parseInt(Math.floor(this.value), 10)\n" +
                             "  minutes = parseInt(Math.floor(60 * (this.value - hours)), 10)\n" +
-                            "  if (hours === 0) { return minutes + \" minutes\" }\n" +
-                            "  else if (minutes === 0) { return hours + \" hours\" }\n" +
-                            "  else { return hours + \" hours \" + minutes + \" minutes\" }\n" +
+                            "  text = \"Screen Usage: \"\n" +
+                            "  if (hours === 0) { return text + minutes + \" minutes\" }\n" +
+                            "  else if (minutes === 0) { return text + hours + \" hours\" }\n" +
+                            "  else { return text + hours + \" hours \" + minutes + \" minutes\" }\n" +
                             "}")
 
-            val column4: Column = cartesian.column(dataForGPS).name("GPS").fill(getString(R.string.sensor_color_gps)).stroke(getString(R.string.sensor_color_gps))
+            val column4: Line = cartesian.line(dataForGPS).name("GPS").color(getString(R.string.sensor_color_gps)) as Line
             column4.tooltip()
                 .titleFormat("GPS usage")
                 .position(Position.CENTER_BOTTOM)
@@ -182,12 +158,13 @@ class AllSensorReportFragment : Fragment() {
                     .format("function() {\n" +
                             "  hours = parseInt(Math.floor(this.value), 10)\n" +
                             "  minutes = parseInt(Math.floor(60 * (this.value - hours)), 10)\n" +
-                            "  if (hours === 0) { return minutes + \" minutes\" }\n" +
-                            "  else if (minutes === 0) { return hours + \" hours\" }\n" +
-                            "  else { return hours + \" hours \" + minutes + \" minutes\" }\n" +
+                            "  text = \"GPS: \"\n" +
+                            "  if (hours === 0) { return text + minutes + \" minutes\" }\n" +
+                            "  else if (minutes === 0) { return text + hours + \" hours\" }\n" +
+                            "  else { return text + hours + \" hours \" + minutes + \" minutes\" }\n" +
                             "}")
 
-            val column5: Column = cartesian.column(dataForNFC).name("NFC").fill(getString(R.string.sensor_color_nfc)).stroke(getString(R.string.sensor_color_nfc))
+            val column5: Line = cartesian.line(dataForNFC).name("NFC").color(getString(R.string.sensor_color_nfc)) as Line
             column5.tooltip()
                 .titleFormat("NFC usage")
                 .position(Position.CENTER_BOTTOM)
@@ -197,12 +174,13 @@ class AllSensorReportFragment : Fragment() {
                     .format("function() {\n" +
                             "  hours = parseInt(Math.floor(this.value), 10)\n" +
                             "  minutes = parseInt(Math.floor(60 * (this.value - hours)), 10)\n" +
-                            "  if (hours === 0) { return minutes + \" minutes\" }\n" +
-                            "  else if (minutes === 0) { return hours + \" hours\" }\n" +
-                            "  else { return hours + \" hours \" + minutes + \" minutes\" }\n" +
+                            "  text = \"NFC: \"\n" +
+                            "  if (hours === 0) { return text + minutes + \" minutes\" }\n" +
+                            "  else if (minutes === 0) { return text + hours + \" hours\" }\n" +
+                            "  else { return text + hours + \" hours \" + minutes + \" minutes\" }\n" +
                             "}")
 
-            val column6: Column = cartesian.column(dataForTorch).name("Torch").fill(getString(R.string.sensor_color_torch)).stroke(getString(R.string.sensor_color_torch))
+            val column6: Line = cartesian.line(dataForTorch).name("Torch").color(getString(R.string.sensor_color_torch)) as Line
             column6.tooltip()
                 .titleFormat("Torch usage")
                 .position(Position.CENTER_BOTTOM)
@@ -212,18 +190,19 @@ class AllSensorReportFragment : Fragment() {
                     .format("function() {\n" +
                             "  hours = parseInt(Math.floor(this.value), 10)\n" +
                             "  minutes = parseInt(Math.floor(60 * (this.value - hours)), 10)\n" +
-                            "  if (hours === 0) { return minutes + \" minutes\" }\n" +
-                            "  else if (minutes === 0) { return hours + \" hours\" }\n" +
-                            "  else { return hours + \" hours \" + minutes + \" minutes\" }\n" +
+                            "  text = \"Torch: \"\n" +
+                            "  if (hours === 0) { return text + minutes + \" minutes\" }\n" +
+                            "  else if (minutes === 0) { return text + hours + \" hours\" }\n" +
+                            "  else { return text + hours + \" hours \" + minutes + \" minutes\" }\n" +
                             "}")
 
             cartesian.animation(true)
             cartesian.yScale().minimum(0.0)
-            cartesian.yScale().maximum(6.0)
             cartesian.tooltip().positionMode(TooltipPositionMode.POINT)
             cartesian.xAxis(0).title(getString(R.string.report_usage_dates))
             cartesian.yAxis(0).title(getString(R.string.report_usage_hours_total))
             cartesian.yAxis(0).labels().format("{%Value}{groupsSeparator: }")
+            cartesian.interactivity().selectionMode("none")
 
             cartesian.legend()
                 .enabled(true)
@@ -249,18 +228,18 @@ class AllSensorReportFragment : Fragment() {
             dataForTorch.clear()
 
             for (index in wifiData.indices) {
-                dataForWifi.add(ValueDataEntry(CalendarManager.extractHoursOfQuarterDayInString(index), wifiData[index]))
-                dataForBluetooth.add(ValueDataEntry(CalendarManager.extractHoursOfQuarterDayInString(index), blData[index]))
-                dataForScreenUsage.add(ValueDataEntry(CalendarManager.extractHoursOfQuarterDayInString(index), screenData[index]))
-                dataForGPS.add(ValueDataEntry(CalendarManager.extractHoursOfQuarterDayInString(index), gpsData[index]))
-                dataForNFC.add(ValueDataEntry(CalendarManager.extractHoursOfQuarterDayInString(index), nfcData[index]))
-                dataForTorch.add(ValueDataEntry(CalendarManager.extractHoursOfQuarterDayInString(index), torchData[index]))
+                dataForWifi.add(ValueDataEntry(dayArray[index], wifiData[index]))
+                dataForBluetooth.add(ValueDataEntry(dayArray[index], blData[index]))
+                dataForScreenUsage.add(ValueDataEntry(dayArray[index], screenData[index]))
+                dataForGPS.add(ValueDataEntry(dayArray[index], gpsData[index]))
+                dataForNFC.add(ValueDataEntry(dayArray[index], nfcData[index]))
+                dataForTorch.add(ValueDataEntry(dayArray[index], torchData[index]))
             }
 
             val maxValue = findBestVisibleMaxValue(wifiData, blData, screenData, gpsData, nfcData, torchData)
             cartesian.yScale().maximum(maxValue)
 
-            val column: Column = cartesian.column(dataForWifi).name("Wifi").fill(getString(R.string.sensor_color_wifi)).stroke(getString(R.string.sensor_color_wifi))
+            val column: Line = cartesian.line(dataForWifi).name("Wifi").color(getString(R.string.sensor_color_wifi)) as Line
             column.tooltip()
                 .titleFormat("Wi-Fi usage")
                 .position(Position.CENTER_BOTTOM)
@@ -270,12 +249,13 @@ class AllSensorReportFragment : Fragment() {
                     .format("function() {\n" +
                             "  hours = parseInt(Math.floor(this.value), 10)\n" +
                             "  minutes = parseInt(Math.floor(60 * (this.value - hours)), 10)\n" +
-                            "  if (hours === 0) { return minutes + \" minutes\" }\n" +
-                            "  else if (minutes === 0) { return hours + \" hours\" }\n" +
-                            "  else { return hours + \" hours \" + minutes + \" minutes\" }\n" +
+                            "  text = \"Wifi: \"\n" +
+                            "  if (hours === 0) { return text + minutes + \" minutes\" }\n" +
+                            "  else if (minutes === 0) { return text + hours + \" hours\" }\n" +
+                            "  else { return text + hours + \" hours \" + minutes + \" minutes\" }\n" +
                             "}")
 
-            val column2: Column = cartesian.column(dataForBluetooth).name("Bluetooth").fill(getString(R.string.sensor_color_bluetooth)).stroke(getString(R.string.sensor_color_bluetooth))
+            val column2: Line = cartesian.line(dataForBluetooth).name("Bluetooth").color(getString(R.string.sensor_color_bluetooth)) as Line
             column2.tooltip()
                 .titleFormat("Bluetooth usage")
                 .position(Position.CENTER_BOTTOM)
@@ -285,12 +265,13 @@ class AllSensorReportFragment : Fragment() {
                     .format("function() {\n" +
                             "  hours = parseInt(Math.floor(this.value), 10)\n" +
                             "  minutes = parseInt(Math.floor(60 * (this.value - hours)), 10)\n" +
-                            "  if (hours === 0) { return minutes + \" minutes\" }\n" +
-                            "  else if (minutes === 0) { return hours + \" hours\" }\n" +
-                            "  else { return hours + \" hours \" + minutes + \" minutes\" }\n" +
+                            "  text = \"Bluetooth: \"\n" +
+                            "  if (hours === 0) { return text + minutes + \" minutes\" }\n" +
+                            "  else if (minutes === 0) { return text + hours + \" hours\" }\n" +
+                            "  else { return text + hours + \" hours \" + minutes + \" minutes\" }\n" +
                             "}")
 
-            val column3: Column = cartesian.column(dataForScreenUsage).name("Screen Usage").fill(getString(R.string.sensor_color_screen_usage)).stroke(getString(R.string.sensor_color_screen_usage))
+            val column3: Line = cartesian.line(dataForScreenUsage).name("Screen Usage").color(getString(R.string.sensor_color_screen_usage)) as Line
             column3.tooltip()
                 .titleFormat("Screen usage")
                 .position(Position.CENTER_BOTTOM)
@@ -300,12 +281,13 @@ class AllSensorReportFragment : Fragment() {
                     .format("function() {\n" +
                             "  hours = parseInt(Math.floor(this.value), 10)\n" +
                             "  minutes = parseInt(Math.floor(60 * (this.value - hours)), 10)\n" +
-                            "  if (hours === 0) { return minutes + \" minutes\" }\n" +
-                            "  else if (minutes === 0) { return hours + \" hours\" }\n" +
-                            "  else { return hours + \" hours \" + minutes + \" minutes\" }\n" +
+                            "  text = \"Screen Usage: \"\n" +
+                            "  if (hours === 0) { return text + minutes + \" minutes\" }\n" +
+                            "  else if (minutes === 0) { return text + hours + \" hours\" }\n" +
+                            "  else { return text + hours + \" hours \" + minutes + \" minutes\" }\n" +
                             "}")
 
-            val column4: Column = cartesian.column(dataForGPS).name("GPS").fill(getString(R.string.sensor_color_gps)).stroke(getString(R.string.sensor_color_gps))
+            val column4: Line = cartesian.line(dataForGPS).name("GPS").color(getString(R.string.sensor_color_gps)) as Line
             column4.tooltip()
                 .titleFormat("GPS usage")
                 .position(Position.CENTER_BOTTOM)
@@ -315,12 +297,13 @@ class AllSensorReportFragment : Fragment() {
                     .format("function() {\n" +
                             "  hours = parseInt(Math.floor(this.value), 10)\n" +
                             "  minutes = parseInt(Math.floor(60 * (this.value - hours)), 10)\n" +
-                            "  if (hours === 0) { return minutes + \" minutes\" }\n" +
-                            "  else if (minutes === 0) { return hours + \" hours\" }\n" +
-                            "  else { return hours + \" hours \" + minutes + \" minutes\" }\n" +
+                            "  text = \"GPS: \"\n" +
+                            "  if (hours === 0) { return text + minutes + \" minutes\" }\n" +
+                            "  else if (minutes === 0) { return text + hours + \" hours\" }\n" +
+                            "  else { return text + hours + \" hours \" + minutes + \" minutes\" }\n" +
                             "}")
 
-            val column5: Column = cartesian.column(dataForNFC).name("NFC").fill(getString(R.string.sensor_color_nfc)).stroke(getString(R.string.sensor_color_nfc))
+            val column5: Line = cartesian.line(dataForNFC).name("NFC").color(getString(R.string.sensor_color_nfc)) as Line
             column5.tooltip()
                 .titleFormat("NFC usage")
                 .position(Position.CENTER_BOTTOM)
@@ -330,12 +313,13 @@ class AllSensorReportFragment : Fragment() {
                     .format("function() {\n" +
                             "  hours = parseInt(Math.floor(this.value), 10)\n" +
                             "  minutes = parseInt(Math.floor(60 * (this.value - hours)), 10)\n" +
-                            "  if (hours === 0) { return minutes + \" minutes\" }\n" +
-                            "  else if (minutes === 0) { return hours + \" hours\" }\n" +
-                            "  else { return hours + \" hours \" + minutes + \" minutes\" }\n" +
+                            "  text = \"NFC: \"\n" +
+                            "  if (hours === 0) { return text + minutes + \" minutes\" }\n" +
+                            "  else if (minutes === 0) { return text + hours + \" hours\" }\n" +
+                            "  else { return text + hours + \" hours \" + minutes + \" minutes\" }\n" +
                             "}")
 
-            val column6: Column = cartesian.column(dataForTorch).name("Torch").fill(getString(R.string.sensor_color_torch)).stroke(getString(R.string.sensor_color_torch))
+            val column6: Line = cartesian.line(dataForTorch).name("Torch").color(getString(R.string.sensor_color_torch)) as Line
             column6.tooltip()
                 .titleFormat("Torch usage")
                 .position(Position.CENTER_BOTTOM)
@@ -345,9 +329,10 @@ class AllSensorReportFragment : Fragment() {
                     .format("function() {\n" +
                             "  hours = parseInt(Math.floor(this.value), 10)\n" +
                             "  minutes = parseInt(Math.floor(60 * (this.value - hours)), 10)\n" +
-                            "  if (hours === 0) { return minutes + \" minutes\" }\n" +
-                            "  else if (minutes === 0) { return hours + \" hours\" }\n" +
-                            "  else { return hours + \" hours \" + minutes + \" minutes\" }\n" +
+                            "  text = \"Torch: \"\n" +
+                            "  if (hours === 0) { return text + minutes + \" minutes\" }\n" +
+                            "  else if (minutes === 0) { return text + hours + \" hours\" }\n" +
+                            "  else { return text + hours + \" hours \" + minutes + \" minutes\" }\n" +
                             "}")
         }
     }
@@ -361,8 +346,8 @@ class AllSensorReportFragment : Fragment() {
         val maxValueTorch = torchData.maxOrNull() ?: 0.0
 
         val maxValue = doubleArrayOf(maxValueWifi, maxValueBL, maxValueScreen, maxValueGPS, maxValueNFC, maxValueTorch).maxOrNull() ?: 0.0
-        return if (maxValue > 4.0) {
-            6.0
+        return if (maxValue > 20.0) {
+            24.0
         } else {
             maxValue
         }
