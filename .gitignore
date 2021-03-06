@@ -1,2 +1,6 @@
 *.DS_Store
 DeviceTracking/.idea/*
+.idea/modules.xml
+.idea/ALPS-DeviceTracking.iml
+.idea/vcs.xml
+.idea/workspace.xml
