@@ -135,6 +135,7 @@ class DataCollectionActivity : BaseActivity(), SensorStatusDelegate {
         } else {
             selectedTorchView.switchToStatusView()
             selectedTorchView.configureSensor(getResIcon(R.drawable.ic_light_sensor), getString(R.string.sensor_torch))
+            selectedTorchView.changeSensorStatus(SettingsManager.isTorchEnabled())
         }
     }
 
