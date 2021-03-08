@@ -98,7 +98,7 @@ class AllSensorReportFragment : Fragment() {
             }
 
             val maxValue = findBestVisibleMaxValue(wifiData, blData, screenData, gpsData, nfcData, torchData)
-            cartesian.yScale().maximum(30)
+            cartesian.yScale().maximum(maxValue)
 
             val column: Line = cartesian.line(dataForWifi).name("Wifi").color(getString(R.string.sensor_color_wifi)) as Line
             column.tooltip()
