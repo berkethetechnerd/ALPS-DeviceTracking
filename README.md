@@ -5,7 +5,7 @@ If you have any questions or just want to reach us, send a mail to:
 <berke.esmer@tum.de>   
 <ece.ata@tum.de>
 
-The application can be installed from last version from [here](https://github.com/berkethetechnerd/ALPS-DeviceTracking/tags).
+The application can be installed with the last version from [here](https://github.com/berkethetechnerd/ALPS-DeviceTracking/tags).
 
 ### What is ALPS & Device Tracking?
 
@@ -17,13 +17,13 @@ As a contributor to this project, we develop an Android application which collec
 
 ### Example Screenshoots
 
-Login Screen               |Sensor Selection Screen    |Data Collection Screen   | 
+Login Screen               | Consent Screen.           |Sensor Selection Screen  
 ---------------------------|---------------------------|-------------------------|
-![](https://github.com/berkethetechnerd/ALPS-DeviceTracking/blob/main/IDP%20Documents/images/sensor_metrics_1.jpeg)  | ![](https://github.com/berkethetechnerd/ALPS-DeviceTracking/blob/main/IDP%20Documents/images/sensor_metrics_2.jpeg)     | ![](https://github.com/berkethetechnerd/ALPS-DeviceTracking/blob/main/IDP%20Documents/images/sensor_metrics_3.jpeg)    
+![](https://github.com/berkethetechnerd/ALPS-DeviceTracking/blob/main/IDP%20Documents/images/sensor_metrics_1.jpeg)  | ![](https://github.com/berkethetechnerd/ALPS-DeviceTracking/blob/main/IDP%20Documents/images/sensor_metrics_6.jpeg) | ![](https://github.com/berkethetechnerd/ALPS-DeviceTracking/blob/main/IDP%20Documents/images/sensor_metrics_2.jpeg)    
 
-Stats for All Sensors      |Stats for One Sensor       |
----------------------------|---------------------------|
-![](https://github.com/berkethetechnerd/ALPS-DeviceTracking/blob/main/IDP%20Documents/images/sensor_metrics_4.jpeg)  | ![](https://github.com/berkethetechnerd/ALPS-DeviceTracking/blob/main/IDP%20Documents/images/sensor_metrics_5.jpeg)     | 
+Data Collection Screen     | Stats for All Sensors     |Stats for One Sensor       |
+---------------------------|---------------------------|---------------------------|
+![](https://github.com/berkethetechnerd/ALPS-DeviceTracking/blob/main/IDP%20Documents/images/sensor_metrics_3.jpeg) | ![](https://github.com/berkethetechnerd/ALPS-DeviceTracking/blob/main/IDP%20Documents/images/sensor_metrics_4.jpeg)  | ![](https://github.com/berkethetechnerd/ALPS-DeviceTracking/blob/main/IDP%20Documents/images/sensor_metrics_5.jpeg)  | 
 
 ### Related Documents
 
