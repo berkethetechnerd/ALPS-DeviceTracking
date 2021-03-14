@@ -5,6 +5,8 @@ If you have any questions or just want to reach us, send a mail to:
 <berke.esmer@tum.de>   
 <ece.ata@tum.de>
 
+The application can be installed from last version from [here](https://github.com/berkethetechnerd/ALPS-DeviceTracking/tags).
+
 ### What is ALPS & Device Tracking?
 
 The goal of Automated Licensing Payment Systems (ALPS) is to enhance accuracy and trust and reduce uncertainty as well as overall transaction costs in the licensing of Intellectual Property (IP). The system enables novel business models and contributes to fairer remuneration of the IP owners for the value their assets generate in the industry.   
