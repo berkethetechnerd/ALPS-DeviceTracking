@@ -36,7 +36,7 @@ object ConstantsManager {
     private const val RUNNING_SENSOR_TORCH_ID = RUNNING_SENSOR_TORCH + ID
 
     const val DEFAULT_API = "DEFAULT_API"
-    private const val DEFAULT_API_URL = "http://192.168.0.3:8080"
+    private const val DEFAULT_API_URL = "http://192.168.0.136:8080"
 
     const val DEVICE_IDENTIFIER = "DEVICE_ID"
     const val DEVICE_IDENTIFIER_DEFAULT = "CORRUPTED_ID"
