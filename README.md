@@ -17,7 +17,7 @@ As a contributor to this project, we develop an Android application which collec
 
 ### Example Screenshoots
 
-Login Screen               | Consent Screen.           |Sensor Selection Screen  
+Login Screen               | Consent Screen            |Sensor Selection Screen  
 ---------------------------|---------------------------|-------------------------|
 ![](https://github.com/berkethetechnerd/ALPS-DeviceTracking/blob/main/IDP%20Documents/images/sensor_metrics_1.jpeg)  | ![](https://github.com/berkethetechnerd/ALPS-DeviceTracking/blob/main/IDP%20Documents/images/sensor_metrics_6.jpeg) | ![](https://github.com/berkethetechnerd/ALPS-DeviceTracking/blob/main/IDP%20Documents/images/sensor_metrics_2.jpeg)    
 
