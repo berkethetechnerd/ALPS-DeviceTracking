@@ -144,24 +144,60 @@ class DataCollectionActivity : BaseActivity(), SensorStatusDelegate {
             SharedPreferencesManager.write(C.RUNNING_DATA_COLLECTION, true)
             btnStartStop.text = getString(R.string.data_collection_stop)
 
-            if(isWifiSelected) { DataCollectionManager.startCollectionForSensor(DeviceSensor.ACCESS_WIFI, this) }
-            if(isBluetoothSelected) { DataCollectionManager.startCollectionForSensor(DeviceSensor.ACCESS_BLUETOOTH, this) }
-            if(isScreenUsageSelected) {  DataCollectionManager.startCollectionForSensor(DeviceSensor.ACCESS_SCREEN_USAGE, this) }
-            if(isGpsSelected) { DataCollectionManager.startCollectionForSensor(DeviceSensor.ACCESS_GPS, this) }
-            if(isNfcSelected) { DataCollectionManager.startCollectionForSensor(DeviceSensor.ACCESS_NFC, this) }
-            if(isTorchSelected) { DataCollectionManager.startCollectionForSensor(DeviceSensor.ACCESS_TORCH, this) }
+            if(isWifiSelected) {
+                DataCollectionManager.startCollectionForSensor(DeviceSensor.ACCESS_WIFI, this)
+                SharedPreferencesManager.write(C.SENSOR_WIFI_SELECTED, true)
+            }
+            if(isBluetoothSelected) {
+                DataCollectionManager.startCollectionForSensor(DeviceSensor.ACCESS_BLUETOOTH, this)
+                SharedPreferencesManager.write(C.SENSOR_BLUETOOTH_SELECTED, true)
+            }
+            if(isScreenUsageSelected) {
+                DataCollectionManager.startCollectionForSensor(DeviceSensor.ACCESS_SCREEN_USAGE, this)
+                SharedPreferencesManager.write(C.SENSOR_SCREEN_USAGE_SELECTED, true)
+            }
+            if(isGpsSelected) {
+                DataCollectionManager.startCollectionForSensor(DeviceSensor.ACCESS_GPS, this)
+                SharedPreferencesManager.write(C.SENSOR_GPS_SELECTED, true)
+            }
+            if(isNfcSelected) {
+                DataCollectionManager.startCollectionForSensor(DeviceSensor.ACCESS_NFC, this)
+                SharedPreferencesManager.write(C.SENSOR_NFC_SELECTED, true)
+            }
+            if(isTorchSelected) {
+                DataCollectionManager.startCollectionForSensor(DeviceSensor.ACCESS_TORCH, this)
+                SharedPreferencesManager.write(C.SENSOR_TORCH_SELECTED, true)
+            }
         }
 
         fun stopDataCollection() {
             SharedPreferencesManager.write(C.RUNNING_DATA_COLLECTION, false)
             btnStartStop.text = getString(R.string.data_collection_start)
 
-            if(isWifiSelected) { DataCollectionManager.stopCollectionForSensor(DeviceSensor.ACCESS_WIFI) }
-            if(isBluetoothSelected){ DataCollectionManager.stopCollectionForSensor(DeviceSensor.ACCESS_BLUETOOTH) }
-            if(isScreenUsageSelected){ DataCollectionManager.stopCollectionForSensor(DeviceSensor.ACCESS_SCREEN_USAGE) }
-            if(isGpsSelected) { DataCollectionManager.stopCollectionForSensor(DeviceSensor.ACCESS_GPS) }
-            if(isNfcSelected) { DataCollectionManager.stopCollectionForSensor(DeviceSensor.ACCESS_NFC) }
-            if(isTorchSelected) { DataCollectionManager.stopCollectionForSensor(DeviceSensor.ACCESS_TORCH) }
+            if(isWifiSelected) {
+                DataCollectionManager.stopCollectionForSensor(DeviceSensor.ACCESS_WIFI)
+                SharedPreferencesManager.write(C.SENSOR_WIFI_SELECTED, false)
+            }
+            if(isBluetoothSelected){
+                DataCollectionManager.stopCollectionForSensor(DeviceSensor.ACCESS_BLUETOOTH)
+                SharedPreferencesManager.write(C.SENSOR_BLUETOOTH_SELECTED, false)
+            }
+            if(isScreenUsageSelected){
+                DataCollectionManager.stopCollectionForSensor(DeviceSensor.ACCESS_SCREEN_USAGE)
+                SharedPreferencesManager.write(C.SENSOR_SCREEN_USAGE_SELECTED, false)
+            }
+            if(isGpsSelected) {
+                DataCollectionManager.stopCollectionForSensor(DeviceSensor.ACCESS_GPS)
+                SharedPreferencesManager.write(C.SENSOR_GPS_SELECTED, false)
+            }
+            if(isNfcSelected) {
+                DataCollectionManager.stopCollectionForSensor(DeviceSensor.ACCESS_NFC)
+                SharedPreferencesManager.write(C.SENSOR_NFC_SELECTED, false)
+            }
+            if(isTorchSelected) {
+                DataCollectionManager.stopCollectionForSensor(DeviceSensor.ACCESS_TORCH)
+                SharedPreferencesManager.write(C.SENSOR_TORCH_SELECTED, false)
+            }
         }
 
         if(!isRunning()) { // Starting

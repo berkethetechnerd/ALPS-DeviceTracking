@@ -41,6 +41,14 @@ object ConstantsManager {
     const val DEVICE_IDENTIFIER = "DEVICE_ID"
     const val DEVICE_IDENTIFIER_DEFAULT = "CORRUPTED_ID"
 
+    const val SELECTED = "Selected"
+    const val SENSOR_WIFI_SELECTED = SENSOR_WIFI + SELECTED
+    const val SENSOR_BLUETOOTH_SELECTED = SENSOR_BLUETOOTH + SELECTED
+    const val SENSOR_SCREEN_USAGE_SELECTED = SENSOR_SCREEN_USAGE + SELECTED
+    const val SENSOR_GPS_SELECTED = SENSOR_GPS + SELECTED
+    const val SENSOR_NFC_SELECTED = SENSOR_NFC + SELECTED
+    const val SENSOR_TORCH_SELECTED = SENSOR_TORCH + SELECTED
+
     fun getSensorName(forSensor: DeviceSensor): String {
         return when (forSensor) {
             DeviceSensor.ACCESS_WIFI -> SENSOR_WIFI
