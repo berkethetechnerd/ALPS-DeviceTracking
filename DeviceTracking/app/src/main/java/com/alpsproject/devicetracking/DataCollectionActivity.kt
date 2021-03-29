@@ -142,6 +142,7 @@ class DataCollectionActivity : BaseActivity(), SensorStatusDelegate {
     private fun startStopButton() {
         fun startDataCollection() {
             SharedPreferencesManager.write(C.RUNNING_DATA_COLLECTION, true)
+            SharedPreferencesManager.write(C.SELECTED, true)
             btnStartStop.text = getString(R.string.data_collection_stop)
 
             if(isWifiSelected) {
@@ -172,6 +173,7 @@ class DataCollectionActivity : BaseActivity(), SensorStatusDelegate {
 
         fun stopDataCollection() {
             SharedPreferencesManager.write(C.RUNNING_DATA_COLLECTION, false)
+            SharedPreferencesManager.write(C.SELECTED, false)
             btnStartStop.text = getString(R.string.data_collection_start)
 
             if(isWifiSelected) {
