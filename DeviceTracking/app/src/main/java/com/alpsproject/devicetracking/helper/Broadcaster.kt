@@ -10,8 +10,6 @@ import android.net.wifi.WifiManager
 import android.nfc.NfcAdapter
 import com.alpsproject.devicetracking.delegates.SensorStatusDelegate
 import com.alpsproject.devicetracking.enums.DeviceSensor
-import com.alpsproject.devicetracking.enums.ServiceState
-import com.alpsproject.devicetracking.services.TrackerService
 
 object Broadcaster {
 
@@ -81,12 +79,6 @@ object Broadcaster {
         shutdownFilter.addAction(Intent.ACTION_REBOOT)
         shutdownFilter.addAction(Intent.ACTION_SHUTDOWN)
         receiver.registerReceiver(shutdownReceiver, shutdownFilter)
-    }
-
-    fun registerForStart(receiver: Context) {
-        val startFilter = IntentFilter()
-        startFilter.addAction(Intent.ACTION_BOOT_COMPLETED)
-        receiver.registerReceiver(startReceiver, startFilter)
     }
 
     private val wifiStateReceiver = object : BroadcastReceiver() {
@@ -248,45 +240,6 @@ object Broadcaster {
                     context?.let {
                         unregisterForBroadcasting(context, arrOfSensors)
                     }
-                }
-            }
-        }
-    }
-
-    private val startReceiver = object : BroadcastReceiver() {
-        override fun onReceive(context: Context?, intent: Intent?) {
-            val wasRunning = SharedPreferencesManager.read(ConstantsManager.SELECTED, false)
-
-            Logger.logServiceNotification("Phone is rebooting. Starting with the data collection!")
-            if (wasRunning) {
-                SharedPreferencesManager.write(ConstantsManager.RUNNING_DATA_COLLECTION, true)
-
-                if (SharedPreferencesManager.read(ConstantsManager.SENSOR_WIFI_SELECTED, false)) {
-                    SharedPreferencesManager.write(ConstantsManager.getRunningSensorKey(DeviceSensor.ACCESS_WIFI), true)
-                }
-
-                if (SharedPreferencesManager.read(ConstantsManager.SENSOR_BLUETOOTH_SELECTED, false)) {
-                    SharedPreferencesManager.write(ConstantsManager.getRunningSensorKey(DeviceSensor.ACCESS_BLUETOOTH), true)
-                }
-
-                if (SharedPreferencesManager.read(ConstantsManager.SENSOR_SCREEN_USAGE_SELECTED, false)) {
-                    SharedPreferencesManager.write(ConstantsManager.getRunningSensorKey(DeviceSensor.ACCESS_SCREEN_USAGE), true)
-                }
-
-                if (SharedPreferencesManager.read(ConstantsManager.SENSOR_GPS_SELECTED, false)) {
-                    SharedPreferencesManager.write(ConstantsManager.getRunningSensorKey(DeviceSensor.ACCESS_GPS), true)
-                }
-
-                if (SharedPreferencesManager.read(ConstantsManager.SENSOR_NFC_SELECTED, false)) {
-                    SharedPreferencesManager.write(ConstantsManager.getRunningSensorKey(DeviceSensor.ACCESS_NFC), true)
-                }
-
-                if (SharedPreferencesManager.read(ConstantsManager.SENSOR_TORCH_SELECTED, false)) {
-                    SharedPreferencesManager.write(ConstantsManager.getRunningSensorKey(DeviceSensor.ACCESS_TORCH), true)
-                }
-
-                context?.let { ctx ->
-                    ServiceManager.startTrackerService(ctx)
                 }
             }
         }
