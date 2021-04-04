@@ -24,9 +24,9 @@
         android:theme="@style/Theme.DeviceTracking"
         android:networkSecurityConfig="@xml/network_security_config"
         android:supportsRtl="true"
-        android:allowBackup="true"
+        android:allowBackup="false"
         tools:targetApi="n"
-        tools:ignore="AllowBackup">
+        tools:replace="android:allowBackup">
 
         <service
             android:name=".services.TrackerService"
