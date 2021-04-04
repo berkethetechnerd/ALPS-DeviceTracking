@@ -8,7 +8,7 @@ import com.alpsproject.devicetracking.enums.DeviceSensor
 class StartReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context?, intent: Intent?) {
-
+        if (intent?.action.equals(Intent.ACTION_BOOT_COMPLETED)) {
             val wasRunning = SharedPreferencesManager.read(ConstantsManager.SELECTED, false)
 
             Logger.logServiceNotification("Phone is rebooting. Starting with the data collection!")
@@ -43,6 +43,6 @@ class StartReceiver : BroadcastReceiver() {
                     ServiceManager.startTrackerService(ctx)
                 }
             }
-
+        }
     }
 }
